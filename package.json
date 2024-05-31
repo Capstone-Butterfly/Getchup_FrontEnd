@@ -1,0 +1,26 @@
+{
+    "name": "getchup",
+    "version": "1.0.0",
+    "main": "expo/AppEntry.js",
+    "scripts": {
+        "start": "expo start",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web"
+    },
+    "dependencies": {
+        "@gluestack-style/react": "^1.0.56",
+        "@gluestack-ui/config": "^1.1.18",
+        "@gluestack-ui/themed": "^1.1.26",
+        "@react-navigation/native": "^6.1.17",
+        "expo": "~51.0.9",
+        "expo-status-bar": "~1.12.1",
+        "react": "18.2.0",
+        "react-native": "0.74.1",
+        "react-native-svg": "^13.4.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.20.0"
+    },
+    "private": true
+}
