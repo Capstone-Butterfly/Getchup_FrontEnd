@@ -23,6 +23,7 @@ download Expo Go and scan the QR Code
 - After the merge, the branch has to be auto deleted from the repository.
 - After completing a task, remember to checkout to a new branch.
 - Strive to write code that is free of bugs.
+- Use .jsx extensions for components files and .js for logic files.
 
 ## Naming conventions
 - PascalCase: components
@@ -40,18 +41,18 @@ Getchup_FrontEnd/
     - icons/
     - images/
 - components/ --> UI components
-    - CalendarMonth.js
-    - CalendarWeek.js
-    - Header.js
-    - TaskControlBar.js
-    - TaskItem.js
-    - TaskList.js
-    - ProgressChart.js
-    - ProfileForm.js
-    - ModalSetDate.js
-    - ModalSetTime.js
-    - ProfileForm.js
-    - SurveyQuestion.js
+    - CalendarMonth.jsx
+    - CalendarWeek.jsx
+    - Header.jsx
+    - TaskControlBar.jsx
+    - TaskItem.jsx
+    - TaskList.jsx
+    - ProgressChart.jsx
+    - ProfileForm.jsx
+    - ModalSetDate.jsx
+    - ModalSetTime.jsx
+    - ProfileForm.jsx
+    - SurveyQuestion.jsx
 - config/ --> configuration variables to use for API connections
     - apiConfig.js
 - styles/ --> centralize styling of the application and related variables
@@ -67,26 +68,26 @@ Getchup_FrontEnd/
     - ProgressNavigator.js
 - screens/
     - home/
-        - HomeScreen.js
-        - HomeWeeklyViewScreen.js
-        - HomeMonthlyViewScreen.js
+        - HomeScreen.jsx
+        - HomeWeeklyViewScreen.jsx
+        - HomeMonthlyViewScreen.jsx
     - existingTask/
-        - TaskScreen.js
-        - TaskEditScreen.js
-        - FocusModeScreen.js
+        - TaskScreen.jsx
+        - TaskEditScreen.jsx
+        - FocusModeScreen.jsx
     - newTask/
-        - TaskCreateScreen.js
-        - TaskTitleSuggestionScreen.js
+        - TaskCreateScreen.jsx
+        - TaskTitleSuggestionScreen.jsx
     - profile/
-        - ProfileScreen.js
-        - SignInScreen.js
-        - SignUpScreen.js
-        - ForgotPasswordScreen.js
-        - ResetPasswordScreen.js
+        - ProfileScreen.jsx
+        - SignInScreen.jsx
+        - SignUpScreen.jsx
+        - ForgotPasswordScreen.jsx
+        - ResetPasswordScreen.jsx
     - progress/
-        - ProgressScreen.js
-        - MovementTrackingScreen.js
-        - SurveyScreen.js
+        - ProgressScreen.jsx
+        - MovementTrackingScreen.jsx
+        - SurveyScreen.jsx
 - services/ --> logic to query APIs for information
     - notification.js
     - profile.js
