@@ -8,9 +8,7 @@ export const checkAuthorization = async (navigation) => {
 
     if (token) {
       // Token exists, perform validation
-      console.log("Inside if statement");
       const decodedToken = jwtDecode(token);
-      console.log("Decoded token inside authUtils is", decodedToken);
       const currentTime = Date.now() / 1000; // Convert to seconds
 
       if (decodedToken.exp < currentTime) {

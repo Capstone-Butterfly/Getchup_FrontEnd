@@ -1,16 +1,13 @@
-// LoginScreen.js
 
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, TextInput, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 
 
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-//   const navigation = useNavigation();k
 
 
   const handleLogin = async () => {
