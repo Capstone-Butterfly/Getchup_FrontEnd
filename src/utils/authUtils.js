@@ -2,7 +2,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {jwtDecode} from 'jwt-decode';
 
 export const checkAuthorization = async (navigation) => {
+
   try {
+    //to check the negative scenario, uncomment the below line
+    // await AsyncStorage.setItem('authToken', null);
+
+
     const token = await AsyncStorage.getItem('authToken');
     console.log("Token inside authUtils is", token);
 
