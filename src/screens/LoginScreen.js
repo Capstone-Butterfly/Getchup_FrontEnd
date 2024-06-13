@@ -13,7 +13,7 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = async () => {
     console.log("sending request to backend with email: "+email+" and pwd "+password);
     try {
-      const response = await fetch('http://localhost:8080/api/v1/auth/login', {
+      const response = await fetch('http://localhost:8080/api/v1/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
