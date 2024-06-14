@@ -13,6 +13,8 @@ const HomeScreen = () => {
         navigation.navigate('SecondPage');
       } else {
         navigation.navigate('Login');
+
+        
       }
     } catch (error) {
       console.error('Error in handleCheckAuthorization:', error);
