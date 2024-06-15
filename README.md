@@ -41,53 +41,28 @@ Getchup_FrontEnd/
     - icons/
     - images/
 - components/ --> UI components
-    - CalendarMonth.jsx
-    - CalendarWeek.jsx
-    - Header.jsx
-    - TaskControlBar.jsx
-    - TaskItem.jsx
-    - TaskList.jsx
-    - ProgressChart.jsx
-    - ProfileForm.jsx
-    - ModalSetDate.jsx
-    - ModalSetTime.jsx
-    - ProfileForm.jsx
-    - SurveyQuestion.jsx
-- config/ --> configuration variables to use for API connections
-    - apiConfig.js
+- utils/ --> configuration variables to use for API connections
+    - authUtils.js
 - styles/ --> centralize styling of the application and related variables
-    - colors.js
-    - theme.js
 - hooks/
-    - useTasks.js
 - navigation/
-    - MainNavigator.js
-    - HomeNavigator.js
-    - AuthNavigator.js
-    - ProfileNavigator.js
-    - ProgressNavigator.js
+    - AddTaskTab.jsx
+    - CalendarTab.jsx
+    - HomeTab.jsx
+    - Navigator.jsx
+    - ProfileTab.jsx
+    - ProgressTab.jsx
 - screens/
+    - add-task/
+        - AddTaskScreen.jsx
+    - calendar/
+        - CalendarScreen.jsx
     - home/
         - HomeScreen.jsx
-        - HomeWeeklyViewScreen.jsx
-        - HomeMonthlyViewScreen.jsx
-    - existingTask/
-        - TaskScreen.jsx
-        - TaskEditScreen.jsx
-        - FocusModeScreen.jsx
-    - newTask/
-        - TaskCreateScreen.jsx
-        - TaskTitleSuggestionScreen.jsx
     - profile/
         - ProfileScreen.jsx
-        - SignInScreen.jsx
-        - SignUpScreen.jsx
-        - ForgotPasswordScreen.jsx
-        - ResetPasswordScreen.jsx
     - progress/
-        - ProgressScreen.jsx
-        - MovementTrackingScreen.jsx
-        - SurveyScreen.jsx
+        ProgressScreen.jsx
 - services/ --> logic to query APIs for information
     - notification.js
     - profile.js
