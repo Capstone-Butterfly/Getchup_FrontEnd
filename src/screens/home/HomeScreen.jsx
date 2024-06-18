@@ -1,10 +1,15 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "@gluestack-ui/themed"
+import Header from "../../components/Header";
+import Greeting from "../../components/Greeting";
+import WeeklyCalendar from "../../components/WeeklyCalendar";
+import { Text } from "@gluestack-ui/themed";
 
 const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView>
-            <Text>HomeScreen</Text>
+            <Header />
+            <Greeting />
+            <WeeklyCalendar />
         </SafeAreaView>
     );
 };
