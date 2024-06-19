@@ -5,7 +5,7 @@ import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
 import { FlatList } from '@gluestack-ui/themed';
 
-const WeeklyCalendar = () => {
+const WeeklyCalendar = ({ userId }) => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,15 +14,16 @@ const WeeklyCalendar = () => {
     useEffect(() => {
         axios.get('http://52.55.48.104:8080/api/v1/tasks')
             .then(response => {
-                setTasks(response.data);
+                const userTasks = response.data.filter(task => task.user_id === userId);
+                setTasks(userTasks);
                 setLoading(false);
-                console.log(response.data)
+                console.log(userTasks);
             })
             .catch(error => {
                 setError(error);
                 setLoading(false);
             });
-    }, []);
+    }, [userId]);
 
     const handleDateSelected = (date) => {
         setSelectedDate(date);
@@ -77,12 +78,20 @@ const WeeklyCalendar = () => {
             }
             <FlatList
                 data={filteredTasks}
-                renderItem={({item}) => (
-                    <TaskCard
-                        title={item.title}
-                        created_datetime={item.created_datetime}
-                    />
-                )}
+                renderItem={({ item }) => {
+                    const totalSubtasks = item.subtask.length;
+                    const completedSubtasks = item.subtask.filter(subtask => subtask.status === 'completed').length;
+
+                    return (
+                        <TaskCard
+                            title={item.title}
+                            created_datetime={item.created_datetime}
+                            totalSubtasks={totalSubtasks}
+                            completedSubtasks={completedSubtasks}
+                        />
+                    );
+                }}
+                keyExtractor={(item) => item._id}
             />
         </View>
     );

@@ -1,11 +1,13 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const TaskCard = ({ title, created_datetime }) => {
+const TaskCard = ({ title, created_datetime, totalSubtasks, completedSubtasks }) => {
     return (
         <View style={styles.card}>
             <Text>{title}</Text>
             <Text>{new Date(created_datetime).toLocaleString()}</Text>
+            <Text>Total Subtasks: {totalSubtasks}</Text>
+            <Text>Completed Subtasks: {completedSubtasks}</Text>
         </View>
     );
 };
