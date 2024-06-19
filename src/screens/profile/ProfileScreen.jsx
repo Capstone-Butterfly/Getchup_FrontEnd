@@ -1,12 +1,17 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "@gluestack-ui/themed"
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SignInScreen from './SignInScreen';
+import SignUpScreen from './SignUpScreen';
 
-const ProfileScreen = ({ navigation }) => {
-    return (
-        <SafeAreaView>
-            <Text>ProfileScreen</Text>
-        </SafeAreaView>
-    );
-};
+const Stack = createNativeStackNavigator();
 
-export default ProfileScreen;
+const ProfileTab = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
+export default ProfileTab;
