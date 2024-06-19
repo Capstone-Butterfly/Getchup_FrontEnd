@@ -1,29 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import axios from 'axios';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
 import { FlatList } from '@gluestack-ui/themed';
+import useTaskStore from '../store/store';
 
 const WeeklyCalendar = ({ userId }) => {
-    const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(new Date());
+    const { tasks, loading, error, selectedDate, fetchTasks, setSelectedDate } = useTaskStore();
 
     useEffect(() => {
-        axios.get('http://52.55.48.104:8080/api/v1/tasks')
-            .then(response => {
-                const userTasks = response.data.filter(task => task.user_id === userId);
-                setTasks(userTasks);
-                setLoading(false);
-                console.log(userTasks);
-            })
-            .catch(error => {
-                setError(error);
-                setLoading(false);
-            });
-    }, [userId]);
+        fetchTasks(userId);
+    }, [userId, fetchTasks]);
 
     const handleDateSelected = (date) => {
         setSelectedDate(date);
