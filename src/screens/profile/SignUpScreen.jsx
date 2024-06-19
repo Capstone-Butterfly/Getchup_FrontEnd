@@ -32,11 +32,11 @@ function SignUpScreen() {
 
     try {
       console.log('Sending signup request', { first_name: firstName, last_name: lastName, email, password, phone });
-      const response = await api.post('api/v1/createAccount', { first_name: firstName, last_name: lastName, email, password, phone });
+      const response = await api.post('/api/v1/createaccount', { first_name: firstName, last_name: lastName, email, password, phone });
       console.log('Signup response:', response);
       if (response.status === 201) {
         Alert.alert('Success', 'User registered successfully');
-        navigation.navigate('SignIn');
+        navigation.navigate('SurveyQuestionScreen');
       } else {
         Alert.alert('Signup failed', response.data.message || 'Unknown error');
       }
