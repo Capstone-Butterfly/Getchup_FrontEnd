@@ -16,10 +16,7 @@ const useCreateTaskStore = create((set) => ({
     setTaskUrgency: (task_urgency) => set({ task_urgency }),
   
     // Setters for subtasks
-    addSubtask: (subtask) =>
-      set((state) => ({
-        subtasks: [...state.subtasks, subtask],
-      })),
+    addSubtask: (subtask) => set({ subTasks : subtask }),
     updateSubtask: (index, updatedSubtask) =>
       set((state) => ({
         subtasks: state.subtasks.map((subtask, i) =>
@@ -32,4 +29,4 @@ const useCreateTaskStore = create((set) => ({
       })),
   }));
 
-  export { useCreateTaskStore };
+  export default useCreateTaskStore ;
