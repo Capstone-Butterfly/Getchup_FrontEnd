@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "@gluestack-ui/themed"
 import useTaskStore from "../../store/taskStore"
-
+import { useEffect } from 'react';
 
 
 const AddTaskScreen = ({ navigation }) => {
@@ -14,9 +14,14 @@ const AddTaskScreen = ({ navigation }) => {
     
     const storedTasks = tasks;
     
-    if (storedTasks){
-        console.log("storedTasks in AddTaskScreen : ", storedTasks.length + "  " + new Date().toString());
-    }
+    useEffect(() => {
+        if (storedTasks){
+            console.log("storedTasks in AddTaskScreen : ", storedTasks.length + "  " + new Date().toString());
+            console.log("selectedDate in AddTaskScreen : ", selectedDate.toString());
+        }
+      }, [tasks, selectedDate]);
+
+    
 
     return (
         <SafeAreaView>

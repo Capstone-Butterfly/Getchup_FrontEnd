@@ -5,7 +5,6 @@ const base_url = BASE_URL;
 
 const fetchTasks = async () => {
   const { data } = await axios.get( `${base_url}/tasks`);
-  //const { data } = await axios.get('http://127.0.0.1:8080/api/v1/tasks');
   return data;
 };
  
