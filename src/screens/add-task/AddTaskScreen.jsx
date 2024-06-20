@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "@gluestack-ui/themed"
+import { AddIcon, Box, Button, ButtonIcon, ButtonText, Card, Center, FlatList, HStack, Heading, Text } from "@gluestack-ui/themed"
 import useTaskStore from "../../store/taskStore"
 import { useEffect } from 'react';
 
@@ -25,7 +25,33 @@ const AddTaskScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView>
-            <Text>This is the add Task Screen {storedTasks.length}</Text>
+         
+            <HStack space="4xl" reversed={false}>
+            <Box width='20%'>
+                <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} >
+                    <ButtonText verticalAlign="middle"> Cancel </ButtonText>
+                </Button>
+            </Box>
+            <Box width='40%'>
+                <Center>
+                    <Heading>New Task</Heading>
+                </Center>
+            </Box>
+            <Box width='20%'>
+                <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} >
+                    <ButtonText verticalAlign="middle"> Save </ButtonText>
+                </Button>
+            </Box>
+            </HStack>
+            <Card>
+                <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} >
+                    <ButtonText>Add </ButtonText>
+                </Button>
+                <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} >
+                    <ButtonText>Date </ButtonText>
+                </Button>
+            
+            </Card>
         </SafeAreaView>
     );
 };
