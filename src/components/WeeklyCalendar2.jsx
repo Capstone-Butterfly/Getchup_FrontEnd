@@ -7,7 +7,6 @@ import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
 
-
 const WeeklyCalendar = ({ userId }) => {
 
     const { tasks, setTasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
@@ -17,47 +16,32 @@ const WeeklyCalendar = ({ userId }) => {
         setSelectedDate: state.setSelectedDate
     }));
 
-    const storedTasks = tasks;
-
-    if (storedTasks){
-        console.log("storedTasks : ", storedTasks.length + "  " + new Date().toString());
-    }
-    
     const { data: fetchedTask, isLoading, error } = useQuery({
-        queryKey: ['tasks'], 
+        queryKey: ['tasks', userId], 
         queryFn: () => fetchTasksByUserId(userId),
-        enabled: !storedTasks,
+        enabled: !tasks || tasks.length === 0,
     });
 
     useEffect(() => {
         setTasks(fetchedTask);
-      }, [fetchedTask, setTasks]);
+    }, [fetchedTask, setTasks]);
 
     const handleDateSelected = useCallback((date) => {
         setSelectedDate(date);
     }, [setSelectedDate]);
       
-
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
         return tasks.filter(task => task.created_datetime.split('T')[0] === selectedDateString);
     };
 
     const filteredTasks = useMemo(() => {
-        let tasksToFilter = tasks;
-        if (storedTasks && storedTasks.length > 0) {
-            tasksToFilter = storedTasks;
-        }
-        if (tasksToFilter && tasksToFilter.length > 0) {
-            console.log("Before filteredTasks : ", tasksToFilter.length + "  " + new Date().toString());
-            const filtered = filterTasksByDate(tasksToFilter, selectedDate);
-            console.log("After filteredTasks : ", filtered.length + "  " + new Date().toString());
-            return filtered;
+        if (tasks && tasks.length > 0) {
+            return filterTasksByDate(tasks, selectedDate);
         }
         return [];
-    }, [tasks, storedTasks, selectedDate]);
+    }, [tasks, selectedDate]);
     
-
     return (
         <View>
             <CalendarStrip
