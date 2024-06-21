@@ -2,20 +2,26 @@ import React, { useState } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import useAddTaskTitleStore from "../store/addTaskTitleModelStore";
 import { FlatList } from "@gluestack-ui/themed";
-import { fetchCommonTasks } from "../services/taskLibraryApi";
+import {
+  fetchCommonTasks,
+  fetchRepeatedTasks,
+} from "../services/taskLibraryApi";
 import { useQuery } from "@tanstack/react-query";
 import usecreateTaskStore from "../store/createTaskStore";
 
-const CommonTasks = ({ fetchedCommonTask, activeTab }) => {
-  const { title,subTasks, setTitle, addSubtask } = usecreateTaskStore((state) => ({
-    title: state.title,
-    subTasks: state.subTasks,
-    setTitle: state.setTitle,
-    addSubtask: state.addSubtask,
-  }));
+const CommonTasks = ({ fetchedCommonTask }) => {
+  const { title, subTasks, setTitle, addSubtask } = usecreateTaskStore(
+    (state) => ({
+      title: state.title,
+      subTasks: state.subTasks,
+      setTitle: state.setTitle,
+      addSubtask: state.addSubtask,
+    })
+  );
 
   console.log("title" + title);
   console.log("addSubtask" + JSON.stringify(subTasks));
+
   return (
     <View style={styles.tabContent}>
       <View>
@@ -26,6 +32,7 @@ const CommonTasks = ({ fetchedCommonTask, activeTab }) => {
               <Text style={styles.categoryHeading}>{item._id}</Text>
               {item.tasks.map((task) => (
                 <TouchableOpacity
+                  key={task._id}
                   onPress={() => {
                     setTitle(task.title);
                     addSubtask(task.subtask);
@@ -45,11 +52,42 @@ const CommonTasks = ({ fetchedCommonTask, activeTab }) => {
   );
 };
 
-const CreatedTasks = () => (
-  <View style={styles.tabContent}>
-    <Text>Created Tasks Content</Text>
-  </View>
-);
+const CreatedTasks = ({ fetchedRepeatedTask }) => {
+  const { title, subTasks, setTitle, addSubtask } = usecreateTaskStore(
+    (state) => ({
+      title: state.title,
+      subTasks: state.subTasks,
+      setTitle: state.setTitle,
+      addSubtask: state.addSubtask,
+    })
+  );
+  console.log("title" + title);
+  console.log("addSubtask" + JSON.stringify(subTasks));
+
+  return (
+    <View style={styles.tabContent}>
+      <FlatList
+        data={fetchedRepeatedTask}
+        renderItem={({ item }) => (
+          <View key={item._id}>
+            <TouchableOpacity
+              key={item._id}
+              onPress={() => {
+                setTitle(item.title);
+                addSubtask(item.subtask);
+              }}
+            >
+              <Text key={item._id} style={styles.taskTitle}>
+                {item.title}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        )}
+        keyExtractor={(item) => item._id}
+      />
+    </View>
+  );
+};
 
 const TaskLibraryTab = () => {
   const { activeTab, setActiveTab } = useAddTaskTitleStore((state) => ({
@@ -65,7 +103,13 @@ const TaskLibraryTab = () => {
     queryKey: ["commonTasks"],
     queryFn: () => fetchCommonTasks(),
   });
-  console.log("fetchedCommonTask" + fetchedCommonTask);
+  // console.log("fetchedCommonTask" + fetchedCommonTask);
+
+  const { data: fetchedRepeatedTask } = useQuery({
+    queryKey: ["repeatedTasks"],
+    queryFn: () => fetchRepeatedTasks(),
+  });
+  // console.log("repeatedTasks" + fetchedRepeatedTask);
 
   return (
     <View>
@@ -107,12 +151,14 @@ const TaskLibraryTab = () => {
         {activeTab === "CommonTasks" && (
           <CommonTasks
             fetchedCommonTask={fetchedCommonTask}
-            activeTab={activeTab}
+            // activeTab={activeTab}
             // setTltle={setTltle}
             // addSubtask={addSubtask}
           />
         )}
-        {activeTab === "CreatedTasks" && <CreatedTasks />}
+        {activeTab === "CreatedTasks" && (
+          <CreatedTasks fetchedRepeatedTask={fetchedRepeatedTask} />
+        )}
       </View>
     </View>
   );
