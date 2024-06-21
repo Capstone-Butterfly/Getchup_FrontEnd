@@ -8,23 +8,21 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Navigator from './src/navigation/Navigator';
 import { config } from '@gluestack-ui/config';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import queryClient from './src/services/QueryClient';
+import { QueryClientProvider } from '@tanstack/react-query';
 
 const App = () => {
     return (
-        <NavigationContainer>
-            <SafeAreaProvider>
-               <GluestackUIProvider config={config}>
-                    {/* <Stack.Navigator initialRouteName="Login">
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="SecondPage" component={SecondPage} />
-        </Stack.Navigator> */}
-        <StatusBar bg='#2c3e50' />
-                    <Navigator />
-                </GluestackUIProvider>
-            </SafeAreaProvider>
-        </NavigationContainer>
+        <QueryClientProvider client={queryClient}>
+            <NavigationContainer>
+                <SafeAreaProvider>
+                <GluestackUIProvider config={config}>
+                        <StatusBar bg='#2c3e50' />
+                        <Navigator />
+                    </GluestackUIProvider>
+                </SafeAreaProvider>
+            </NavigationContainer>
+        </QueryClientProvider> 
     )
 }
 const styles = StyleSheet.create({
