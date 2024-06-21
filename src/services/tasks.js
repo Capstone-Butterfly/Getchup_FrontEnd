@@ -4,7 +4,7 @@ import { BASE_URL } from '../config/apiConfig';
 const base_url = BASE_URL;
 
 const fetchTasks = async () => {
-  const { data } = await axios.get( `${base_url}/tasks`);
+  const { data } = await axios.get( `${base_url}/tasks/`);
   return data;
 };
  
@@ -21,7 +21,9 @@ const fetchTasksByUserId = async (userId) => {
 
 const addTask = async (newTask) => {
   try {
-    const { data } = await axios.post(`${base_url}/tasks`, newTask);
+    console.log("newTask", newTask);
+    const { data } = await axios.post(`${base_url}/tasks/`, newTask);
+    console.log("SaveTask :", data);
     return data;
   } catch (error) {
     console.error("Error adding task:", error);
