@@ -8,4 +8,9 @@ const fetchCommonTasks = async () => {
   return data;
 };
 
-export { fetchCommonTasks };
+const fetchRepeatedTasks = async () => {
+  const { data } = await axios.get( `${base_url}/repeatedTasks`);
+  return data;
+};
+
+export { fetchCommonTasks, fetchRepeatedTasks };
