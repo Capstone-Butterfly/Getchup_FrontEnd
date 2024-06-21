@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api from '../../config/apiConfig'; // Adjust the path based on your project structure
+import api from '../../../api'; 
 
 function SignInScreen() {
   const [showPassword, setShowPassword] = useState(false);

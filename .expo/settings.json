@@ -2,5 +2,9 @@
   "urlRandomness": "3hHMyho",
   "dev": true,
   "minify": false,
-  "https": false
+  "https": false,
+  "hostType": "lan",
+  "lanType": "ip",
+  "scheme": null,
+  "devClient": false
 }

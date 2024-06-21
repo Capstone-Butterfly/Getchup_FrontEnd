@@ -2,7 +2,7 @@ import { EyeIcon, ButtonText, FormControl, Heading, VStack, Button } from '@glue
 import React, { useState } from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../config/apiConfig'; // Adjust the path based on your project structure
+import api from '../../../api'; 
 
 function SurveyQuestionScreen() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -49,7 +49,7 @@ function SurveyQuestionScreen() {
     };
 
     try {
-      const response = await api.post('/submit', data);
+      const response = await api.post('/surveys/submit', data);
       console.log('Survey response:', response);
       if (response.status === 200) {
         // Assuming the response contains a category field

@@ -3,7 +3,7 @@ import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSl
 import React, { useState } from 'react';
 import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../config/apiConfig'; // Adjust the path based on your project structure
+import api from '../../../api'; 
 
 function SignUpScreen() {
   const [showPassword, setShowPassword] = useState(false);
