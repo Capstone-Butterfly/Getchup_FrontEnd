@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
 import { FlatList } from '@gluestack-ui/themed';
-import useTaskStore from '../store/store';
+import useTaskStore from '../store/taskStore';
 
 const WeeklyCalendar = ({ userId }) => {
     const { tasks, loading, error, selectedDate, fetchTasks, setSelectedDate } = useTaskStore();
