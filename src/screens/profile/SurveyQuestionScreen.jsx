@@ -1,13 +1,16 @@
-import { EyeIcon, ButtonText, FormControl, Heading, VStack, Button } from '@gluestack-ui/themed';
-import React, { useState } from 'react';
+import { ButtonText, FormControl, Heading, VStack, Button } from '@gluestack-ui/themed';
+import React from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../../api'; 
+import { BASE_URL } from '../../config/apiConfig';
+import surveyQuestionStore from '../../store/surveyQuestionStore';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 function SurveyQuestionScreen() {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState([]);
+  const { currentQuestion, setCurrentQuestion, answers, setAnswers } = surveyQuestionStore(); // Access the Zustand store
   const navigation = useNavigation();
+  const base_url = BASE_URL;
 
   const questions = [
     {
@@ -40,29 +43,30 @@ function SurveyQuestionScreen() {
     }
   };
 
-  const handleSubmit = async (answers) => {
-    const data = {
-      question_1: [{ question: questions[0].question, options: answers[0] }],
-      question_2: [{ question: questions[1].question, options: answers[1] }],
-      question_3: [{ question: questions[2].question, options: answers[2] }],
-      question_4: [{ question: questions[3].question, options: answers[3] }]
-    };
 
-    try {
-      const response = await api.post('/surveys/submit', data);
-      console.log('Survey response:', response);
-      if (response.status === 200) {
-        // Assuming the response contains a category field
-        const category = 'mixed presentation'; // Replace with actual logic to determine category
+  const { mutate: handleSubmit, isLoading, mutationFn } = useMutation(
+    {
+      mutationFn: async (answers) => {
+        const response = await axios.post(`${base_url}/surveys/submit`, {
+          question_1: [{ question: questions[0].question, options: answers[0] }],
+          question_2: [{ question: questions[1].question, options: answers[1] }],
+          question_3: [{ question: questions[2].question, options: answers[2] }],
+          question_4: [{ question: questions[3].question, options: answers[3] }]
+        });
+        return response.data;
+      },
+      onSuccess: async (data) => {
+        
+        const category = 'mixed presentation';
+        // Navigate to ADHDCatScreen page
         navigation.navigate('ADHDCatScreen', { category });
-      } else {
-        Alert.alert('Survey submission failed', response.data.message || 'Unknown error');
-      }
-    } catch (error) {
-      console.error('Survey submission error:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      },
+      onError: () => {
+        Alert.alert('Login failed', 'Invalid email or password');
+      },
     }
-  };
+  );
+    
 
   return (
     <View>

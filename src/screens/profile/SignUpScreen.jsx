@@ -3,18 +3,17 @@ import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSl
 import React, { useState } from 'react';
 import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import api from '../../../api'; 
+import { BASE_URL } from '../../config/apiConfig';
+import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
+import signUpStore from '../../store/signUpStore';
 
 function SignUpScreen() {
+  const { firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, confirmPassword, setConfirmPassword, phone, setPhone } = signUpStore(); // Access the Zustand store
+  const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [phone, setPhone] = useState('');
-  const navigation = useNavigation();
+  const base_url = BASE_URL;
 
   const handlePasswordState = () => {
     setShowPassword((showState) => !showState);
@@ -24,27 +23,22 @@ function SignUpScreen() {
     setShowConfirmPassword((showState) => !showState);
   };
 
-  const handleSignUp = async () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
-    }
-
-    try {
-      console.log('Sending signup request', { first_name: firstName, last_name: lastName, email, password, phone });
-      const response = await api.post('/createaccount', { first_name: firstName, last_name: lastName, email, password, phone });
-      console.log('Signup response:', response);
-      if (response.status === 201) {
-        Alert.alert('Success', 'User registered successfully');
+  const { mutate: handleSignUp, isLoading, mutationFn } = useMutation(
+    {
+      mutationFn: async () => {
+        const response = await axios.post(`${base_url}/createaccount`, { first_name: firstName, last_name: lastName, email, password, phone });
+        console.log("response: ", response);
+        return response.data;
+      },
+      onSuccess: async () => {
+        // Navigate to Survey Question
         navigation.navigate('SurveyQuestionScreen');
-      } else {
-        Alert.alert('Signup failed', response.data.message || 'Unknown error');
-      }
-    } catch (error) {
-      console.error('Signup error:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      },
+      onError: () => {
+        Alert.alert('Signup failed', 'Something went wrong. Please try again.');
+      },
     }
-  };
+  );
 
   return (
     <View>
@@ -101,7 +95,7 @@ function SignUpScreen() {
             </Input>
           </VStack>
 
-          <Button backgroundColor='$blue' onPress={handleSignUp}>
+          <Button backgroundColor='$blue' onPress={handleSignUp} isLoading={isLoading}>
             <ButtonText>Create Account</ButtonText>
           </Button>
 
@@ -115,3 +109,4 @@ function SignUpScreen() {
 }
 
 export default SignUpScreen;
+
