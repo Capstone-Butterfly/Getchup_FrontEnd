@@ -115,6 +115,17 @@ const AddTaskScreen = ({ navigation }) => {
                     <ButtonText verticalAlign="middle">Add Subtask by AI</ButtonText>
                 </Button>
             </Card>
+            <FlatList
+            data={subTasks}
+            renderItem={({ item }) => (
+                <Box style={styles.subTaskContainer}>
+                    <Text color="black" fontWeight={"$bold"}>{item.sub_title}</Text>
+                    <Text color="black">Time: {item.time}</Text>
+                    <Text color="black">Movement: {item.movement.toString()}</Text>
+                </Box>
+            )}
+            keyExtractor={(item) => item.sub_title}
+            />
             <Modal isOpen={modalVisible} onClose={handleCloseModal}>
                 <ModalContent style={styles.modalContent}>
                     <Heading size='lg' textAlign='center'>Add Task Title</Heading>
@@ -151,6 +162,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingTop:50,
+    },
+    subTaskContainer: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
 });
 
