@@ -7,32 +7,42 @@ import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
 
-const WeeklyCalendar = ({ userId }) => {
+const WeeklyCalendar = ({ userId, navigation }) => {
 
     const { tasks, setTasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
         tasks: state.tasks,
         setTasks: state.setTasks,
         selectedDate: state.selectedDate,
-        setSelectedDate: state.setSelectedDate
+        setSelectedDate: state.setSelectedDate,
     }));
 
     const { data: fetchedTask, isLoading, error } = useQuery({
         queryKey: ['tasks', userId], 
         queryFn: () => fetchTasksByUserId(userId),
-        enabled: !tasks || tasks.length === 0,
+        //enabled: !tasks || tasks.length === 0,
+        refetchOnMount: true,
+        refetchOnReconnect: true,
     });
 
     useEffect(() => {
-        setTasks(fetchedTask);
+        if (fetchedTask) {
+            setTasks(fetchedTask);
+            console.log("Tasks !!!" , tasks != null ? tasks.length: 0)
+        }
     }, [fetchedTask, setTasks]);
 
-    const handleDateSelected = useCallback((date) => {
+    const handleDateSelected = (date) => {
         setSelectedDate(date);
-    }, [setSelectedDate]);
+    };
       
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
-        return tasks.filter(task => task.created_datetime.split('T')[0] === selectedDateString);
+        return tasks.filter(task => {
+            if (task.created_datetime) {
+                return task.created_datetime.split('T')[0] === selectedDateString;
+            }
+            return false; // or handle this case as per your application logic
+        });
     };
 
     const filteredTasks = useMemo(() => {
@@ -68,17 +78,15 @@ const WeeklyCalendar = ({ userId }) => {
             ) : filteredTasks && filteredTasks.length === 0 ? (
                 <Text>There are no tasks here yet, yay!</Text>
             ) : (
-            <FlatList
-            data={filteredTasks}
-            renderItem={({ item }) => (
-                <TaskCard
-                title={item.title}
-                created_datetime={item.created_datetime}
-                totalSubtasks={item.subtask.length}
-                completedSubtasks={item.subtask.filter((subtask) => subtask.status === 'complete').length}
-                />
-            )}
-            keyExtractor={(item) => item._id}
+                <FlatList
+                data={filteredTasks}
+                renderItem={({ item }) => (
+                    <TaskCard
+                        task={item}
+                        navigation={navigation}
+                    />
+                )}
+                keyExtractor={(item) => item._id}
             />
             )}
         </View>
