@@ -6,7 +6,7 @@ import NotesInputForm from "../../components/NotesInputForm";
 const NotesModelScreen = () => {
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Notes</Text>
+      {/* <Text style={styles.title}>Notes</Text> */}
       <NotesInputForm />
     </SafeAreaView>
   );

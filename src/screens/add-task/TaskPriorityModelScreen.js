@@ -8,11 +8,10 @@ const TaskPriorityModelScreen = () => {
     task_urgency: state.task_urgency,
     setTaskUrgency: state.setTaskUrgency,
   }));
-  console.log("task_urgency" + task_urgency);
 
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Task Priority</Text>
+      {/* <Text style={styles.title}>Task Priority</Text> */}
       <View>
         <TouchableOpacity
           onPress={() => setTaskUrgency("High")}

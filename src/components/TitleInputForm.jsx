@@ -8,7 +8,6 @@ const TitleInputForm = () => {
         title: state.title,
         setTitle: state.setTitle,
     }));
-    console.log("title" +title);
 
   return (
     <View >
