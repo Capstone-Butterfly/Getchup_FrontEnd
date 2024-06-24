@@ -7,7 +7,6 @@ const NotesInputForm = () => {
     notes: state.notes,
     setNotes: state.setNotes,
   }));
-  console.log("notes" + notes);
 
   return (
     <View>

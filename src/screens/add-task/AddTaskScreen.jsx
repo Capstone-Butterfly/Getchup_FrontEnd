@@ -9,22 +9,31 @@ import { CalendarDaysIcon } from "@gluestack-ui/themed";
 import useCreateTaskStore from '../../store/createTaskStore';
 import { addTask, getAISubTasks } from '../../services/tasks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import TitleModelScreen from './TilteModelScreen';
-import { Header } from '@react-navigation/stack';
+import TitleModalScreen from './TilteModelScreen';
+import NotesModalScreen from './NotesModelScreen';
+import TaskPriorityModalScreen from './TaskPriorityModelScreen'
 
 const { width, height } = Dimensions.get('window');
 
 const AddTaskScreen = ({ navigation }) => {
     const userId = '6668b7f95dbce97bc28322d2';
     const queryClient = useQueryClient();
-    const [modalVisible, setModalVisible] = useState(false);
+    const [modalTitleVisible, setModalTitleVisible] = useState(false);
+    const [modalNoteVisible, setModalNoteVisible] = useState(false);
+    const [modalPriorityVisible, setModalPriorityVisible] = useState(false);
 
-    const handleOpenModal = () => setModalVisible(true);
-    const handleCloseModal = () => setModalVisible(false);
+    const handleOpenTitleModal = () => setModalTitleVisible(true);
+    const handleCloseTitleModal = () => setModalTitleVisible(false);
+
+    const handleOpenNoteModal = () => setModalNoteVisible(true);
+    const handleCloseNoteModal = () => setModalNoteVisible(false);
+
+    const handleOpenPriorityModal = () => setModalPriorityVisible(true);
+    const handleClosePriorityModal = () => setModalPriorityVisible(false);
 
     const handleSaveTitle = (newTitle) => {
         setTitle(newTitle);
-        setModalVisible(false);
+        setModalTitleVisible(false);
     };
 
     const mutation = useMutation({
@@ -39,11 +48,13 @@ const AddTaskScreen = ({ navigation }) => {
         console.log("New Data ", JSON.stringify(data));
     };
 
-    const { subTasks, title, setTitle, addSubtask } = useCreateTaskStore((state) => ({
+    const { subTasks, title, setTitle, addSubtask, notes, task_urgency } = useCreateTaskStore((state) => ({
         subTasks: state.subTasks,
         title: state.title,
         setTitle: state.setTitle,
-        addSubtask: state.addSubtask
+        addSubtask: state.addSubtask,
+        notes: state.notes,
+        task_urgency: state.task_urgency,
     }));
 
     // useEffect(() => {
@@ -89,7 +100,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Box>
             </HStack>
             <Card>
-                <Pressable onPress={handleOpenModal} p="$5">
+                <Pressable onPress={handleOpenTitleModal} p="$5">
                     <Text color="black" fontWeight={"$bold"}>Add Task Title</Text>
                     <Text color="black">{title}</Text>
                 </Pressable>
@@ -97,13 +108,15 @@ const AddTaskScreen = ({ navigation }) => {
                     <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
                     <Text color="black" fontWeight={"$bold"}>Date</Text>
                 </Pressable>
-                <Pressable onPress={() => console.log('Notes')} p="$5">
+                <Pressable onPress={handleOpenNoteModal} p="$5">
                     <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
                     <Text color="black" fontWeight={"$bold"}>Notes</Text>
+                    <Text color="black">{notes}</Text>
                 </Pressable>
-                <Pressable onPress={() => console.log('Task priority')} p="$5">
+                <Pressable onPress={handleOpenPriorityModal} p="$5">
                     <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
                     <Text color="black" fontWeight={"$bold"}>Task priority</Text>
+                    <Text color="black">{task_urgency}</Text>
                 </Pressable>
             </Card>
             <Card>
@@ -126,14 +139,36 @@ const AddTaskScreen = ({ navigation }) => {
             )}
             keyExtractor={(item) => item.sub_title}
             />
-            <Modal isOpen={modalVisible} onClose={handleCloseModal}>
+            <Modal isOpen={modalTitleVisible} onClose={handleCloseTitleModal}>
                 <ModalContent style={styles.modalContent}>
                     <Heading size='lg' textAlign='center'>Add Task Title</Heading>
-                    <ModalCloseButton style={styles.closeButton} onPress={handleCloseModal}>
+                    <ModalCloseButton style={styles.closeButton} onPress={handleCloseTitleModal}>
                         <Icon as={CloseIcon} />
                     </ModalCloseButton>
                     <VStack space={4} style={styles.modalBody}>
-                        <TitleModelScreen title={title} handleSaveTitle={handleSaveTitle} />
+                        <TitleModalScreen/>
+                    </VStack>
+                </ModalContent>
+            </Modal>
+            <Modal isOpen={modalNoteVisible} onClose={handleCloseNoteModal}>
+                <ModalContent style={styles.modalNoteContent}>
+                    <Heading size='lg' textAlign='center'>Notes</Heading>
+                    <ModalCloseButton style={styles.closeButton} onPress={handleCloseNoteModal}>
+                        <Icon as={CloseIcon} />
+                    </ModalCloseButton>
+                    <VStack space={4} style={styles.modalBody}>
+                        <NotesModalScreen />
+                    </VStack>
+                </ModalContent>
+            </Modal>
+            <Modal isOpen={modalPriorityVisible} onClose={handleClosePriorityModal}>
+                <ModalContent style={styles.modalPriorityContent}>
+                    <Heading size='lg' textAlign='center'>Task Priority</Heading>
+                    <ModalCloseButton style={styles.closeButton} onPress={handleClosePriorityModal}>
+                        <Icon as={CloseIcon} />
+                    </ModalCloseButton>
+                    <VStack space={4} style={styles.modalBody}>
+                        <TaskPriorityModalScreen />
                     </VStack>
                 </ModalContent>
             </Modal>
@@ -151,7 +186,29 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         borderRadius:10,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: 0,
+    },
+    modalNoteContent: {
+        width: '100%',
+        height: '25%',
+        margin: 0,
+        padding: 0,
+        borderRadius:10,
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: 0,
+    },
+    modalPriorityContent: {
+        width: '100%',
+        height: '55%',
+        margin: 0,
+        padding: 0,
+        borderRadius:10,
+        backgroundColor: 'white',
+        position: 'absolute',
+        bottom: 0,
     },
     closeButton: {
         position: 'absolute',
