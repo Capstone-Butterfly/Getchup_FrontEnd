@@ -7,7 +7,7 @@ import {
 import { useEffect } from 'react';
 import { CalendarDaysIcon } from "@gluestack-ui/themed";
 import useCreateTaskStore from '../../store/createTaskStore';
-import { addTask } from '../../services/tasks';
+import { addTask, getAISubTasks } from '../../services/tasks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TitleModelScreen from './TilteModelScreen';
 import { Header } from '@react-navigation/stack';
@@ -27,12 +27,11 @@ const AddTaskScreen = ({ navigation }) => {
         setModalVisible(false);
     };
 
-
     const mutation = useMutation({
-        mutationFn: async (newTask) => await addTask(newTask),
+        mutationFn: async (title) => await getAISubTasks(title),
         onSuccess: (data) => {
             queryClient.invalidateQueries(['tasks']);
-            displayData(data);
+            addSubtask(data.subtask);
         },
     });
 
@@ -40,10 +39,16 @@ const AddTaskScreen = ({ navigation }) => {
         console.log("New Data ", JSON.stringify(data));
     };
 
-    const { title, setTitle } = useCreateTaskStore((state) => ({
+    const { subTasks, title, setTitle, addSubtask } = useCreateTaskStore((state) => ({
+        subTasks: state.subTasks,
         title: state.title,
         setTitle: state.setTitle,
+        addSubtask: state.addSubtask
     }));
+
+    // useEffect(() => {
+    //     console.log("subTask!!!!! ", subTasks);
+    // }, [subTasks, addSubtask]);
 
 
     const addToTask = async () => {
@@ -52,6 +57,15 @@ const AddTaskScreen = ({ navigation }) => {
             await mutation.mutateAsync(newTask);
         } catch (error) {
             console.error('Error adding task:', error);
+        }
+    };
+
+    const getAISubTasksResult = async () => {
+        try {
+            const newTitle = { title: title };
+            await mutation.mutateAsync(newTitle);
+        } catch (error) {
+            console.error('Error get AI subtasks:', error);
         }
     };
 
@@ -97,7 +111,7 @@ const AddTaskScreen = ({ navigation }) => {
                     <Text color="black" fontWeight={"$bold"}>Add subtask</Text>
                 </Pressable>
                 <Text>OR</Text>
-                <Button size="md" variant="solid" action="primary" isDisabled={false} isFocusVisible={false} onPress={addToTask}>
+                <Button size="md" variant="solid" action="primary" isDisabled={false} isFocusVisible={false} onPress={getAISubTasksResult}>
                     <ButtonText verticalAlign="middle">Add Subtask by AI</ButtonText>
                 </Button>
             </Card>

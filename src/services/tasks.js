@@ -31,4 +31,14 @@ const addTask = async (newTask) => {
   }
 };
 
-export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask };
+const getAISubTasks = async (newTitle) => {
+  try {
+    const { data } = await axios.post(`${base_url}/tasks/aisubtasks/`, newTitle);
+    return data;
+  } catch (error) {
+    console.error("Error adding task:", error);
+    throw error;
+  }
+};
+
+export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask, getAISubTasks};

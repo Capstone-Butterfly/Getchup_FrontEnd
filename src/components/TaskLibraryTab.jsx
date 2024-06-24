@@ -19,9 +19,6 @@ const CommonTasks = ({ fetchedCommonTask }) => {
     })
   );
 
-  console.log("title" + title);
-  console.log("addSubtask" + JSON.stringify(subTasks));
-
   return (
     <View style={styles.tabContent}>
       <View>
@@ -61,8 +58,6 @@ const CreatedTasks = ({ fetchedRepeatedTask }) => {
       addSubtask: state.addSubtask,
     })
   );
-  console.log("title" + title);
-  console.log("addSubtask" + JSON.stringify(subTasks));
 
   return (
     <View style={styles.tabContent}>
