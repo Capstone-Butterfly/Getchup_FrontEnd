@@ -21,9 +21,7 @@ const fetchTasksByUserId = async (userId) => {
 
 const addTask = async (newTask) => {
   try {
-    console.log("newTask", newTask);
     const { data } = await axios.post(`${base_url}/tasks/`, newTask);
-    console.log("SaveTask :", data);
     return data;
   } catch (error) {
     console.error("Error adding task:", error);

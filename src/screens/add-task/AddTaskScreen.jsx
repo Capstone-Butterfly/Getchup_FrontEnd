@@ -7,6 +7,7 @@ import {
 import { useEffect } from 'react';
 import { CalendarDaysIcon } from "@gluestack-ui/themed";
 import useCreateTaskStore from '../../store/createTaskStore';
+import useTaskStore from '../../store/taskStore';
 import { addTask, getAISubTasks } from '../../services/tasks';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TitleModalScreen from './TilteModelScreen';
@@ -21,6 +22,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [modalTitleVisible, setModalTitleVisible] = useState(false);
     const [modalNoteVisible, setModalNoteVisible] = useState(false);
     const [modalPriorityVisible, setModalPriorityVisible] = useState(false);
+    const [warningMessage, setWarningMessage] = useState('');
 
     const handleOpenTitleModal = () => setModalTitleVisible(true);
     const handleCloseTitleModal = () => setModalTitleVisible(false);
@@ -31,60 +33,90 @@ const AddTaskScreen = ({ navigation }) => {
     const handleOpenPriorityModal = () => setModalPriorityVisible(true);
     const handleClosePriorityModal = () => setModalPriorityVisible(false);
 
-    const handleSaveTitle = (newTitle) => {
-        setTitle(newTitle);
-        setModalTitleVisible(false);
-    };
+    const { addDataTask, setSelectedDate } = useTaskStore((state) => ({
+        addDataTask: state.addDataTask,
+        setSelectedDate: state.setSelectedDate,
+    }));
 
-    const mutation = useMutation({
-        mutationFn: async (title) => await getAISubTasks(title),
-        onSuccess: (data) => {
-            queryClient.invalidateQueries(['tasks']);
-            addSubtask(data.subtask);
-        },
-    });
-
-    const displayData = (data) => {
-        console.log("New Data ", JSON.stringify(data));
-    };
-
-    const { subTasks, title, setTitle, addSubtask, notes, task_urgency } = useCreateTaskStore((state) => ({
+    const { subTasks, title, addSubtask, notes, task_urgency, clearCreateTaskStore } = useCreateTaskStore((state) => ({
         subTasks: state.subTasks,
         title: state.title,
         setTitle: state.setTitle,
         addSubtask: state.addSubtask,
         notes: state.notes,
         task_urgency: state.task_urgency,
+        clearCreateTaskStore: state.clearCreateTaskStore,
     }));
 
-    // useEffect(() => {
-    //     console.log("subTask!!!!! ", subTasks);
-    // }, [subTasks, addSubtask]);
+    const getAIMutation = useMutation({
+        mutationFn: async (title) => await getAISubTasks(title),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries(['createTask']);
+            setSelectedDate(new Date());
+            addSubtask(data.subtask);
+        },
+    });
 
+    const saveTaskMutation = useMutation({
+        mutationFn: async (task) => await addTask(task),
+        onSuccess: (data) => {
+            queryClient.invalidateQueries(['tasks']); // Invalidate task queries
+            addDataTask(data); // Add task to taskStore
+            clearCreateTaskStore(); // Clear createTaskStore after saving
+            navigation.navigate('Home'); // Navigate to Home screen
+        },
+    });
 
-    const addToTask = async () => {
+    const getAISubTasksResult = async () => {
         try {
-            const newTask = { title: title, user_id: userId };
-            await mutation.mutateAsync(newTask);
+            const newTitle = { title: title };
+            await getAIMutation.mutateAsync(newTitle);
+        } catch (error) {
+            console.error('Error get AI subtasks:', error);
+        }
+    };
+
+    const handleSaveTask = async () => {
+        if (!userId || userId.length === 0) {
+            setWarningMessage('User ID is required');
+            return;
+        }
+        if (!title || title.length === 0) {
+            setWarningMessage('Title is required');
+            return;
+        }
+        if (!subTasks || subTasks.length === 0) {
+            setWarningMessage('At least one subtask is required');
+            return;
+        }
+
+        try {
+            const newTask = {
+                user_id: userId,
+                title,
+                notes,
+                task_urgency,
+                subtask: subTasks,
+                is_repeated: false,
+                due_date: null,
+            };
+            await saveTaskMutation.mutateAsync(newTask);
+            setWarningMessage('');
         } catch (error) {
             console.error('Error adding task:', error);
         }
     };
 
-    const getAISubTasksResult = async () => {
-        try {
-            const newTitle = { title: title };
-            await mutation.mutateAsync(newTitle);
-        } catch (error) {
-            console.error('Error get AI subtasks:', error);
-        }
+    const handleCancel = () => {
+        clearCreateTaskStore(); 
+        navigation.navigate('HomeScreen'); 
     };
 
     return (
         <SafeAreaView style={styles.container}>
             <HStack space="4xl" reversed={false}>
                 <Box width='20%'>
-                    <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false}>
+                    <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} onPress={handleCancel}>
                         <ButtonText verticalAlign="middle">Cancel</ButtonText>
                     </Button>
                 </Box>
@@ -94,11 +126,14 @@ const AddTaskScreen = ({ navigation }) => {
                     </Center>
                 </Box>
                 <Box width='20%'>
-                    <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false}>
+                    <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} onPress={handleSaveTask}>
                         <ButtonText verticalAlign="middle">Save</ButtonText>
                     </Button>
                 </Box>
             </HStack>
+            {warningMessage ? (
+                <Text style={styles.warningText}>{warningMessage}</Text>
+            ) : null}
             <Card>
                 <Pressable onPress={handleOpenTitleModal} p="$5">
                     <Text color="black" fontWeight={"$bold"}>Add Task Title</Text>
@@ -130,11 +165,11 @@ const AddTaskScreen = ({ navigation }) => {
             </Card>
             <FlatList
             data={subTasks}
-            renderItem={({ item }) => (
-                <Box style={styles.subTaskContainer}>
+            renderItem={({ item, index }) => (
+                <Box key={index} style={styles.subTaskContainer}>
                     <Text color="black" fontWeight={"$bold"}>{item.sub_title}</Text>
                     <Text color="black">Time: {item.time}</Text>
-                    <Text color="black">Movement: {item.movement.toString()}</Text>
+                    <Text color="black">Movement: {item.movement != null ? item.movement.toString() : ''}</Text>
                 </Box>
             )}
             keyExtractor={(item) => item.sub_title}

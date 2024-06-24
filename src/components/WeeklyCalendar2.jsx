@@ -13,26 +13,36 @@ const WeeklyCalendar = ({ userId }) => {
         tasks: state.tasks,
         setTasks: state.setTasks,
         selectedDate: state.selectedDate,
-        setSelectedDate: state.setSelectedDate
+        setSelectedDate: state.setSelectedDate,
     }));
 
     const { data: fetchedTask, isLoading, error } = useQuery({
         queryKey: ['tasks', userId], 
         queryFn: () => fetchTasksByUserId(userId),
-        enabled: !tasks || tasks.length === 0,
+        //enabled: !tasks || tasks.length === 0,
+        refetchOnMount: true,
+        refetchOnReconnect: true,
     });
 
     useEffect(() => {
-        setTasks(fetchedTask);
+        if (fetchedTask) {
+            setTasks(fetchedTask);
+            console.log("Tasks !!!" , tasks != null ? tasks.length: 0)
+        }
     }, [fetchedTask, setTasks]);
 
-    const handleDateSelected = useCallback((date) => {
+    const handleDateSelected = (date) => {
         setSelectedDate(date);
-    }, [setSelectedDate]);
+    };
       
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
-        return tasks.filter(task => task.created_datetime.split('T')[0] === selectedDateString);
+        return tasks.filter(task => {
+            if (task.created_datetime) {
+                return task.created_datetime.split('T')[0] === selectedDateString;
+            }
+            return false; // or handle this case as per your application logic
+        });
     };
 
     const filteredTasks = useMemo(() => {
