@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { BASE_URL } from '../../config/apiConfig';
 import surveyQuestionStore from '../../store/surveyQuestionStore';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import { surveyQuestionProfile } from '../../services/profile';
 
 function SurveyQuestionScreen() {
   const { currentQuestion, setCurrentQuestion, answers, setAnswers } = surveyQuestionStore(); // Access the Zustand store
@@ -43,20 +43,18 @@ function SurveyQuestionScreen() {
     }
   };
 
-
   const { mutate: handleSubmit, isLoading, mutationFn } = useMutation(
     {
       mutationFn: async (answers) => {
-        const response = await axios.post(`${base_url}/surveys/submit`, {
-          question_1: [{ question: questions[0].question, options: answers[0] }],
-          question_2: [{ question: questions[1].question, options: answers[1] }],
-          question_3: [{ question: questions[2].question, options: answers[2] }],
-          question_4: [{ question: questions[3].question, options: answers[3] }]
-        });
-        return response.data;
+        const data = await surveyQuestionProfile([
+          { question: questions[0].question, options: answers[0] },
+          { question: questions[1].question, options: answers[1] },
+          { question: questions[2].question, options: answers[2] },
+          { question: questions[3].question, options: answers[3] },
+      ]);
+        return data;
       },
       onSuccess: async (data) => {
-        
         const category = 'mixed presentation';
         // Navigate to ADHDCatScreen page
         navigation.navigate('ADHDCatScreen', { category });

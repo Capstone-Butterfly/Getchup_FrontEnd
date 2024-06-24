@@ -4,35 +4,30 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
 import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
-import { BASE_URL } from '../../config/apiConfig';
 import signInStore from '../../store/signInStore';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
+import { signInProfile } from '../../services/profile';
 
 function SignInScreen() {
   const { email, setEmail, password, setPassword } = signInStore(); // Access the Zustand store
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
-  const base_url = BASE_URL;
 
   const { mutate: handleLogin, isLoading, mutationFn } = useMutation(
     {
       mutationFn: async () => {
-        const response = await axios.post(`${base_url}/login`, { email, password });
-        console.log("response: ", response);
-        return response.data;
+        const data = await signInProfile(email, password);
+        return data;
       },
-      onSuccess: async (data) => {
-        console.log("data-onSuccess", data);
-        console.log("onSuccess", data.token);
-        // Save token in AsyncStorage
-        await AsyncStorage.setItem('token', data.token);
-        // Navigate to home page
-        navigation.navigate('HomeScreen');
-      },
-      onError: () => {
-        Alert.alert('Login failed', 'Invalid email or password');
-      },
+        onSuccess: async (data) => {
+            // Save token in AsyncStorage
+            await AsyncStorage.setItem('token', data.token);
+            // Navigate to home page
+            navigation.navigate('HomeScreen');
+        },
+        onError: () => {
+            Alert.alert('Login failed', 'Invalid email or password');
+        },
     }
   );
 

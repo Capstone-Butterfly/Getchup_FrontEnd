@@ -3,17 +3,15 @@ import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSl
 import React, { useState } from 'react';
 import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { BASE_URL } from '../../config/apiConfig';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import signUpStore from '../../store/signUpStore';
+import { signUpProfile } from '../../services/profile';
 
 function SignUpScreen() {
   const { firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, confirmPassword, setConfirmPassword, phone, setPhone } = signUpStore(); // Access the Zustand store
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const base_url = BASE_URL;
 
   const handlePasswordState = () => {
     setShowPassword((showState) => !showState);
@@ -26,9 +24,8 @@ function SignUpScreen() {
   const { mutate: handleSignUp, isLoading, mutationFn } = useMutation(
     {
       mutationFn: async () => {
-        const response = await axios.post(`${base_url}/createaccount`, { first_name: firstName, last_name: lastName, email, password, phone });
-        console.log("response: ", response);
-        return response.data;
+        const data = await signUpProfile(firstName, lastName, email, password, phone);
+        return data;
       },
       onSuccess: async () => {
         // Navigate to Survey Question
