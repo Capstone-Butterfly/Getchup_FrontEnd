@@ -7,7 +7,7 @@ import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
 
-const WeeklyCalendar = ({ userId }) => {
+const WeeklyCalendar = ({ userId, navigation }) => {
 
     const { tasks, setTasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
         tasks: state.tasks,
@@ -78,17 +78,15 @@ const WeeklyCalendar = ({ userId }) => {
             ) : filteredTasks && filteredTasks.length === 0 ? (
                 <Text>There are no tasks here yet, yay!</Text>
             ) : (
-            <FlatList
-            data={filteredTasks}
-            renderItem={({ item }) => (
-                <TaskCard
-                title={item.title}
-                created_datetime={item.created_datetime}
-                totalSubtasks={item.subtask.length}
-                completedSubtasks={item.subtask.filter((subtask) => subtask.status === 'complete').length}
-                />
-            )}
-            keyExtractor={(item) => item._id}
+                <FlatList
+                data={filteredTasks}
+                renderItem={({ item }) => (
+                    <TaskCard
+                        task={item}
+                        navigation={navigation}
+                    />
+                )}
+                keyExtractor={(item) => item._id}
             />
             )}
         </View>

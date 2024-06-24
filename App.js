@@ -1,4 +1,4 @@
-import 'react-native-gesture-handler'; //THIS HAS TO BE AT LINE NUMBER 1
+import {GestureHandlerRootView} from 'react-native-gesture-handler'; //THIS HAS TO BE AT LINE NUMBER 1
 import React from 'react';
 import { Image } from '@gluestack-ui/themed';
 import { GluestackUIProvider, StatusBar } from '@gluestack-ui/themed';
@@ -13,6 +13,7 @@ import { QueryClientProvider } from '@tanstack/react-query';
 
 const App = () => {
     return (
+        <GestureHandlerRootView style={{ flex: 1 }}>
         <QueryClientProvider client={queryClient}>
             <NavigationContainer>
                 <SafeAreaProvider>
@@ -23,6 +24,7 @@ const App = () => {
                 </SafeAreaProvider>
             </NavigationContainer>
         </QueryClientProvider> 
+        </GestureHandlerRootView>
     )
 }
 const styles = StyleSheet.create({
