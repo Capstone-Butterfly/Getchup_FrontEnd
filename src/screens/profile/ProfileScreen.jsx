@@ -1,12 +1,9 @@
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "@gluestack-ui/themed"
+import ProfileStack from "../../stacks/ProfileStack"
 
-const ProfileScreen = ({ navigation }) => {
-    return (
-        <SafeAreaView>
-            <Text>ProfileScreen</Text>
-        </SafeAreaView>
-    );
-};
+const ProfileTab = () => {
+    return(
+        <ProfileStack />
+    )
+}
 
-export default ProfileScreen;
+export default ProfileTab
