@@ -3,6 +3,7 @@ import { Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddTaskDateContainer from "../../components/AddTaskDateContainer";
 import AddTaskTimeContainer from "../../components/AddTaskTimeContainer";
+import ToggleSwitchTaskReminder from "../../components/ToggleSwitchTaskReminder";
 
 const DateTimeModelScreen = () => {
   return (
@@ -10,6 +11,7 @@ const DateTimeModelScreen = () => {
       <Text style={styles.title}>Date and Time</Text>
       <AddTaskDateContainer />
       <AddTaskTimeContainer />
+      <ToggleSwitchTaskReminder />
     </SafeAreaView>
   );
 };
