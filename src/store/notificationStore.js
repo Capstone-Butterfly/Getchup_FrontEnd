@@ -1,16 +1,22 @@
 
 import { create } from 'zustand';
 
-export const usePushTokenStore = create((set) => ({
-    expoPushToken: '',
-    setExpoPushToken: (token) => set({ expoPushToken: token }),
-  }));
+const useNotificationStore = create(set => ({
+  expoPushToken: '',
+  setExpoPushToken: (token) => set({ expoPushToken: token }),
+  channels: [],
+  setChannels: (channels) => set({ channels }),
+  notification: undefined,
+  setNotification: (notification) => set({ notification }),
 
-// const useFetchTasks = userId => {
-//     const setTasks = useTaskStore(state => state.setTasks);
-//     return useQuery(['tasks', userId], () => fetchTasks(userId), {
-//         onSuccess: data => setTasks(data),
-//     });
-// };
+  //unread notifications from the notification tray:
+  notifications: [],
+  setNotifications: (notifications) => set({ notifications }),
 
-export {usePushTokenStore};
+  //notification popover in the header:
+  isPopoverOpen: false,
+  openPopover: () => set({ isPopoverOpen: true }),
+  closePopover: () => set({ isPopoverOpen: false }),
+}));
+
+export default useNotificationStore;

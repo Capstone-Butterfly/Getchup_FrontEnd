@@ -9,28 +9,56 @@ const base_url = BASE_URL;
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldShowAlert: true,
-      shouldPlaySound: true,
-      shouldSetBadge: false,
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
     }),
-  });
+});
 
-  async function schedulePushNotification(title, body, trigger) {
-    const scheduledNotificationId = await Notifications.scheduleNotificationAsync({
+async function scheduleNotification(task) {
+    const notificationId = await Notifications.scheduleNotificationAsync({
         content: {
-            title: title,
-            body: body,
-            data: { data: 'goes here', test: { test1: 'more data' } },
+            title: task.title,
+            body: task.body,
         },
-        trigger: { seconds: trigger },
+        trigger: { seconds: task.trigger },
     });
-    console.log(scheduledNotificationId)
-    return scheduledNotificationId
-  }
-  
-  async function registerForPushNotificationsAsync() {
+    
+    console.log(notificationId)
+    return notificationId
+}
+
+async function cancelNotification(task) {
+
+    await Notifications.cancelScheduledNotificationAsync(task.notificationId).then(
+
+        console.log('notification cancelled')
+    )
+}
+
+async function saveNotification(newNotification) {
+    try {
+      const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
+      return data;
+    } catch (error) {
+      console.error("Error adding task:", error);
+      throw error;
+    }
+  };
+
+  async function getUnreadNotifications() {
+    try {
+        const notifications = await Notifications.getPresentedNotificationsAsync();
+        console.log('Presented Notifications:', notifications);
+        return notifications;
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+    }
+}
+
+async function registerForPushNotificationsAsync() {
     let token;
-  
+
     if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync('default', {
             name: 'default',
@@ -39,7 +67,7 @@ Notifications.setNotificationHandler({
             lightColor: '#FF231F7C',
         });
     }
-  
+
     if (Device.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
@@ -62,15 +90,15 @@ Notifications.setNotificationHandler({
                     projectId,
                 })
             ).data;
-            console.log(token);
+            // console.log(token);
         } catch (e) {
             token = `${e}`;
         }
     } else {
         alert('Must use physical device for Push Notifications');
     }
-  
-    return token;
-  }
 
-export { schedulePushNotification, registerForPushNotificationsAsync };
+    return token;
+}
+
+export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications };

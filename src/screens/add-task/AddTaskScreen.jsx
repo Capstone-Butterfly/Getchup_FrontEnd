@@ -13,7 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TitleModalScreen from './TilteModelScreen';
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
-import DateModelScreen from './DateModelScreen'
+import DateModelScreen from './DateTimeModelScreen'
 
 const { width, height } = Dimensions.get('window');
 
