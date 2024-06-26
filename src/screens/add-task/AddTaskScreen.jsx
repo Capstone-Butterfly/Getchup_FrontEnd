@@ -13,6 +13,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import TitleModalScreen from './TilteModelScreen';
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
+import DateModelScreen from './DateModelScreen'
 
 const { width, height } = Dimensions.get('window');
 
@@ -114,6 +115,7 @@ const AddTaskScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
+            <DateModelScreen />
             <HStack space="4xl" reversed={false}>
                 <Box width='20%'>
                     <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} onPress={handleCancel}>
