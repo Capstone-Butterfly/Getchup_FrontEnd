@@ -8,7 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { signInProfile, userDataProfile } from '../../services/profile';
 
 function SignInScreen() {
-  const { email, password, userId, setEmail, setPassword, setUserId, setToken, setPhone, setLastName, setFirstName, setNotification, setTaskReminder, setMovementReminder, setUserType } = profileStore((state) => state);
+  const { email, password, userId, setEmail, setPassword, setUserId, setToken, setPhone, setLastName, setFirstName, setNotification, setTaskReminder, setMovementReminder, setUserType, setSurveyDone } = profileStore((state) => state);
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
 
@@ -35,6 +35,7 @@ function SignInScreen() {
         setFirstName(userData.user.first_name);
         setLastName(userData.user.last_name);
 
+        setSurveyDone(true);
         navigation.navigate('HomeScreen');
       },
       onError: () => {

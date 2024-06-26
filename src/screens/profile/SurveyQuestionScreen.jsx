@@ -4,10 +4,10 @@ import { View, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
-import { surveyQuestionProfile } from '../../services/profile';
+import { surveyQuestionProfile, updateUserProfile } from '../../services/profile';
 
 function SurveyQuestionScreen() {
-  const { current_question, setCurrentQuestion, answers, setAnswers } = profileStore((state) => state); 
+  const { userId, current_question, setCurrentQuestion, answers, setAnswers, setUserType, setSurveyDone } = profileStore((state) => state); 
   const navigation = useNavigation();
 
   const questions = [
@@ -53,9 +53,16 @@ function SurveyQuestionScreen() {
         return data;
       },
       onSuccess: async (data) => {
-        const category = 'mixed presentation';
+    
+
+        setUserType(data.user_type);
+        const userInfo = {
+          user_type: data.user_type,
+        };
+        await updateUserProfile(userId, userInfo);
+
         // Navigate to ADHDCatScreen page
-        navigation.navigate('ADHDCatScreen', { category });
+        navigation.navigate('ADHDCatScreen');
       },
       onError: () => {
         Alert.alert('Survey submission failed', 'Something went wrong. Please try again.');

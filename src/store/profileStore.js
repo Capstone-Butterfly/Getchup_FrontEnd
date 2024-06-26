@@ -11,10 +11,12 @@ const profileStore = create((set) => ({
     notification: false,
     movement_reminder: false,
     task_reminder: false,
+    survey_done: false,
     current_question: 0,
     answers: '',
     user_type: '',
   
+    setSurveyDone: (survey_done) => set((state) => ({ ...state, survey_done })),
     setFirstName: (first_name) => set((state) => ({ ...state, first_name })),
     setLastName: (last_name) => set((state) => ({ ...state, last_name })),
     setEmail: (email) => set((state) => ({ ...state, email })),

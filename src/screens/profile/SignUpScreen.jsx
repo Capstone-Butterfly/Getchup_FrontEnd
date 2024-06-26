@@ -1,7 +1,6 @@
-
 import { EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
 import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
@@ -9,8 +8,7 @@ import profileStore from '../../store/profileStore';
 import { signUpProfile } from '../../services/profile';
 
 function SignUpScreen() {
-
-  const { email, first_name, last_name, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword } = profileStore((state) => state);
+  const { email, first_name, last_name, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword, setUserId } = profileStore((state) => state);
 
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
@@ -42,14 +40,21 @@ function SignUpScreen() {
         const data = await signUpProfile(first_name, last_name, email, password, phone);
         return data;
       },
-      onSuccess: async () => {
+      onSuccess: async (data) => {
+        setUserId(data.userId);
+        console.log('Signup successful, navigating to SurveyQuestionScreen');
         navigation.navigate('SurveyQuestionScreen');
       },
-      onError: () => {
+      onError: (error) => {
+        console.log('Signup error:', error);
         Alert.alert('Signup failed', 'Something went wrong. Please try again.');
       },
     }
   );
+
+  useEffect(() => {
+    console.log('Navigation object:', navigation);
+  }, []);
 
   return (
     <View>
@@ -112,7 +117,10 @@ function SignUpScreen() {
             </Text>
           )}
 
-          <Button backgroundColor='$blue' onPress={handleSignUp} disabled={!isMatched}>
+          <Button backgroundColor='$blue' onPress={() => {
+            console.log('Sign Up button pressed');
+            handleSignUp();
+          }} disabled={!isMatched}>
             <ButtonText>Create Account</ButtonText>
           </Button>
 
@@ -126,5 +134,3 @@ function SignUpScreen() {
 }
 
 export default SignUpScreen;
-
-

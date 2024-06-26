@@ -14,13 +14,13 @@ import profileStore from '../store/profileStore';
 const Stack = createNativeStackNavigator();
 
 const ProfileStack = () => {
-  const { userId } = profileStore((state) => state);
+  const { survey_done } = profileStore((state) => state);
 
 
   return (
     <>
       {
-        userId ?
+        survey_done ?
           <Stack.Navigator initialRouteName={"ProfileHome"}>
             <Stack.Screen name="ProfileHome" component={ProfileHomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ headerShown: false }} />
