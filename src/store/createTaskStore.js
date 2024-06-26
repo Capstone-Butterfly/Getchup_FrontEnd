@@ -9,7 +9,7 @@ const useCreateTaskStore = create((set) => ({
     end_time: "",
     is_repeated: false,
     notes: "",
-    task_urgency: "medium",
+    task_urgency: "",
     subTasks: [],
   
     // Setters

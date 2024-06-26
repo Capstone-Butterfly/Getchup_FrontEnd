@@ -14,7 +14,7 @@ const TaskPriorityModelScreen = () => {
       {/* <Text style={styles.title}>Task Priority</Text> */}
       <View>
         <TouchableOpacity
-          onPress={() => setTaskUrgency("High")}
+          onPress={() => setTaskUrgency("high")}
           style={styles.button}
         >
           <View style={styles.gridrow}>
@@ -26,7 +26,7 @@ const TaskPriorityModelScreen = () => {
               <Text style={styles.text}>High</Text>
             </View>
             <View>
-              {task_urgency === "High" && (
+              {task_urgency === "high" && (
                 <Image
                   source={require("../../../assets/tickIcon.png")}
                   style={styles.tickImage}
@@ -36,7 +36,7 @@ const TaskPriorityModelScreen = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setTaskUrgency("Medium")}
+          onPress={() => setTaskUrgency("medium")}
           style={styles.button}
         >
           <View style={styles.gridrow}>
@@ -48,7 +48,7 @@ const TaskPriorityModelScreen = () => {
               <Text style={styles.text}>Medium</Text>
             </View>
             <View>
-              {task_urgency === "Medium" && (
+              {task_urgency === "medium" && (
                 <Image
                   source={require("../../../assets/tickIcon.png")}
                   style={styles.tickImage}
@@ -58,7 +58,7 @@ const TaskPriorityModelScreen = () => {
           </View>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => setTaskUrgency("Low")}
+          onPress={() => setTaskUrgency("low")}
           style={styles.button}
         >
           <View style={styles.gridrow}>
@@ -70,7 +70,7 @@ const TaskPriorityModelScreen = () => {
               <Text style={styles.text}>Low</Text>
             </View>
             <View>
-              {task_urgency === "Low" && (
+              {task_urgency === "low" && (
                 <Image
                   source={require("../../../assets/tickIcon.png")}
                   style={styles.tickImage}
