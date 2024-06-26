@@ -2,15 +2,13 @@ import { ButtonText, FormControl, Heading, VStack, Button } from '@gluestack-ui/
 import React from 'react';
 import { View, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { BASE_URL } from '../../config/apiConfig';
-import surveyQuestionStore from '../../store/surveyQuestionStore';
+import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
 import { surveyQuestionProfile } from '../../services/profile';
 
 function SurveyQuestionScreen() {
-  const { currentQuestion, setCurrentQuestion, answers, setAnswers } = surveyQuestionStore(); // Access the Zustand store
+  const { current_question, setCurrentQuestion, answers, setAnswers } = profileStore((state) => state); 
   const navigation = useNavigation();
-  const base_url = BASE_URL;
 
   const questions = [
     {
@@ -33,17 +31,17 @@ function SurveyQuestionScreen() {
 
   const handleOptionPress = (option) => {
     const newAnswers = [...answers];
-    newAnswers[currentQuestion] = option;
+    newAnswers[current_question] = option;
     setAnswers(newAnswers);
 
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
+    if (current_question < questions.length - 1) {
+      setCurrentQuestion(current_question + 1);
     } else {
       handleSubmit(newAnswers);
     }
   };
 
-  const { mutate: handleSubmit, isLoading, mutationFn } = useMutation(
+  const { mutate: handleSubmit } = useMutation(
     {
       mutationFn: async (answers) => {
         const data = await surveyQuestionProfile([
@@ -51,7 +49,7 @@ function SurveyQuestionScreen() {
           { question: questions[1].question, options: answers[1] },
           { question: questions[2].question, options: answers[2] },
           { question: questions[3].question, options: answers[3] },
-      ]);
+        ]);
         return data;
       },
       onSuccess: async (data) => {
@@ -60,15 +58,14 @@ function SurveyQuestionScreen() {
         navigation.navigate('ADHDCatScreen', { category });
       },
       onError: () => {
-        Alert.alert('Login failed', 'Invalid email or password');
+        Alert.alert('Survey submission failed', 'Something went wrong. Please try again.');
       },
     }
   );
-    
 
   return (
     <View>
-      <Text fontWeight="bold">Survey {currentQuestion + 1}</Text>
+      <Text fontWeight="bold">Survey {current_question + 1}</Text>
       <FormControl
         p="$4"
         borderWidth="$1"
@@ -80,18 +77,18 @@ function SurveyQuestionScreen() {
       >
         <VStack space="xl">
           <Heading color="$text900" lineHeight="$md">
-            {questions[currentQuestion].question}
+            {questions[current_question].question}
           </Heading>
 
-          {questions[currentQuestion].options.map((option) => (
-  <Button
-    key={option}
-    backgroundColor="$blue"
-    onPress={() => handleOptionPress(option)}
-  >
-    <ButtonText>{option}</ButtonText>
-  </Button>
-))}
+          {questions[current_question].options.map((option) => (
+            <Button
+              key={option}
+              backgroundColor="$blue"
+              onPress={() => handleOptionPress(option)}
+            >
+              <ButtonText>{option}</ButtonText>
+            </Button>
+          ))}
         </VStack>
       </FormControl>
     </View>

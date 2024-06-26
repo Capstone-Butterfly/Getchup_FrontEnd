@@ -1,17 +1,22 @@
+
 import { EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
 import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
 import React, { useState } from 'react';
 import { View, Text, Alert, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
-import signUpStore from '../../store/signUpStore';
+import profileStore from '../../store/profileStore';
 import { signUpProfile } from '../../services/profile';
 
 function SignUpScreen() {
-  const { firstName, setFirstName, lastName, setLastName, email, setEmail, password, setPassword, confirmPassword, setConfirmPassword, phone, setPhone } = signUpStore(); // Access the Zustand store
+
+  const { email, first_name, last_name, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword } = profileStore((state) => state);
+
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isMatched, setIsMatched] = useState(false);
 
   const handlePasswordState = () => {
     setShowPassword((showState) => !showState);
@@ -21,14 +26,23 @@ function SignUpScreen() {
     setShowConfirmPassword((showState) => !showState);
   };
 
-  const { mutate: handleSignUp, isLoading, mutationFn } = useMutation(
+  const handlePasswordChange = (value) => {
+    setPassword(value);
+    setIsMatched(value === confirmPassword);
+  };
+
+  const handleConfirmPasswordChange = (value) => {
+    setConfirmPassword(value);
+    setIsMatched(value === password);
+  };
+
+  const { mutate: handleSignUp, mutationFn } = useMutation(
     {
       mutationFn: async () => {
-        const data = await signUpProfile(firstName, lastName, email, password, phone);
+        const data = await signUpProfile(first_name, last_name, email, password, phone);
         return data;
       },
       onSuccess: async () => {
-        // Navigate to Survey Question
         navigation.navigate('SurveyQuestionScreen');
       },
       onError: () => {
@@ -47,14 +61,14 @@ function SignUpScreen() {
           <VStack space="xs">
             <Text color="$text500" lineHeight="$xs">First Name</Text>
             <Input>
-              <InputField value={firstName} onChangeText={setFirstName} type="text" />
+              <InputField value={first_name} onChangeText={setFirstName} type="text" />
             </Input>
           </VStack>
 
           <VStack space="xs">
             <Text color="$text500" lineHeight="$xs">Last Name</Text>
             <Input>
-              <InputField value={lastName} onChangeText={setLastName} type="text" />
+              <InputField value={last_name} onChangeText={setLastName} type="text" />
             </Input>
           </VStack>
 
@@ -75,7 +89,7 @@ function SignUpScreen() {
           <VStack space="xs">
             <Text color="$text500" lineHeight="$xs">Password</Text>
             <Input textAlign="center">
-              <InputField value={password} onChangeText={setPassword} type={showPassword ? "text" : "password"} />
+              <InputField value={password} onChangeText={handlePasswordChange} type={showPassword ? "text" : "password"} />
               <InputSlot pr="$3" onPress={handlePasswordState}>
                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
               </InputSlot>
@@ -85,14 +99,20 @@ function SignUpScreen() {
           <VStack space="xs">
             <Text color="$text500" lineHeight="$xs">Confirm Password</Text>
             <Input textAlign="center">
-              <InputField value={confirmPassword} onChangeText={setConfirmPassword} type={showConfirmPassword ? "text" : "password"} />
+              <InputField value={confirmPassword} onChangeText={handleConfirmPasswordChange} type={showConfirmPassword ? "text" : "password"} />
               <InputSlot pr="$3" onPress={handleConfirmPasswordState}>
                 <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
               </InputSlot>
             </Input>
           </VStack>
 
-          <Button backgroundColor='$blue' onPress={handleSignUp} isLoading={isLoading}>
+          {!isMatched && (
+            <Text style={{ color: 'red'}}>
+              Passwords do not match. Please enter matching passwords.
+            </Text>
+          )}
+
+          <Button backgroundColor='$blue' onPress={handleSignUp} disabled={!isMatched}>
             <ButtonText>Create Account</ButtonText>
           </Button>
 
@@ -106,4 +126,5 @@ function SignUpScreen() {
 }
 
 export default SignUpScreen;
+
 

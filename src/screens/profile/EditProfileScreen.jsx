@@ -1,45 +1,32 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { VStack, HStack, Icon, Input, InputField, FormControl, Heading, Button, ButtonText } from '@gluestack-ui/themed';
 import { EditIcon } from '@gluestack-ui/themed';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { updateUserProfile, userDataProfile } from '../../services/profile';
-import useUserStore from '../../store/useUserStore';
+import profileStore from '../../store/profileStore';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 function EditProfileScreen({ navigation }) {
-  const queryClient = useQueryClient();
-  const { userInfo, setUserInfo, editableField, setEditableField } = useUserStore();
 
-  const { data: fetchUser, isLoading, error } = useQuery({
-    queryKey: ['userData', 'userId'],
-    queryFn: async () => {
-      const userID = await AsyncStorage.getItem('userId');
-      return userDataProfile(userID);
-    },
-    refetchOnMount: true,
-    refetchOnReconnect: true,
-  });
+  const { email, first_name, last_name, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword } = profileStore((state) => state);
 
-  useEffect(() => {
-    if (fetchUser) {
-      setUserInfo({
-        first_name: fetchUser.user.first_name || '',
-        last_name: fetchUser.user.last_name || '',
-        email: fetchUser.user.email || '',
-        phone: fetchUser.profile.phone || '',
-        password: '', // Initialize password from fetched data if needed
-      });
-    }
-  }, [fetchUser]);
+
+  const [editableField, setEditableField] = useState('');
+
+
 
   const mutation = useMutation({
-    mutationFn: async (userInfo) => {
-      const userID = await AsyncStorage.getItem('userId');
-      return updateUserProfile(userID, userInfo);
+    mutationFn: async () => {
+      const userInfo = {
+        email: email,
+        first_name: first_name,
+        last_name: last_name,
+        password: password,
+        phone: phone,
+      };
+      return updateUserProfile(userId, userInfo);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['userData', 'userId']);
       Alert.alert('Success', 'User profile updated successfully.');
     },
     onError: (error) => {
@@ -49,24 +36,16 @@ function EditProfileScreen({ navigation }) {
   });
 
   const handleEdit = (field) => {
-    setEditableField(field);
+    setEditableField((prevField) => (prevField === field ? '' : field));
   };
-
-  const handleInputChange = (field, value) => {
-    setUserInfo({ ...userInfo, [field]: value });
-  };
+  // const handleInputChange = (field, value) => {
+  //   setUserInfo({ ...userInfo, [field]: value });
+  // };
 
   const handleSubmit = () => {
-    mutation.mutate(userInfo);
+    mutation.mutate();
   };
 
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (error) {
-    return <Text>Error loading user data</Text>;
-  }
 
   return (
     <View>
@@ -82,11 +61,8 @@ function EditProfileScreen({ navigation }) {
       >
         <VStack space="xl">
           <Button onPress={() => navigation.navigate('ProfileHome')} variant="outline">
-            <ButtonText>
-              Back
-            </ButtonText>
-            
-          </Button> 
+            <ButtonText>Back</ButtonText>
+          </Button>
           <Heading color="$text900" lineHeight="$md">
             User Profile
           </Heading>
@@ -103,13 +79,13 @@ function EditProfileScreen({ navigation }) {
             {editableField === 'first_name' ? (
               <Input>
                 <InputField
-                  value={userInfo.first_name}
-                  onChangeText={(value) => handleInputChange('first_name', value)}
+                  value={first_name}
+                  onChangeText={(value) => setFirstName(value)}
                   type="text"
                 />
               </Input>
             ) : (
-              <Text>{userInfo.first_name}</Text>
+              <Text>{first_name}</Text>
             )}
           </VStack>
 
@@ -125,13 +101,13 @@ function EditProfileScreen({ navigation }) {
             {editableField === 'last_name' ? (
               <Input>
                 <InputField
-                  value={userInfo.last_name}
-                  onChangeText={(value) => handleInputChange('last_name', value)}
+                  value={last_name}
+                  onChangeText={(value) => setLastName(value)}
                   type="text"
                 />
               </Input>
             ) : (
-              <Text>{userInfo.last_name}</Text>
+              <Text>{last_name}</Text>
             )}
           </VStack>
 
@@ -147,13 +123,13 @@ function EditProfileScreen({ navigation }) {
             {editableField === 'email' ? (
               <Input>
                 <InputField
-                  value={userInfo.email}
-                  onChangeText={(value) => handleInputChange('email', value)}
+                  value={email}
+                  onChangeText={(value) => setEmail(value)}
                   type="text"
                 />
               </Input>
             ) : (
-              <Text>{userInfo.email}</Text>
+              <Text>{email}</Text>
             )}
           </VStack>
 
@@ -169,13 +145,13 @@ function EditProfileScreen({ navigation }) {
             {editableField === 'phone' ? (
               <Input>
                 <InputField
-                  value={userInfo.phone}
-                  onChangeText={(value) => handleInputChange('phone', value)}
+                  value={phone}
+                  onChangeText={(value) => setPhone(value)}
                   type="text"
                 />
               </Input>
             ) : (
-              <Text>{userInfo.phone}</Text>
+              <Text>{phone}</Text>
             )}
           </VStack>
 
@@ -191,8 +167,8 @@ function EditProfileScreen({ navigation }) {
             {editableField === 'password' ? (
               <Input>
                 <InputField
-                  value={userInfo.password}
-                  onChangeText={(value) => handleInputChange('password', value)}
+                  value={password}
+                  onChangeText={(value) => setPassword('password', value)}
                   type="password"
                 />
               </Input>
@@ -207,7 +183,6 @@ function EditProfileScreen({ navigation }) {
       <Button onPress={handleSubmit}>
         <ButtonText>Save Changes</ButtonText>
       </Button>
-      
     </View>
   );
 }

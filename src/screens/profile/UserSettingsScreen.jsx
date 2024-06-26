@@ -1,64 +1,63 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView } from 'react-native';
+import React from 'react';
+import { View, Text, ScrollView, Alert } from 'react-native';
 import { VStack, FormControl, Heading, Button, ButtonText } from '@gluestack-ui/themed';
 import SettingsSwitch from '../../components/SettingsSwitch';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { updateUserProfile, userDataProfile } from '../../services/profile';
-import useUserStore from '../../store/useUserStore';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import profileStore from '../../store/profileStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-function UserSettingsScreen({navigation}) {
+function UserSettingsScreen({ navigation }) {
   const queryClient = useQueryClient();
-  const { userInfo, setUserInfo, editableField, setEditableField } = useUserStore();
+  const { userId, notification, movement_reminder, task_reminder, setNotification, setMovementReminder, setTaskReminder } = profileStore((state) => state);
 
-  const { data: fetchUser, isLoading, error } = useQuery({
-    queryKey: ['userData', 'userId'],
-    queryFn: async () => {
-      const userID = await AsyncStorage.getItem('userId');
-      return userDataProfile(userID);
-    },
-    refetchOnMount: true,
-    refetchOnReconnect: true,
-  });
-  
-  useEffect(() => {
-    if (fetchUser) {
-      setUserInfo({
-        notification: fetchUser.profile.notification || '',
-        movement_reminder: fetchUser.profile.movement_reminder || '',
-        task_reminder: fetchUser.profile.task_reminder || '',
-      });
-    }
-  }, [fetchUser]);
 
   const mutation = useMutation({
-    mutationFn: async (userInfo) => {
-      const userID = await AsyncStorage.getItem('userId');
-      return updateUserProfile(userID, userInfo);
+    mutationFn: async () => {
+
+
+      const updatedSettings = {
+        task_reminder: task_reminder,
+        movement_reminder:movement_reminder,
+        notification:notification,
+      };
+      console.log(updatedSettings);
+
+      const response = await fetch(`http://52.55.48.104:8080/api/v1/update/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedSettings),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to update user settings');
+      }
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries(['userData', 'userId']);
-      Alert.alert('Success', 'User profile updated successfully.');
+      Alert.alert('Success', 'User settings updated successfully.');
     },
     onError: (error) => {
-      console.error('Error updating user data:', error);
-      Alert.alert('Error', 'Failed to update user data. Please try again.');
+      console.error('Error updating user settings:', error);
+      Alert.alert('Error', 'Failed to update user settings. Please try again.');
     }
   });
 
-  const toggleSwitch = async (field) => {
-    const updatedUserInfo = { ...userInfo, [field]: !userInfo[field] };
-    setUserInfo(updatedUserInfo);
-    await mutation.mutate(updatedUserInfo);
+  // Toggle switch handler to update the Zustand store and trigger the mutation
+  const toggleSwitch = (field) => {
+    switch (field) {
+      case "task_reminder":
+        setTaskReminder(!task_reminder);
+        break;
+      case "movement_reminder":
+        setMovementReminder(!movement_reminder);
+        break;
+      case "notification":
+        setNotification(!notification);
+        break
+    };
+    mutation.mutate(); 
   };
-
-  if (isLoading) {
-    return <Text>Loading...</Text>;
-  }
-
-  if (error) {
-    return <Text>Error loading user data</Text>;
-  }
 
   return (
     <ScrollView>
@@ -74,33 +73,33 @@ function UserSettingsScreen({navigation}) {
           $dark-borderColor="$borderDark800"
         >
           <VStack space="xl">
-          <Button onPress={() => navigation.navigate('ProfileHome')} variant="outline">
-            <ButtonText>
-              Back
-            </ButtonText>
-            
-          </Button> 
+            <Button onPress={() => navigation.navigate('ProfileHome')} variant="outline">
+              <ButtonText>Back</ButtonText>
+            </Button>
             <Heading color="$text900" lineHeight="$md">
               Settings
             </Heading>
 
-            <SettingsSwitch
-              label="Task Reminder"
-              value={userInfo.task_reminder}
-              onToggle={() => toggleSwitch('task_reminder')}
-            />
+            <>
+              <SettingsSwitch
+                label="Task Reminder"
+                value={task_reminder}
+                onToggle={() => toggleSwitch('task_reminder')}
+              />
 
-            <SettingsSwitch
-              label="Movement Reminder"
-              value={userInfo.movement_reminder}
-              onToggle={() => toggleSwitch('movement_reminder')}
-            />
+              <SettingsSwitch
+                label="Movement Reminder"
+                value={movement_reminder}
+                onToggle={() => toggleSwitch('movement_reminder')}
+              />
 
-            <SettingsSwitch
-              label="Notifications"
-              value={userInfo.notification}
-              onToggle={() => toggleSwitch('notification')}
-            />
+              <SettingsSwitch
+                label="Notifications"
+                value={notification}
+                onToggle={() => toggleSwitch('notification')}
+              />
+            </>
+
           </VStack>
         </FormControl>
       </View>
@@ -109,3 +108,4 @@ function UserSettingsScreen({navigation}) {
 }
 
 export default UserSettingsScreen;
+

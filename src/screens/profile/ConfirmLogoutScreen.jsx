@@ -2,13 +2,17 @@ import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { VStack, HStack, Button, FormControl, Heading, ButtonText } from '@gluestack-ui/themed';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import profileStore from '../../store/profileStore';
 
 function ConfirmLogoutScreen({ navigation }) {
+
+  const { clearToken, clearUserId} = profileStore((state) => state);
+ 
   const handleLogout = async () => {
     try {
       console.log('Logged out');
-      await AsyncStorage.removeItem('userId');
-      await AsyncStorage.removeItem('token');
+      clearToken();
+      clearUserId();
       navigation.navigate('HomeScreen');
     } catch (error) {
       console.error('Error logging out: ', error);
