@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, SafeAreaView, Text, View, Platform } from 'react-native';
+import { Button, Text, View, Platform } from 'react-native';
 import Header from '../../components/Header';
 import Greeting from '../../components/Greeting';
 import WeeklyCalendar from '../../components/WeeklyCalendar2';
@@ -7,6 +7,7 @@ import { BASE_URL } from '../../config/apiConfig';
 import { useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, schedulePushNotification } from '../../services/notificationService';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const userId = '6668b7f95dbce97bc28322d2';
 const base_url = BASE_URL
@@ -50,8 +51,9 @@ const HomeScreen = ({ navigation }) => {
         <SafeAreaView>
             <Header />
             <Greeting />
-            <WeeklyCalendar userId={userId} />
+            <WeeklyCalendar userId={userId} navigation={navigation}/>
             <Button title="Send push notification" onPress={async () => { await schedulePushNotification('Hello there', 'General Kenobi', trigger); }} />
+
         </SafeAreaView>
     );
 };

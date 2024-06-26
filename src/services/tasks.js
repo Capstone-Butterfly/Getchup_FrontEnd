@@ -4,7 +4,7 @@ import { BASE_URL } from '../config/apiConfig';
 const base_url = BASE_URL;
 
 const fetchTasks = async () => {
-  const { data } = await axios.get( `${base_url}/tasks`);
+  const { data } = await axios.get( `${base_url}/tasks/`);
   return data;
 };
  
@@ -21,7 +21,7 @@ const fetchTasksByUserId = async (userId) => {
 
 const addTask = async (newTask) => {
   try {
-    const { data } = await axios.post(`${base_url}/tasks`, newTask);
+    const { data } = await axios.post(`${base_url}/tasks/`, newTask);
     return data;
   } catch (error) {
     console.error("Error adding task:", error);
@@ -29,4 +29,14 @@ const addTask = async (newTask) => {
   }
 };
 
-export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask };
+const getAISubTasks = async (newTitle) => {
+  try {
+    const { data } = await axios.post(`${base_url}/tasks/aisubtasks/`, newTitle);
+    return data;
+  } catch (error) {
+    console.error("Error adding task:", error);
+    throw error;
+  }
+};
+
+export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask, getAISubTasks};

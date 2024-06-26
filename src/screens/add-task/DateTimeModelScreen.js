@@ -1,18 +1,18 @@
 import React from "react";
 import { Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import NotesInputForm from "../../components/NotesInputForm";
+import AddTaskDateContainer from "../../components/AddTaskDateContainer";
 
-const NotesModelScreen = () => {
+const DateTimeModelScreen = () => {
   return (
     <SafeAreaView>
-      {/* <Text style={styles.title}>Notes</Text> */}
-      <NotesInputForm />
+      <Text style={styles.title}>Date and Time</Text>
+      <AddTaskDateContainer />
     </SafeAreaView>
   );
 };
 
-export default NotesModelScreen;
+export default DateTimeModelScreen;
 
 const styles = StyleSheet.create({
   title: {
