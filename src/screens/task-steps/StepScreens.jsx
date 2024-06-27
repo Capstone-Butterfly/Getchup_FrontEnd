@@ -23,7 +23,7 @@ const StepScreen = ({ route, navigation }) => {
         let subscription;
 
         if (isTaskInProgress && isMovementEnabled) {
-            console.log("movement will be tracked");
+            console.log("movement tracking is started");
             subscription = Accelerometer.addListener(accelerometerData => {
                 const accelerationMagnitude = Math.sqrt(
                     accelerometerData.x * accelerometerData.x +
@@ -87,7 +87,6 @@ const StepScreen = ({ route, navigation }) => {
                 await updateTaskStartTime(task._id, start_date, mainTaskStartTime, subtaskStartTime, MAIN_STATUS, STATUS, subtaskIndex);
             } else {
                 // Stop Task
-                console.log("inside the end task");
                 setIsTaskInProgress(false);
                 const mainTaskEndTime = currentTimestamp;
                 const subtaskEndTime = currentTimestamp;
@@ -103,12 +102,12 @@ const StepScreen = ({ route, navigation }) => {
             }
         } catch (error) {
             console.error('Error updating task status:', error);
-            setIsTaskInProgress(false); // Reset task status if there's an error
+            setIsTaskInProgress(false);
         }
     };
 
     const handleBackToHome = () => {
-        navigation.navigate('HomeScreen'); // Navigate back to HomeScreen
+        navigation.navigate('HomeScreen'); 
     };
 
     return (
