@@ -1,28 +1,33 @@
 import React, { useState } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
 import {
-    AddIcon, Box, Button, ButtonText, Card, Center, CloseIcon, FlatList, HStack, Heading, Icon, Input, InputField, Pressable, Text, Modal, ModalCloseButton, ModalContent, VStack,
-    ModalHeader
+    Box, Button, ButtonText, Card, Center, CloseIcon, FlatList, 
+    HStack, Heading, Icon, Text, Modal, 
+    ModalCloseButton, ModalContent, VStack,
+    View
 } from "@gluestack-ui/themed";
 import { useEffect } from 'react';
 import { CalendarDaysIcon } from "@gluestack-ui/themed";
 import useCreateTaskStore from '../../store/createTaskStore';
 import useTaskStore from '../../store/taskStore';
 import { addTask, getAISubTasks } from '../../services/tasks';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import TitleModalScreen from './TilteModelScreen';
+import { useMutation } from '@tanstack/react-query';
+import queryClient from '../../services/QueryClient';
+import TitleModalScreen from './TitleModelScreen';
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
-import DateModelScreen from './DateTimeModelScreen'
+import DateTimeModelScreen from './DateTimeModelScreen'
+import { Pressable } from '@gluestack-ui/themed';
+import { ScrollView } from '@gluestack-ui/themed';
 
 const { width, height } = Dimensions.get('window');
 
 const AddTaskScreen = ({ navigation }) => {
     const userId = '6668b7f95dbce97bc28322d2';
-    const queryClient = useQueryClient();
     const [modalTitleVisible, setModalTitleVisible] = useState(false);
     const [modalNoteVisible, setModalNoteVisible] = useState(false);
     const [modalPriorityVisible, setModalPriorityVisible] = useState(false);
+    const [modalDateTimeVisible, setModalDateTimeVisible] = useState(false);
     const [warningMessage, setWarningMessage] = useState('');
 
     const handleOpenTitleModal = () => setModalTitleVisible(true);
@@ -33,13 +38,16 @@ const AddTaskScreen = ({ navigation }) => {
 
     const handleOpenPriorityModal = () => setModalPriorityVisible(true);
     const handleClosePriorityModal = () => setModalPriorityVisible(false);
+    
+    const handleOpenDateTimeModal = () => setModalDateTimeVisible(true);
+    const handleCloseDateTimeModal = () => setModalDateTimeVisible(false);
 
     const { addDataTask, setSelectedDate } = useTaskStore((state) => ({
         addDataTask: state.addDataTask,
         setSelectedDate: state.setSelectedDate,
     }));
 
-    const { subTasks, title, addSubtask, notes, task_urgency, clearCreateTaskStore } = useCreateTaskStore((state) => ({
+    const { subTasks, title, addSubtask, notes, task_urgency, clearCreateTaskStore, start_date, end_date, start_time, end_time } = useCreateTaskStore((state) => ({
         subTasks: state.subTasks,
         title: state.title,
         setTitle: state.setTitle,
@@ -113,10 +121,56 @@ const AddTaskScreen = ({ navigation }) => {
         navigation.navigate('HomeScreen'); 
     };
 
+    const renderContent = () => (
+        <>
+            <Card style={styles.cardBody}>
+                <Pressable onPress={handleOpenTitleModal} p="$5">
+                    <Text color="black" fontWeight={"$bold"}>Add Task Title</Text>
+                    <Text color="black">{title}</Text>
+                </Pressable>
+                <Pressable onPress={handleOpenDateTimeModal} p="$5">
+                    <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
+                    <Text color="black" fontWeight={"$bold"}>Date</Text>
+                </Pressable>
+                <Pressable onPress={handleOpenNoteModal} p="$5">
+                    <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
+                    <Text color="black" fontWeight={"$bold"}>Notes</Text>
+                    <Text color="black">{notes}</Text>
+                </Pressable>
+                <Pressable onPress={handleOpenPriorityModal} p="$5">
+                    <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
+                    <Text color="black" fontWeight={"$bold"}>Task priority</Text>
+                    <Text color="black">{task_urgency}</Text>
+                </Pressable>
+            </Card>
+            <Card style={styles.cardBody}>
+                <Pressable onPress={() => console.log('Title')} p="$5" style={styles.bottomLine}>
+                    <Text color="black" fontWeight={"$bold"}>Add subtask</Text>
+                </Pressable>
+                <FlatList
+                    data={subTasks}
+                    renderItem={({ item, index }) => (
+                        <Box key={index} style={styles.subTaskContainer}>
+                            <Text color="black" fontWeight={"$bold"}>{item.sub_title}</Text>
+                            <Text color="black">Time: {item.time}</Text>
+                            <Text color="black">Movement: {item.movement != null ? item.movement.toString() : ''}</Text>
+                        </Box>
+                    )}
+                    keyExtractor={(item) => item.sub_title}
+                    windowSize={10}
+                    contentContainerStyle={styles.listContent}
+                />
+                <Text style={styles.txtCenter}>OR</Text>
+                <Button size="md" variant="solid" action="primary" isDisabled={false} isFocusVisible={false} onPress={getAISubTasksResult}>
+                    <ButtonText verticalAlign="middle">Add Subtask by AI</ButtonText>
+                </Button>
+            </Card>
+        </>
+    );
+
     return (
-        <SafeAreaView style={styles.container}>
-            <DateModelScreen />
-            <HStack space="4xl" reversed={false}>
+        <SafeAreaView>
+            <HStack space="4xl" reversed={false} style={styles.headerContainer}>
                 <Box width='20%'>
                     <Button size="md" variant="link" action="primary" isDisabled={false} isFocusVisible={false} onPress={handleCancel}>
                         <ButtonText verticalAlign="middle">Cancel</ButtonText>
@@ -136,45 +190,11 @@ const AddTaskScreen = ({ navigation }) => {
             {warningMessage ? (
                 <Text style={styles.warningText}>{warningMessage}</Text>
             ) : null}
-            <Card>
-                <Pressable onPress={handleOpenTitleModal} p="$5">
-                    <Text color="black" fontWeight={"$bold"}>Add Task Title</Text>
-                    <Text color="black">{title}</Text>
-                </Pressable>
-                <Pressable onPress={() => console.log('Date')} p="$5">
-                    <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
-                    <Text color="black" fontWeight={"$bold"}>Date</Text>
-                </Pressable>
-                <Pressable onPress={handleOpenNoteModal} p="$5">
-                    <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
-                    <Text color="black" fontWeight={"$bold"}>Notes</Text>
-                    <Text color="black">{notes}</Text>
-                </Pressable>
-                <Pressable onPress={handleOpenPriorityModal} p="$5">
-                    <Icon as={CalendarDaysIcon} stroke={'black'} fill={'black'} style={{ color: 'black' }} size="md" />
-                    <Text color="black" fontWeight={"$bold"}>Task priority</Text>
-                    <Text color="black">{task_urgency}</Text>
-                </Pressable>
-            </Card>
-            <Card>
-                <Pressable onPress={() => console.log('Title')} p="$5">
-                    <Text color="black" fontWeight={"$bold"}>Add subtask</Text>
-                </Pressable>
-                <Text>OR</Text>
-                <Button size="md" variant="solid" action="primary" isDisabled={false} isFocusVisible={false} onPress={getAISubTasksResult}>
-                    <ButtonText verticalAlign="middle">Add Subtask by AI</ButtonText>
-                </Button>
-            </Card>
             <FlatList
-            data={subTasks}
-            renderItem={({ item, index }) => (
-                <Box key={index} style={styles.subTaskContainer}>
-                    <Text color="black" fontWeight={"$bold"}>{item.sub_title}</Text>
-                    <Text color="black">Time: {item.time}</Text>
-                    <Text color="black">Movement: {item.movement != null ? item.movement.toString() : ''}</Text>
-                </Box>
-            )}
-            keyExtractor={(item) => item.sub_title}
+                data={[{ key: 'content' }]} 
+                renderItem={renderContent}
+                keyExtractor={(item) => item.key}
+                contentContainerStyle={styles.container}
             />
             <Modal isOpen={modalTitleVisible} onClose={handleCloseTitleModal}>
                 <ModalContent style={styles.modalContent}>
@@ -184,6 +204,17 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalCloseButton>
                     <VStack space={4} style={styles.modalBody}>
                         <TitleModalScreen/>
+                    </VStack>
+                </ModalContent>
+            </Modal>
+            <Modal isOpen={modalDateTimeVisible} onClose={handleCloseDateTimeModal}>
+                <ModalContent style={styles.modalContent}>
+                    <Heading size='lg' textAlign='center'>Date and Time</Heading>
+                    <ModalCloseButton style={styles.closeButton} onPress={handleCloseDateTimeModal}>
+                        <Icon as={CloseIcon} />
+                    </ModalCloseButton>
+                    <VStack space={4} style={styles.modalBody}>
+                        <DateTimeModelScreen/>
                     </VStack>
                 </ModalContent>
             </Modal>
@@ -214,15 +245,20 @@ const AddTaskScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    headerContainer: {
+        paddingTop:20
+    },
     container: {
-        flex: 1,
+        //flex: 1,
+        padding: 20,
+        backgroundColor: '#f8f8f8',
     },
     modalContent: {
         width: '100%',
-        height: '85%',
+        height: '90%',
         margin: 0,
         padding: 0,
-        borderRadius:10,
+        borderRadius:20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -232,7 +268,7 @@ const styles = StyleSheet.create({
         height: '25%',
         margin: 0,
         padding: 0,
-        borderRadius:10,
+        borderRadius:20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -242,7 +278,7 @@ const styles = StyleSheet.create({
         height: '55%',
         margin: 0,
         padding: 0,
-        borderRadius:10,
+        borderRadius:20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -257,11 +293,26 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop:50,
     },
+    listContent: {
+        paddingBottom: 20,
+    },
     subTaskContainer: {
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
+    txtCenter: {
+        textAlign: 'center',
+        marginBottom:20,
+    },
+    cardBody:{
+        borderRadius:20,
+        marginBottom:20,
+    },
+    bottomLine: {
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
+    }
 });
 
 export default AddTaskScreen;

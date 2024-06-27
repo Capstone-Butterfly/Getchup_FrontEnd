@@ -16,12 +16,10 @@ import useAddTaskDateModelStore from "../store/addTaskDateModelStore";
 import usecreateTaskStore from "../store/createTaskStore";
 
 const DateModelScreen = () => {
-  const { dateLabel, setDateLabel, timeLabel, setTimeLabel } =
+  const { dateLabel, setDateLabel} =
     useAddTaskDateModelStore((state) => ({
       dateLabel: state.dateLabel,
       setDateLabel: state.setDateLabel,
-      timeLabel: state.timeLabel,
-      setTimeLabel: state.setTimeLabel,
     }));
 
   const { start_date, end_date, setStartDate, setEndDate } = usecreateTaskStore(

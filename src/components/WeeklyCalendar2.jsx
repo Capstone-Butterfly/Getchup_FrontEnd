@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
@@ -6,6 +6,7 @@ import { FlatList } from '@gluestack-ui/themed';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
+import { SafeAreaView } from '@gluestack-ui/themed';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
 
@@ -16,7 +17,9 @@ const WeeklyCalendar = ({ userId, navigation }) => {
         setSelectedDate: state.setSelectedDate,
     }));
 
-    const { data: fetchedTask, isLoading, error } = useQuery({
+    //const [refreshing, setRefreshing] = useState(false);
+
+    const { data: fetchedTask, isLoading, error, refetch } = useQuery({
         queryKey: ['tasks', userId], 
         queryFn: () => fetchTasksByUserId(userId),
         //enabled: !tasks || tasks.length === 0,
@@ -34,6 +37,12 @@ const WeeklyCalendar = ({ userId, navigation }) => {
     const handleDateSelected = (date) => {
         setSelectedDate(date);
     };
+
+    // const handleRefresh = async () => {
+    //     setRefreshing(true);
+    //     await refetch();
+    //     setRefreshing(false);
+    // };
       
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
@@ -52,8 +61,9 @@ const WeeklyCalendar = ({ userId, navigation }) => {
         return [];
     }, [tasks, selectedDate]);
     
+    
     return (
-        <View>
+        <View style={styles.container}>
             <CalendarStrip
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 daySelectionAnimation={{ type: 'border', duration: 200, borderWidth: 1, borderHighlightColor: 'purple' }}
@@ -87,6 +97,8 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                     />
                 )}
                 keyExtractor={(item) => item._id}
+                style={styles.list}
+                contentContainerStyle={styles.listContent}
             />
             )}
         </View>
@@ -98,8 +110,10 @@ export default WeeklyCalendar;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
         backgroundColor: '#f8f8f8',
+    },
+    list: {
+        flex: 1,
     },
     listContent: {
         paddingBottom: 20,

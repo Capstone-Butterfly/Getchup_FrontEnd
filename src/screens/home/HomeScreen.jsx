@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button, Text, View, Platform } from 'react-native';
 import Header from '../../components/Header';
@@ -6,7 +7,6 @@ import WeeklyCalendar from '../../components/WeeklyCalendar2';
 import { useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, getUnreadNotifications } from '../../services/notificationService';
-import { SafeAreaView } from "react-native-safe-area-context";
 import useNotificationStore from '../../store/notificationStore';
 
 const userId = '6668b7f95dbce97bc28322d2';
@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <Header />
             <Greeting />
             <WeeklyCalendar userId={userId} navigation={navigation}/>
@@ -66,3 +66,9 @@ const HomeScreen = ({ navigation }) => {
 
 
 export default HomeScreen;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+});

@@ -9,11 +9,12 @@
         "web": "expo start --web"
     },
     "dependencies": {
-        "@expo/metro-runtime": "~3.2.1",
+        "@expo/metro-runtime": "^3.2.1",
         "@gluestack-style/react": "^1.0.56",
         "@gluestack-ui/config": "^1.1.18",
         "@gluestack-ui/themed": "^1.1.26",
         "@react-native-async-storage/async-storage": "1.23.1",
+        "@react-native-community/datetimepicker": "^8.1.1",
         "@react-navigation/bottom-tabs": "^6.5.20",
         "@react-navigation/material-top-tabs": "^6.6.13",
         "@react-navigation/native": "^6.1.17",
@@ -30,7 +31,7 @@
         "expo-status-bar": "~1.12.1",
         "jwt-decode": "^4.0.0",
         "react": "18.2.0",
-        "react-dom": "18.2.0",
+        "react-dom": "^18.3.1",
         "react-native": "^0.74.2",
         "react-native-calendar-strip": "^2.2.6",
         "react-native-calendars": "^1.1305.0",
@@ -40,7 +41,7 @@
         "react-native-screens": "3.31.1",
         "react-native-svg": "^15.2.0",
         "react-native-tab-view": "^3.5.2",
-        "react-native-web": "~0.19.10",
+        "react-native-web": "^0.19.12",
         "zustand": "^4.5.2"
     },
     "devDependencies": {

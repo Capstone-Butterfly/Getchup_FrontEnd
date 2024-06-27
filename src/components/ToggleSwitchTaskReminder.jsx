@@ -3,24 +3,24 @@ import { Text, View, StyleSheet } from "react-native";
 import { Switch, HStack } from "@gluestack-ui/themed";
 import profileStore from "../store/profileStore";
 
-const ToggleSwitch = () => {
-  const { movement_reminder, setMovementReminder } = profileStore((state) => ({
-    movement_reminder: state.movement_reminder,
-    setMovementReminder: state.setMovementReminder,
+const ToggleSwitchTaskReminder = () => {
+  const { task_reminder, setTaskReminder } = profileStore((state) => ({
+    task_reminder: state.task_reminder,
+    setTaskReminder: state.setTaskReminder,
   }));
 
   const toggleSwitch = () => {
-    setMovementReminder(!movement_reminder);
+    setTaskReminder(!task_reminder);
   };
 
   return (
     <View style={styles.container}>
       <HStack alignItems="center" spacing="2">
-        <Text>Track Movement</Text>
+        <Text>Notify Me</Text>
         <Switch
           size="sm"
           isDisabled={false}
-          value={movement_reminder}
+          value={task_reminder}
           onToggle={toggleSwitch}
         />
       </HStack>
@@ -28,7 +28,7 @@ const ToggleSwitch = () => {
   );
 };
 
-export default ToggleSwitch;
+export default ToggleSwitchTaskReminder;
 
 const styles = StyleSheet.create({
   container: {
