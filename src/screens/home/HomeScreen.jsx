@@ -8,6 +8,8 @@ import { useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, getUnreadNotifications } from '../../services/notificationService';
 import useNotificationStore from '../../store/notificationStore';
+import { StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const userId = '6668b7f95dbce97bc28322d2';
 
