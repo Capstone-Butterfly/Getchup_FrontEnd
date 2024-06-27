@@ -45,8 +45,13 @@ const useCreateTaskStore = create((set) => ({
       date: "",
       is_repeated: false,
       notes: "",
-      task_urgency: "medium",
+      task_urgency: "",
       subTasks: [],
+      start_date: "",
+      end_date: "",
+      start_time: "",
+      end_time: "",
+      user_estimate_duration: "",
     }),
   }));
 
