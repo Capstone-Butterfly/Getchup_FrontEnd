@@ -1,10 +1,7 @@
-// src/screens/FocusModeScreen.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import StepScreen from '../task-steps/StepScreens';
-import { Button, ButtonText, SafeAreaView } from '@gluestack-ui/themed';
-import { Alert } from 'react-native';
-import { Accelerometer } from 'expo-sensors';
+import { SafeAreaView } from '@gluestack-ui/themed';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -13,41 +10,19 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     const totalSteps = task.subtask.length;
 
-    const [isTaskInProgress, setIsTaskInProgress] = useState(false);
-    const [isAlertShown, setIsAlertShown] = useState(false);
-
-    useEffect(() => {
-        let subscription;
-
-        if (isTaskInProgress) {
-            subscription = Accelerometer.addListener(accelerometerData => {
-                const accelerationMagnitude = Math.sqrt(
-                    accelerometerData.x * accelerometerData.x +
-                    accelerometerData.y * accelerometerData.y +
-                    accelerometerData.z * accelerometerData.z
-                );
-
-                const movementThreshold = 1.5;
-
-                if (accelerationMagnitude > movementThreshold && !isAlertShown) {
-                    setIsAlertShown(true);
-                    Alert.alert('Reminder', 'Please take a moment to calm down and refocus on the task.', [
-                        { text: 'OK', onPress: () => setIsAlertShown(false) }
-                    ]);
-                    setTimeout(() => setIsAlertShown(false), 1000);
-                }
+    const handleNextStep = (currentStep) => {
+        const nextStep = currentStep + 1;
+        if (nextStep <= totalSteps) {
+            navigation.push('StepScreen', {
+                stepNumber: nextStep,
+                stepDescription: task.subtask[nextStep - 1].sub_title,
+                imageSource: require('../../../assets/task-image-png.png'),
+                imageAlt: `Image description for step ${nextStep}`,
+                totalSteps: totalSteps,
+                taskSubtasks: task.subtask,
+                task: task,
             });
-        }
-
-        return () => {
-            if (subscription) {
-                subscription.remove();
-            }
-        };
-    }, [isTaskInProgress, isAlertShown]);
-
-    const toggleTaskStatus = () => {
-        setIsTaskInProgress(prevState => !prevState);
+        } 
     };
 
     return (
@@ -70,18 +45,12 @@ const FocusModeScreen = ({ route, navigation }) => {
                             time: subtask.time,
                             totalSteps: totalSteps,
                             taskSubtasks: task.subtask,
+                            task: task,
+                            goToNextStep: handleNextStep,
                         }}
                     />
                 ))}
             </Tab.Navigator>
-            <Button
-                onPress={toggleTaskStatus}
-                style={{ backgroundColor: 'green', color: 'white' }}
-            >
-                <ButtonText>
-                    {isTaskInProgress ? 'Stop Task' : 'Start Task'}
-                </ButtonText>
-            </Button>
         </SafeAreaView>
     );
 };
