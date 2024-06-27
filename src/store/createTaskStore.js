@@ -10,6 +10,7 @@ const useCreateTaskStore = create((set) => ({
     is_repeated: false,
     notes: "",
     task_urgency: "",
+    user_estimate_duration: "",
     subTasks: [],
   
     // Setters
@@ -21,6 +22,7 @@ const useCreateTaskStore = create((set) => ({
     setIsRepeated: (is_repeated) => set({ is_repeated }),
     setNotes: (notes) => set({ notes }),
     setTaskUrgency: (task_urgency) => set({ task_urgency }),
+    setUserEstimateDuration: (time) => set({ user_estimate_duration : time }),
 
     addCreateTask: (task) => set((state) => ({ 
       tasks: [...state.createTask, task] })),
