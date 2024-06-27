@@ -22,14 +22,21 @@ const TimeModelScreen = () => {
     setTimeLabel: state.setTimeLabel,
   }));
 
-  const { start_time, end_time, setStartTime, setEndTime } = usecreateTaskStore(
-    (state) => ({
-      start_time: state.start_time,
-      end_time: state.end_time,
-      setStartTime: state.setStartTime,
-      setEndTime: state.setEndTime,
-    })
-  );
+  const {
+    start_time,
+    end_time,
+    setStartTime,
+    setEndTime,
+    user_estimate_duration,
+    setUserEstimateDuration,
+  } = usecreateTaskStore((state) => ({
+    start_time: state.start_time,
+    end_time: state.end_time,
+    setStartTime: state.setStartTime,
+    setEndTime: state.setEndTime,
+    user_estimate_duration: state.user_estimate_duration,
+    setUserEstimateDuration: state.setUserEstimateDuration,
+  }));
 
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
@@ -47,31 +54,35 @@ const TimeModelScreen = () => {
   };
 
   const applyTime = () => {
-    setStartTime(selectedTime.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }));
-    setTimeLabel(selectedTime.toLocaleTimeString([], {
+    setStartTime(
+      selectedTime.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    );
+    setTimeLabel(
+      selectedTime.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
-      }))
+      })
+    );
     setTimePickerVisible(false);
   };
 
   const applyEndTime = () => {
-   
-
     if (selectedTime < selectedEndTime) {
-        setEndTime(selectedEndTime.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }));
-      } else {
-        console.warn("End time must be after start time.");
-      }
+      setEndTime(
+        selectedEndTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
+    } else {
+      console.warn("End time must be after start time.");
+    }
 
     setEndTimePickerVisible(false);
   };
@@ -85,6 +96,14 @@ const TimeModelScreen = () => {
   };
 
   useEffect(() => {
+    if (selectedTime < selectedEndTime) {
+      const startTimeMs = selectedTime.getTime();
+      const endTimeMs = selectedEndTime.getTime();
+      const duration = endTimeMs - startTimeMs;
+      console.log("duration" + duration);
+      setUserEstimateDuration(duration);
+    }
+
     console.log("start_time:", start_time);
     console.log("end_time:", end_time);
   }, [start_time, end_time]);
@@ -127,7 +146,7 @@ const TimeModelScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={toggleEndTimePicker}>
           <HStack space={2} alignItems="center" justifyContent="space-between">
-          <Text>End Time</Text>
+            <Text>End Time</Text>
             <Image
               source={require("../../assets/rightAngle.png")}
               style={styles.tickImage}
@@ -145,7 +164,7 @@ const TimeModelScreen = () => {
             <Icon as={CloseIcon} />
           </ModalCloseButton>
           <VStack space={4} style={styles.modalBody}>
-          <DateTimePicker
+            <DateTimePicker
               testID="dateTimePicker"
               value={selectedTime}
               mode="time"
@@ -162,7 +181,10 @@ const TimeModelScreen = () => {
 
       <Modal isOpen={isEndTimePickerVisible} onClose={toggleEndTimePicker}>
         <ModalContent style={styles.modalContent}>
-          <ModalCloseButton style={styles.closeButton} onPress={toggleEndTimePicker}>
+          <ModalCloseButton
+            style={styles.closeButton}
+            onPress={toggleEndTimePicker}
+          >
             <Icon as={CloseIcon} />
           </ModalCloseButton>
           <VStack space={4} style={styles.modalBody}>
@@ -180,7 +202,6 @@ const TimeModelScreen = () => {
           </VStack>
         </ModalContent>
       </Modal>
-
     </SafeAreaView>
   );
 };
