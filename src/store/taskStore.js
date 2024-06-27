@@ -1,8 +1,10 @@
 import { create } from "zustand";
+import DateFormatter from "../utils/DateFormatter";
+
 
 const useTaskStore = create((set) => ({
   tasks: [],
-  selectedDate: new Date(),
+  selectedDate: DateFormatter(new Date()),
   setTasks : (tasks) => set ({tasks}),
   setSelectedDate: (date) => set({ selectedDate: date }),
   addDataTask: (task) => set((state) => ({ 

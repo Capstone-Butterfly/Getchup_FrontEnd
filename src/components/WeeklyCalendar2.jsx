@@ -6,7 +6,6 @@ import { FlatList } from '@gluestack-ui/themed';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
-import { SafeAreaView } from '@gluestack-ui/themed';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
 
@@ -16,8 +15,6 @@ const WeeklyCalendar = ({ userId, navigation }) => {
         selectedDate: state.selectedDate,
         setSelectedDate: state.setSelectedDate,
     }));
-
-    //const [refreshing, setRefreshing] = useState(false);
 
     const { data: fetchedTask, isLoading, error, refetch } = useQuery({
         queryKey: ['tasks', userId], 
@@ -46,6 +43,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
       
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
+        console.log("selectedDateString ", selectedDateString);
         return tasks.filter(task => {
             if (task.created_datetime) {
                 return task.created_datetime.split('T')[0] === selectedDateString;
@@ -56,7 +54,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
 
     const filteredTasks = useMemo(() => {
         if (tasks && tasks.length > 0) {
-            return filterTasksByDate(tasks, selectedDate);
+            return filterTasksByDate(tasks, new Date(selectedDate));
         }
         return [];
     }, [tasks, selectedDate]);

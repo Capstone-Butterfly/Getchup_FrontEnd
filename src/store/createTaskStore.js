@@ -29,13 +29,13 @@ const useCreateTaskStore = create((set) => ({
     addSubtask: (subtask) => set({ subTasks : subtask }),
     updateSubtask: (index, updatedSubtask) =>
       set((state) => ({
-        subtasks: state.subtasks.map((subtask, i) =>
+        subTasks: state.subTasks.map((subtask, i) =>
           i === index ? updatedSubtask : subtask
         ),
       })),
     removeSubtask: (index) =>
       set((state) => ({
-        subtasks: state.subtasks.filter((_, i) => i !== index),
+        subTasks: state.subTasks.filter((_, i) => i !== index),
       })),
 
     clearCreateTaskStore: () => set({

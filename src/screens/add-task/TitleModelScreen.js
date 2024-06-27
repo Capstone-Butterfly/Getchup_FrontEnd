@@ -8,7 +8,6 @@ import TaskLibraryContainer from "../../components/TaskLibraryContainer"
 const TitleModelScreen = () => {
   return (
     <SafeAreaView>
-      <Text>Add Task Title</Text>
       <TitleInputForm />
       <ToggleSwitch />
       <TaskLibraryContainer />
