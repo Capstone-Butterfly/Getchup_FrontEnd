@@ -33,6 +33,7 @@ const addTask = async (newTask) => {
 const getAISubTasks = async (newTitle) => {
   try {
     const { data } = await axios.post(`${base_url}/tasks/aisubtasks/`, newTitle);
+    //const data = {subtask: [{"movement": true, "status": "new", "sub_title": "Warm up stretching exercises", "time": "5 minutes"}, {"movement": true, "status": "new", "sub_title": "Jog at a moderate pace", "time": "15 minutes"}, {"movement": true, "status": "new", "sub_title": "Sprint intervals", "time": "5 minutes"}, {"movement": true, "status": "new", "sub_title": "Cool down walking", "time": "5 minutes"}]}
     return data;
   } catch (error) {
     console.error("Error adding task:", error);
