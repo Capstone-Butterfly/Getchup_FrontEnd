@@ -3,10 +3,13 @@ import { View, Text, StyleSheet, Switch, Alert } from 'react-native';
 import { Button, ButtonText, Image } from '@gluestack-ui/themed';
 import { Accelerometer } from 'expo-sensors';
 import { updateTaskStartTime, updateTaskEndTime, pauseTask } from '../../services/tasks';
+import { useNavigation } from '@react-navigation/native';
 
-const StepScreen = ({ route, navigation }) => {
+const StepScreen = ({ route }) => {
+    const navigation = useNavigation();
     const [isTaskInProgress, setIsTaskInProgress] = useState(false);
     const [isTaskCompleted, setIsTaskCompleted] = useState(false);
+    const [isTaskStarted, setIsTaskStarted] = useState(false); // Track if the task has started
     const { stepNumber, stepDescription, imageSource, imageAlt, totalSteps, taskSubtasks, task } = route.params;
 
     const hasNextStep = (currentStep, totalSteps) => currentStep < totalSteps;
@@ -55,20 +58,27 @@ const StepScreen = ({ route, navigation }) => {
             const subtaskIndex = stepNumber - 1;
             const currentTimestamp = Date.now();
 
-            setIsTaskInProgress(false); 
+            if (!isTaskInProgress) {
+                // Resume Task
+                setIsTaskInProgress(true);
+                const MAIN_STATUS = "progress";
+                const STATUS = "progress";
 
-            const MAIN_STATUS = "pause";
-            const STATUS = "pause";
+                await pauseTask(task._id, currentTimestamp, MAIN_STATUS, STATUS, subtaskIndex);
+            } else {
+                // Pause Task
+                setIsTaskInProgress(false);
+                const MAIN_STATUS = "pause";
+                const STATUS = "pause";
 
-            await pauseTask(task._id, currentTimestamp, MAIN_STATUS, STATUS, subtaskIndex);
+                await pauseTask(task._id, currentTimestamp, MAIN_STATUS, STATUS, subtaskIndex);
+            }
         } catch (error) {
-            console.error('Error pausing task:', error);
-            setIsTaskInProgress(true); 
+            console.error('Error pausing/resuming task:', error);
+            setIsTaskInProgress(!isTaskInProgress); 
         }
     };
 
-
-    
     const toggleTaskStatus = async () => {
         try {
             const subtaskIndex = stepNumber - 1;
@@ -78,6 +88,7 @@ const StepScreen = ({ route, navigation }) => {
             if (!isTaskInProgress) {
                 // Start Task
                 setIsTaskInProgress(true);
+                setIsTaskStarted(true);
                 const start_date = currentDateTime;
                 const mainTaskStartTime = currentTimestamp;
                 const subtaskStartTime = currentTimestamp;
@@ -110,12 +121,17 @@ const StepScreen = ({ route, navigation }) => {
         navigation.navigate('HomeScreen'); 
     };
 
+    const navigateToNextStep = () => {
+        const nextStepNumber = stepNumber + 1;
+        navigation.navigate(`Step ${nextStepNumber}`);
+    };
+
     return (
         <View style={styles.container}>
             {hasPreviousStep(stepNumber) && (
                 <View style={[styles.stepInfo, styles.card]}>
                     <Text style={styles.boldText}>Previous Step:</Text>
-                    <Text>Step {stepNumber - 1}: {taskSubtasks[stepNumber - 2].sub_title}</Text>
+                    <Text>{taskSubtasks[stepNumber - 2].sub_title}</Text>
                 </View>
             )}
 
@@ -130,9 +146,11 @@ const StepScreen = ({ route, navigation }) => {
                             </View>
                         )}
                         <View style={styles.buttonContainer}>
-                            <Button style={styles.buttonColumn} onPress={handlePauseTask}>
-                                <ButtonText>Pause</ButtonText>
-                            </Button>
+                            {isTaskStarted && ( 
+                                <Button style={styles.buttonColumn} onPress={handlePauseTask}>
+                                    <ButtonText style={styles.smallButtonText}>{isTaskInProgress ? 'Pause' : 'Resume'}</ButtonText>
+                                </Button>
+                            )}
                             <Button
                                 onPress={toggleTaskStatus}
                                 style={[styles.circularButton, { backgroundColor: isTaskInProgress ? 'red' : 'green' }, styles.buttonColumn]}
@@ -142,19 +160,23 @@ const StepScreen = ({ route, navigation }) => {
                                 </ButtonText>
                             </Button>
                             
-                            <Button style={styles.buttonColumn} >
-                                <ButtonText>Next</ButtonText>
-                            </Button>
+                            {hasNextStep(stepNumber, totalSteps) && (
+                                <Button style={styles.buttonColumn} onPress={navigateToNextStep} >
+                                    <ButtonText style={styles.smallButtonText}>
+                                        Next
+                                    </ButtonText>
+                                </Button>
+                            )}
                         </View>
                     </View>
                 </View>
             ) : (
-                <View >
+                <View style={styles.congratulationsContainer}>
                     <View style={[styles.stepInfo, styles.card]}>
-                    <Text style={styles.boldText}>Congratulations!</Text>
-                    <Text>You have accomplished the task.</Text>
+                        <Text style={styles.boldText}>Congratulations!</Text>
+                        <Text>You have accomplished the task.</Text>
                     </View>
-                    <Button style={styles.button} onPress={handleBackToHome}>
+                    <Button onPress={handleBackToHome}>
                         <ButtonText>Back To Home</ButtonText>
                     </Button>
                 </View>
@@ -163,7 +185,7 @@ const StepScreen = ({ route, navigation }) => {
             {hasNextStep(stepNumber, totalSteps) && (
                 <View style={[styles.stepInfo, styles.card]}>
                     <Text style={styles.boldText}>Next Step:</Text>
-                    <Text>Step {stepNumber + 1}: {taskSubtasks[stepNumber].sub_title}</Text>
+                    <Text>{taskSubtasks[stepNumber].sub_title}</Text>
                 </View>
             )}
 
@@ -192,6 +214,8 @@ const StepScreen = ({ route, navigation }) => {
         </View>
     );
 };
+
+
 
 const styles = StyleSheet.create({
     container: {
@@ -253,14 +277,17 @@ const styles = StyleSheet.create({
         flex: 1,
         textAlign: 'center',
     },
-    circularButton: {
-        borderRadius: 30,
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-    },
     button: {
         backgroundColor: 'transparent'
-    }
+    },
+    congratulationsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    smallButtonText: {
+        fontSize: 14,  
+    },
 });
 
 export default StepScreen;
