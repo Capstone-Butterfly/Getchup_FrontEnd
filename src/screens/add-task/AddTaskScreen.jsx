@@ -24,6 +24,7 @@ import { Pressable } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@gluestack-ui/themed';
 import DateFormatter from '../../utils/DateFormatter';
+import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
 
 const { width, height } = Dimensions.get('window');
 
@@ -64,7 +65,8 @@ const AddTaskScreen = ({ navigation }) => {
         setSelectedDate: state.setSelectedDate,
     }));
 
-    const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore, start_date, end_date, start_time, end_time } = useCreateTaskStore((state) => ({
+    const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore, 
+        start_date, end_date, start_time, end_time, user_estimate_duration } = useCreateTaskStore((state) => ({
         subTasks: state.subTasks,
         title: state.title,
         setTitle: state.setTitle,
@@ -73,6 +75,11 @@ const AddTaskScreen = ({ navigation }) => {
         notes: state.notes,
         task_urgency: state.task_urgency,
         clearCreateTaskStore: state.clearCreateTaskStore,
+        start_date: state.start_date,
+        end_date: state.end_date,
+        start_time: state.start_time,
+        end_time: state.end_time,
+        user_estimate_duration: state.user_estimate_duration,
     }));
 
     //console.log("subTasks ", subTasks);
@@ -139,7 +146,11 @@ const AddTaskScreen = ({ navigation }) => {
                 task_urgency,
                 subtask: subTasks,
                 is_repeated: false,
-                due_date: null,
+                estimate_start_date: start_date,
+                due_date: end_date,
+                estimate_start_time: ConvertTimeStamp.convertTimeStringToMilliseconds(start_time),
+                estimate_end_time: ConvertTimeStamp.convertTimeStringToMilliseconds(end_time),
+                user_estimate_duration
             };
             await saveTaskMutation.mutateAsync(newTask);
             setWarningMessage('');

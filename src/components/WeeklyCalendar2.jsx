@@ -2,10 +2,11 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
-import { FlatList } from '@gluestack-ui/themed';
+import { Box, FlatList } from '@gluestack-ui/themed';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
+import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
 
