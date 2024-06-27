@@ -19,18 +19,18 @@ async function scheduleNotification(task) {
     const notificationId = await Notifications.scheduleNotificationAsync({
         content: {
             title: task.title,
-            body: task.body,
+            body: 'Let\'s start this task',
         },
-        trigger: { seconds: task.trigger },
+        trigger: { seconds: convertToSeconds(task.start_date) },
     });
     
     console.log(notificationId)
     return notificationId
 }
 
-async function cancelNotification(task) {
+async function cancelNotification(notificationId) {
 
-    await Notifications.cancelScheduledNotificationAsync(task.notificationId).then(
+    await Notifications.cancelScheduledNotificationAsync(notificationId).then(
 
         console.log('notification cancelled')
     )
@@ -53,6 +53,7 @@ async function saveNotification(newNotification) {
         return notifications;
     } catch (error) {
         console.error('Error fetching notifications:', error);
+        return []
     }
 }
 
@@ -101,4 +102,20 @@ async function registerForPushNotificationsAsync() {
     return token;
 }
 
-export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications };
+const formatNotificationDate = (timestamp) => {
+    const date = new Date(timestamp);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' });
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+const convertToSeconds = (timestamp) => {
+    const targetDate = new Date(timestamp);
+    const now = new Date();
+    const differenceInMilliseconds = targetDate - now;
+    const differenceInSeconds = Math.floor(differenceInMilliseconds / 1000);
+    return differenceInSeconds;
+}
+
+export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications, formatNotificationDate };

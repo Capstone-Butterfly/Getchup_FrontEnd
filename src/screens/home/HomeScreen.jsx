@@ -11,14 +11,12 @@ import useNotificationStore from '../../store/notificationStore';
 
 const userId = '6668b7f95dbce97bc28322d2';
 
-
-
-const task = {
-    title: 'Task test - title',
-    body: 'Task test - body',
-    trigger: 5,
-    notificationId: '5f374f5e-08c8-4976-9e66-fdbf3b48a7aa'
-}
+// const task = {
+//     title: 'Task test - title',
+//     body: 'Task test - body',
+//     trigger: 5,
+//     notificationId: '5f374f5e-08c8-4976-9e66-fdbf3b48a7aa'
+// }
 
 const HomeScreen = ({ navigation }) => {
 
@@ -57,9 +55,9 @@ const HomeScreen = ({ navigation }) => {
             <Header />
             <Greeting />
             <WeeklyCalendar userId={userId} navigation={navigation}/>
-            <Button title="Schedule notification" onPress={async () => { await scheduleNotification(task); }} />
-            <Button title="Cancel notification" onPress={async () => { await cancelNotification(task); }} />
-            <Button title="Get unread notifications" onPress={async () => { await getUnreadNotifications(); }} />
+            {/* <Button title="Schedule notification" onPress={async () => { await scheduleNotification(task); }} /> */}
+            {/* <Button title="Cancel notification" onPress={async () => { await cancelNotification(task); }} /> */}
+            {/* <Button title="Get unread notifications" onPress={async () => { await getUnreadNotifications(); }} /> */}
 
         </SafeAreaView>
     );

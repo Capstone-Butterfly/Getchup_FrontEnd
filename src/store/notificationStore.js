@@ -1,5 +1,6 @@
 
 import { create } from 'zustand';
+import { getUnreadNotifications } from '../services/notificationService';
 
 const useNotificationStore = create(set => ({
   expoPushToken: '',
@@ -12,11 +13,15 @@ const useNotificationStore = create(set => ({
   //unread notifications from the notification tray:
   notifications: [],
   setNotifications: (notifications) => set({ notifications }),
+  fetchNotifications: async () => {
+    const notifications = await getUnreadNotifications();
+    set({ notifications });
+  },
 
   //notification popover in the header:
-  isPopoverOpen: false,
-  openPopover: () => set({ isPopoverOpen: true }),
-  closePopover: () => set({ isPopoverOpen: false }),
+  isOpen: false,
+  openPopover: () => set({ isOpen: true }),
+  closePopover: () => set({ isOpen: false }),
 }));
 
 export default useNotificationStore;
