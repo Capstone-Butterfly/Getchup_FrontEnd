@@ -10,21 +10,6 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     const totalSteps = task.subtask.length;
 
-    const handleNextStep = (currentStep) => {
-        const nextStep = currentStep + 1;
-        if (nextStep <= totalSteps) {
-            navigation.push('StepScreen', {
-                stepNumber: nextStep,
-                stepDescription: task.subtask[nextStep - 1].sub_title,
-                imageSource: require('../../../assets/task-image-png.png'),
-                imageAlt: `Image description for step ${nextStep}`,
-                totalSteps: totalSteps,
-                taskSubtasks: task.subtask,
-                task: task,
-            });
-        } 
-    };
-
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <Tab.Navigator
@@ -46,7 +31,6 @@ const FocusModeScreen = ({ route, navigation }) => {
                             totalSteps: totalSteps,
                             taskSubtasks: task.subtask,
                             task: task,
-                            goToNextStep: handleNextStep,
                         }}
                     />
                 ))}

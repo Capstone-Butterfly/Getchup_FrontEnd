@@ -42,6 +42,7 @@ const getAISubTasks = async (newTitle) => {
 
 const updateTaskStartTime = async (taskId, start_date, mainTaskStartTime, subtaskStartTime, MAIN_STATUS, STATUS, subtaskIndex) => {
   try {
+    console.log("Starting task with task id: ", taskId);
           const requestBody = {
           start_date: start_date,
           start_time: mainTaskStartTime,
@@ -61,6 +62,7 @@ const updateTaskStartTime = async (taskId, start_date, mainTaskStartTime, subtas
 
 const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_STATUS, STATUS, subtaskIndex, isLastStep) => {
   try {
+    console.log("Ending task with task id: ", taskId);
       
       const requestBody = {
           subtask: [{
@@ -86,7 +88,7 @@ const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_S
 
 const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) => {
   try {
-    console.log("task id and pause time ", taskId, pause_time);
+    console.log("Pausing task with task id: ", taskId);
     const requestBody = {
       main_status: MAIN_STATUS,
       subtask: [{
@@ -116,4 +118,4 @@ const handleAxiosError = (error) => {
   throw error;
 };
 
-export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask, getAISubTasks, updateTaskEndTime, pauseTask, handleAxiosError};
+export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask, getAISubTasks, updateTaskStartTime, updateTaskEndTime, pauseTask, handleAxiosError};
