@@ -46,8 +46,10 @@ const WeeklyCalendar = ({ userId, navigation }) => {
         const selectedDateString = date.toISOString().split('T')[0];
         return tasks.filter(task => {
             if (task.estimate_start_date) {
-                let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
-                return local_estimate_start_date.split(',')[0] === selectedDateString;
+                //console.log("task.estimate_start_date",task.estimate_start_date)
+               // let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
+                //return local_estimate_start_date.split(',')[0] === selectedDateString;
+                return task.estimate_start_date.split('T')[0] === selectedDateString;
             }
             return false;
         });

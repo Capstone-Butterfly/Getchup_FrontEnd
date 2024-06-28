@@ -38,8 +38,9 @@ const MonthlyCalendar = ({ userId }) => {
         tasks.forEach(task => {
             let date = "";
             if (task.estimate_start_date) {
-                let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
-                date = local_estimate_start_date.split(',')[0] === selectedDateString;
+                //let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
+                // date = local_estimate_start_date.split(',')[0] === selectedDate;
+                date = task.estimate_start_date.split('T')[0] === selectedDate;
             }
             if (!marks[date]) {
                 marks[date] = { marked: true };

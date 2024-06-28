@@ -153,11 +153,13 @@ const handleSaveTask = async () => {
             console.log('Returned notification ID:', notificationId);
         }
 
+        const adjustedTaskUrgency = task_urgency === '' ? 'medium' : task_urgency;
+
         const newTask = {
             user_id: userId,
             title,
             notes,
-            task_urgency,
+            task_urgency: adjustedTaskUrgency ,
             subtask: subTasks,
             is_repeated: false,
             estimate_start_date: start_date,

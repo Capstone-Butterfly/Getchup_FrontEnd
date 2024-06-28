@@ -4,13 +4,21 @@ import { View, Text, StyleSheet } from 'react-native';
 import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 
 const TaskCard = ({ task, navigation }) => {
+    const formatEstimateStartTime = (time) => {
+        if (time === 0 || time === null) {
+            return '';
+        }
+        return ConvertTimeStamp.convertMillisecondsToTimeString(time);
+    };
     return (
         <TouchableOpacity 
             style={styles.card} 
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <Text>{task.title}</Text>
-            <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text>
+            {/* <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
+            {/* <Text>{task.estimate_start_date.split('T')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
+            <Text>{task.estimate_start_date.split('T')[0]} {formatEstimateStartTime(task.estimate_start_time)}</Text>
             <Text>Total Subtasks: {task.subtask.length}</Text>
             <Text>Completed Subtasks: {task.subtask.filter(subtask => subtask.status === 'complete').length}</Text>
         </TouchableOpacity>
