@@ -12,6 +12,7 @@ const useCreateTaskStore = create((set) => ({
     task_urgency: "",
     user_estimate_duration: "",
     subTasks: [],
+    task_reminder: false,
   
     // Setters
     setTitle: (title) => set({ title }),
@@ -23,6 +24,7 @@ const useCreateTaskStore = create((set) => ({
     setNotes: (notes) => set({ notes }),
     setTaskUrgency: (task_urgency) => set({ task_urgency }),
     setUserEstimateDuration: (time) => set({ user_estimate_duration : time }),
+    setTaskReminder: (task_reminder) => set({task_reminder}),
 
     addCreateTask: (task) => set((state) => ({ 
       tasks: [...state.createTask, task] })),
@@ -45,8 +47,14 @@ const useCreateTaskStore = create((set) => ({
       date: "",
       is_repeated: false,
       notes: "",
-      task_urgency: "medium",
+      task_urgency: "",
       subTasks: [],
+      start_date: "",
+      end_date: "",
+      start_time: "",
+      end_time: "",
+      user_estimate_duration: "",
+      task_reminder: false
     }),
   }));
 

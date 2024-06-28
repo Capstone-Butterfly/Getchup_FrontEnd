@@ -2,10 +2,11 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
-import { FlatList } from '@gluestack-ui/themed';
+import { Box, FlatList } from '@gluestack-ui/themed';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks'
 import { useQuery } from '@tanstack/react-query';
+import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
 
@@ -43,12 +44,12 @@ const WeeklyCalendar = ({ userId, navigation }) => {
       
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
-        console.log("selectedDateString ", selectedDateString);
         return tasks.filter(task => {
-            if (task.created_datetime) {
-                return task.created_datetime.split('T')[0] === selectedDateString;
+            if (task.estimate_start_date) {
+                let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
+                return local_estimate_start_date.split(',')[0] === selectedDateString;
             }
-            return false; // or handle this case as per your application logic
+            return false;
         });
     };
 

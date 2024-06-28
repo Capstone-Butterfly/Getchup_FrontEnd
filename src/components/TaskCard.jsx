@@ -1,6 +1,7 @@
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 
 const TaskCard = ({ task, navigation }) => {
     return (
@@ -9,7 +10,7 @@ const TaskCard = ({ task, navigation }) => {
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <Text>{task.title}</Text>
-            <Text>{new Date(task.created_datetime).toLocaleString()}</Text>
+            <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text>
             <Text>Total Subtasks: {task.subtask.length}</Text>
             <Text>Completed Subtasks: {task.subtask.filter(subtask => subtask.status === 'complete').length}</Text>
         </TouchableOpacity>

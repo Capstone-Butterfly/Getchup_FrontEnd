@@ -22,12 +22,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "e23fa3aa-b866-4f4c-af5a-4f94791d1a90"
-      }
-    },
-    "owner": "butterfly.capstone"
+    }
   }
 }

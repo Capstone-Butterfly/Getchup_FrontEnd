@@ -15,18 +15,49 @@ Notifications.setNotificationHandler({
     }),
 });
 
-async function scheduleNotification(task) {
-    const notificationId = await Notifications.scheduleNotificationAsync({
-        content: {
-            title: task.title,
-            body: 'Let\'s start this task',
-        },
-        trigger: { seconds: convertToSeconds(task.start_date) },
-    });
-    
-    console.log(notificationId)
-    return notificationId
+function convertToSecondsFromNow(start_date, start_time) {
+    const startDate = new Date(`${start_date}T${start_time}`);
+    const now = Date.now();
+    const intervalInSeconds = Math.floor((startDate - now) / 1000);
+    return intervalInSeconds;
 }
+
+async function scheduleNotification(task) {
+
+    const interval = convertToSecondsFromNow(task.start_date, task.start_time)
+
+    console.log('interval:', interval)
+    let defaultTrigger = 45 * 60 // 45 minutes
+  
+    let trigger;
+    
+    if (interval <= defaultTrigger) { //if start time is more than 45 minutes away
+        trigger = 10
+    } else {
+        trigger = interval - defaultTrigger // if more than 45 minutes, set reminder for 45 minutes before task starts
+    }
+
+    try {
+        const notificationContent = {
+            title: 'Reminder!',
+            body: `${task.title} at ${task.start_time}`,
+        };
+
+        // Schedule notification using Expo Notifications module
+        const notificationId = await Notifications.scheduleNotificationAsync({
+            content: notificationContent,
+            trigger: { seconds: trigger },
+        });
+
+        console.log('Notification scheduled with ID:', notificationId);
+        return notificationId;
+    } catch (error) {
+        console.error('Error scheduling notification:', error);
+        throw error; // Propagate the error further if needed
+    }
+}
+
+
 
 async function cancelNotification(notificationId) {
 

@@ -4383,6 +4383,7 @@ expo-asset@~10.0.9:
     invariant "^2.2.4"
     md5-file "^3.2.3"
 
+
 expo-av@^14.0.5:
   version "14.0.5"
   resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-14.0.5.tgz#754f3854b3a1e86a51ac49142623fec0ddb96a35"
