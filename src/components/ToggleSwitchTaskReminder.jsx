@@ -2,12 +2,14 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Switch, HStack } from "@gluestack-ui/themed";
 import profileStore from "../store/profileStore";
+import useCreateTaskStore from "../store/createTaskStore";
 
 const ToggleSwitchTaskReminder = () => {
-  const { task_reminder, setTaskReminder } = profileStore((state) => ({
-    task_reminder: state.task_reminder,
-    setTaskReminder: state.setTaskReminder,
-  }));
+  // const { task_reminder, setTaskReminder } = profileStore((state) => ({
+  //   task_reminder: state.task_reminder,
+  //   setTaskReminder: state.setTaskReminder,
+  // }));
+  const { task_reminder, setTaskReminder } = useCreateTaskStore();
 
   const toggleSwitch = () => {
     setTaskReminder(!task_reminder);
