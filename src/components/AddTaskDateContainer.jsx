@@ -54,6 +54,14 @@ const DateModelScreen = () => {
   };
 
   useEffect(() => {
+    if (dateLabel === "Today") {
+      const today = new Date().toISOString().split("T")[0];
+      setStartDate(today);
+      setEndDate(today);
+    }
+  }, [dateLabel]);
+
+  useEffect(() => {
     console.log("start_date:", start_date);
     console.log("end_date:", end_date);
   }, [start_date, end_date]);

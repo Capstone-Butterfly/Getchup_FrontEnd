@@ -36,7 +36,11 @@ const MonthlyCalendar = ({ userId }) => {
     const markedDates = useMemo(() => {
         const marks = {};
         tasks.forEach(task => {
-            const date = task.created_datetime.split('T')[0];
+            let date = "";
+            if (task.estimate_start_date) {
+                let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
+                date = local_estimate_start_date.split(',')[0] === selectedDateString;
+            }
             if (!marks[date]) {
                 marks[date] = { marked: true };
             }
