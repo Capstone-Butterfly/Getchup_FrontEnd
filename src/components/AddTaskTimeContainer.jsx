@@ -96,7 +96,29 @@ const TimeModelScreen = () => {
   };
 
   useEffect(() => {
-    if (selectedTime < selectedEndTime) {
+    if (timeLabel === "Anytime") {
+      const defaultStartTime = new Date();
+            defaultStartTime.setHours(6, 0, 0); 
+        
+            setStartTime(
+              defaultStartTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })
+            );
+            setEndTime(
+              defaultStartTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })
+            );
+    }
+  }, [timeLabel]);
+
+  useEffect(() => {
+    if (selectedTime <= selectedEndTime) {
       const startTimeMs = selectedTime.getTime();
       const endTimeMs = selectedEndTime.getTime();
       const duration = endTimeMs - startTimeMs;
@@ -106,7 +128,12 @@ const TimeModelScreen = () => {
 
     console.log("start_time:", start_time);
     console.log("end_time:", end_time);
-  }, [start_time, end_time]);
+
+    // if (selectedTime > selectedEndTime) { 
+    //   console.warn("End time must be after start time.");
+    // }
+
+  }, [start_time, end_time, timeLabel]);
 
   return (
     <SafeAreaView>
@@ -121,6 +148,23 @@ const TimeModelScreen = () => {
         </HStack>
         <TouchableOpacity
           onPress={() => {
+            const defaultStartTime = new Date();
+            defaultStartTime.setHours(6, 0, 0); 
+        
+            setStartTime(
+              defaultStartTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })
+            );
+            setEndTime(
+              defaultStartTime.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: false,
+              })
+            );
             setTimeLabel("Anytime");
           }}
         >

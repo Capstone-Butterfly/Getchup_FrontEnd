@@ -43,7 +43,7 @@ const TodayProgressChart = () => {
                     <ProgressFilledTrack h='$1' />
                     </Progress>
                 </VStack>
-                <Text>{todayProgress.totalTasks} out of {todayProgress.completedTasks} tasks completed</Text>
+                <Text>{todayProgress.completedTasks} out of {todayProgress.totalTasks} tasks completed</Text>
             </Card>
             <Card>
                 <Text>Today</Text>
