@@ -6,6 +6,7 @@ import AddTaskTimeContainer from "../../components/AddTaskTimeContainer";
 import ToggleSwitchTaskReminder from "../../components/ToggleSwitchTaskReminder";
 
 const DateTimeModelScreen = () => {
+  
   return (
     <SafeAreaView>
       <Text style={styles.title}>Date and Time</Text>

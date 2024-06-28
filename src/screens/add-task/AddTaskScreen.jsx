@@ -25,6 +25,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@gluestack-ui/themed';
 import DateFormatter from '../../utils/DateFormatter';
 import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
+import { scheduleNotification } from '../../services/notificationService'
 
 const { width, height } = Dimensions.get('window');
 
@@ -37,6 +38,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [modalSubTaskVisible, setModalSubTaskVisible] = useState(false);
     const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState(null);
     const [warningMessage, setWarningMessage] = useState('');
+    const { task_reminder, setTaskReminder } = useCreateTaskStore();
 
     const handleOpenTitleModal = () => setModalTitleVisible(true);
     const handleCloseTitleModal = () => setModalTitleVisible(false);
@@ -107,10 +109,11 @@ const AddTaskScreen = ({ navigation }) => {
 
     const saveTaskMutation = useMutation({
         mutationFn: async (task) => await addTask(task),
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             queryClient.invalidateQueries(['tasks']); // Invalidate task queries
             addDataTask(data); // Add task to taskStore
             clearCreateTaskStore(); // Clear createTaskStore after saving
+
             navigation.navigate('Home'); // Navigate to Home screen
         },
     });
@@ -124,40 +127,56 @@ const AddTaskScreen = ({ navigation }) => {
         }
     };
 
-    const handleSaveTask = async () => {
-        if (!userId || userId.length === 0) {
-            setWarningMessage('User ID is required');
-            return;
-        }
-        if (!title || title.length === 0) {
-            setWarningMessage('Title is required');
-            return;
-        }
-        if (!subTasks || subTasks.length === 0) {
-            setWarningMessage('At least one subtask is required');
-            return;
+const handleSaveTask = async () => {
+    if (!userId || userId.length === 0) {
+        setWarningMessage('User ID is required');
+        return;
+    }
+    if (!title || title.length === 0) {
+        setWarningMessage('Title is required');
+        return;
+    }
+    if (!subTasks || subTasks.length === 0) {
+        setWarningMessage('At least one subtask is required');
+        return;
+    }
+
+    try {
+        let notificationId = null;
+        if (task_reminder) { // schedule notification
+            console.log('calling scheduleNotification')
+            notificationId = await scheduleNotification({
+                title,
+                start_date,
+                start_time
+            });
+            console.log('Returned notification ID:', notificationId);
         }
 
-        try {
-            const newTask = {
-                user_id: userId,
-                title,
-                notes,
-                task_urgency,
-                subtask: subTasks,
-                is_repeated: false,
-                estimate_start_date: start_date,
-                due_date: end_date,
-                estimate_start_time: ConvertTimeStamp.convertTimeStringToMilliseconds(start_time),
-                estimate_end_time: ConvertTimeStamp.convertTimeStringToMilliseconds(end_time),
-                user_estimate_duration
-            };
-            await saveTaskMutation.mutateAsync(newTask);
-            setWarningMessage('');
-        } catch (error) {
-            console.error('Error adding task:', error);
-        }
-    };
+        const newTask = {
+            user_id: userId,
+            title,
+            notes,
+            task_urgency,
+            subtask: subTasks,
+            is_repeated: false,
+            estimate_start_date: start_date,
+            due_date: end_date,
+            estimate_start_time: ConvertTimeStamp.convertTimeStringToMilliseconds(start_time),
+            estimate_end_time: ConvertTimeStamp.convertTimeStringToMilliseconds(end_time),
+            user_estimate_duration,
+            notification_id: notificationId
+        };
+
+        await saveTaskMutation.mutateAsync(newTask);
+        clearCreateTaskStore();
+        setWarningMessage('');
+        navigation.navigate('Home');
+    } catch (error) {
+        console.error('Error adding task:', error);
+    }
+};
+
 
     const handleCancel = () => {
         clearCreateTaskStore(); 
