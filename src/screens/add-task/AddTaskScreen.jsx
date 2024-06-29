@@ -84,7 +84,6 @@ const AddTaskScreen = ({ navigation }) => {
         user_estimate_duration: state.user_estimate_duration,
     }));
 
-    //console.log("subTasks ", subTasks);
 
     // const {first_name, userId} = profileStore((state) => ({
     //     first_name: state.first_name,
@@ -102,7 +101,6 @@ const AddTaskScreen = ({ navigation }) => {
         mutationFn: async (title) => await getAISubTasks(title),
         onSuccess: (data) => {
             queryClient.invalidateQueries(['createTask']);
-            setSelectedDate(DateFormatter(new Date()));
             addSubtask(data.subtask);
         },
     });
@@ -112,9 +110,7 @@ const AddTaskScreen = ({ navigation }) => {
         onSuccess: async (data) => {
             queryClient.invalidateQueries(['tasks']); // Invalidate task queries
             addDataTask(data); // Add task to taskStore
-            clearCreateTaskStore(); // Clear createTaskStore after saving
-
-            navigation.navigate('Home'); // Navigate to Home screen
+            setSelectedDate(DateFormatter(new Date()));
         },
     });
 
@@ -140,7 +136,11 @@ const handleSaveTask = async () => {
         setWarningMessage('At least one subtask is required');
         return;
     }
-
+    if (!start_date || start_date.length === 0) {
+        setWarningMessage('Schedule Date is require');
+        return;
+    }
+    setWarningMessage('');
     try {
         let notificationId = null;
         if (task_reminder) { // schedule notification
@@ -172,7 +172,6 @@ const handleSaveTask = async () => {
 
         await saveTaskMutation.mutateAsync(newTask);
         clearCreateTaskStore();
-        setWarningMessage('');
         navigation.navigate('Home');
     } catch (error) {
         console.error('Error adding task:', error);

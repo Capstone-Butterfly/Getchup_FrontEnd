@@ -10,11 +10,13 @@ import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
 
-    const { tasks, setTasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
+    const { tasks, setTasks, selectedDate, setSelectedDate, addDataTask, updateDataTask } = useTaskStore((state) => ({
         tasks: state.tasks,
         setTasks: state.setTasks,
         selectedDate: state.selectedDate,
         setSelectedDate: state.setSelectedDate,
+        addDataTask: state.addDataTask,
+        updateDataTask: state.updateDataTask,
     }));
 
     const { data: fetchedTask, isLoading, error, refetch } = useQuery({
@@ -28,9 +30,9 @@ const WeeklyCalendar = ({ userId, navigation }) => {
     useEffect(() => {
         if (fetchedTask) {
             setTasks(fetchedTask);
-            console.log("Tasks !!!" , tasks != null ? tasks.length: 0)
+            console.log("Tasks !!!" , tasks != null ? tasks.length : 0)
         }
-    }, [fetchedTask, setTasks]);
+    }, [fetchedTask, addDataTask, updateDataTask]);
 
     const handleDateSelected = (date) => {
         setSelectedDate(date);
@@ -45,10 +47,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
         return tasks.filter(task => {
-            if (task.estimate_start_date) {
-                //console.log("task.estimate_start_date",task.estimate_start_date)
-               // let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
-                //return local_estimate_start_date.split(',')[0] === selectedDateString;
+            if (task.estimate_start_date) {               
                 return task.estimate_start_date.split('T')[0] === selectedDateString;
             }
             return false;
@@ -61,7 +60,6 @@ const WeeklyCalendar = ({ userId, navigation }) => {
         }
         return [];
     }, [tasks, selectedDate]);
-    
     
     return (
         <View style={styles.container}>

@@ -14,14 +14,15 @@ const fetchTasksByTaskId = async (taskId) => {
 };
 
 const fetchTasksByUserId = async (userId) => {
-    console.log("userId : ", userId);
+    //console.log("userId : ", userId);
+    console.log("fetch data from axio!!!!!!!!!!!!!!!!!!!!!!!");
     const { data } = await axios.get( `${base_url}/tasks/user/${userId}`);
     return data;
 };
 
 const addTask = async (newTask) => {
   try {
-    console.log("newTask :", newTask);
+    //console.log("newTask :", newTask);
     const { data } = await axios.post(`${base_url}/tasks/`, newTask);
     return data;
   } catch (error) {
