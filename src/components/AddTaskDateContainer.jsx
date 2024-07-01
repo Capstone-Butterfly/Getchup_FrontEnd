@@ -55,7 +55,8 @@ const DateModelScreen = () => {
 
   useEffect(() => {
     if (dateLabel === "Today") {
-      const today = new Date().toISOString().split("T")[0];
+      // const today = new Date().toISOString().split("T")[0];
+      const today = new Date().toLocaleString('en-CA').split(",")[0];
       setStartDate(today);
       setEndDate(today);
     }
@@ -80,7 +81,8 @@ const DateModelScreen = () => {
         <TouchableOpacity
           onPress={() => {
             const today = new Date();
-            const todayDate = today.toISOString().split("T")[0];
+            //const todayDate = today.toISOString().split("T")[0];
+            const todayDate = today.toLocaleString('en-CA').split(",")[0];
             setStartDate(todayDate);
             setEndDate(todayDate);
             setDateLabel("Today");
@@ -100,7 +102,8 @@ const DateModelScreen = () => {
           onPress={() => {
             const today = new Date();
             today.setDate(today.getDate() + 1);
-            const tomorrowDateString = today.toISOString().split("T")[0];
+            //</VStack>const tomorrowDateString = today.toISOString().split("T")[0];
+            const tomorrowDateString = today.toLocaleString('en-CA').split(",")[0];
             setStartDate(tomorrowDateString);
             setEndDate(tomorrowDateString);
             setDateLabel("Tomorrow");

@@ -8,9 +8,8 @@ import { useQuery } from '@tanstack/react-query';
 
 const MonthlyCalendar = ({ userId }) => {
     const navigation = useNavigation();
-    const { tasks, setTasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
+    const { tasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
         tasks: state.tasks,
-        setTasks: state.setTasks,
         selectedDate: state.selectedDate,
         setSelectedDate: state.setSelectedDate
     }));
@@ -20,12 +19,6 @@ const MonthlyCalendar = ({ userId }) => {
         queryFn: () => fetchTasksByUserId(userId),
         enabled: !tasks || tasks.length === 0,
     });
-
-    useEffect(() => {
-        if (fetchedTask) {
-            setTasks(fetchedTask);
-        }
-    }, [fetchedTask, setTasks]);
 
     const handleDateSelected = useCallback((day) => {
         const selectedDate = new Date(day.timestamp);
@@ -38,11 +31,7 @@ const MonthlyCalendar = ({ userId }) => {
         tasks.forEach(task => {
             let date = "";
             if (task.estimate_start_date) {
-                //let local_estimate_start_date = new Date(task.estimate_start_date).toLocaleString('en-CA');
-                // date = local_estimate_start_date.split(',')[0] === selectedDate;
-                date = task.estimate_start_date.split('T')[0] === selectedDate;
-            }
-            if (!marks[date]) {
+                date = task.estimate_start_date.split('T')[0];
                 marks[date] = { marked: true };
             }
         });
@@ -54,7 +43,8 @@ const MonthlyCalendar = ({ userId }) => {
             <CalendarList
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
-                selected={selectedDate.toISOString().split('T')[0]}
+                //selected={selectedDate.toISOString().split('T')[0]}
+                selected={selectedDate.toLocaleString('en-CA').split(",")[0]}
             />
         </SafeAreaView>
     );
