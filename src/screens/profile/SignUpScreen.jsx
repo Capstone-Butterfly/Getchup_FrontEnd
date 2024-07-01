@@ -43,6 +43,7 @@ function SignUpScreen() {
       onSuccess: async (data) => {
         setUserId(data.userId);
         console.log('Signup successful, navigating to SurveyQuestionScreen');
+        
         navigation.navigate('SurveyQuestionScreen');
       },
       onError: (error) => {

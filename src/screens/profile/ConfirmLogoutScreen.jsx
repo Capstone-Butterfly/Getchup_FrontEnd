@@ -6,13 +6,14 @@ import profileStore from '../../store/profileStore';
 
 function ConfirmLogoutScreen({ navigation }) {
 
-  const { clearToken, clearUserId} = profileStore((state) => state);
+  const { clearToken, clearUserId, setIsLogin} = profileStore((state) => state);
  
   const handleLogout = async () => {
     try {
       console.log('Logged out');
       clearToken();
       clearUserId();
+      setIsLogin(false);
       navigation.navigate('HomeScreen');
     } catch (error) {
       console.error('Error logging out: ', error);

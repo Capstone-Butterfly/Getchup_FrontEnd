@@ -1,3 +1,4 @@
+// src/services/profile.js
 import axios from 'axios';
 import { BASE_URL } from '../config/apiConfig';
 
@@ -18,7 +19,7 @@ const signUpProfile = async (firstName, lastName, email, password, phone) => {
         const response = await axios.post(`${base_url}/createaccount`, { first_name: firstName, last_name: lastName, email, password, phone });
         return response.data;
     } catch (error) {
-        console.error("Error sigUp:", error);
+        console.error("Error signUp:", error);
         throw error;
     }
 };
@@ -34,17 +35,27 @@ const surveyQuestionProfile = async (questions) => {
 };
 
 const userDataProfile = async (userId) => {
-  const { data } = await axios.get(`${base_url}/getUserDetails/${userId}`);
-  return data;
+    try {
+        const response = await axios.get(`${base_url}/getUserDetails/${userId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error userData:", error);
+        throw error;
+    }
 };
 
 const updateUserProfile = async (userId, userInfo) => {
-  const response = await axios.put(`${base_url}/update/${userId}`, userInfo, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  return response.data;
+    try {
+        const response = await axios.put(`${base_url}/update/${userId}`, userInfo, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error updateUserProfile:", error);
+        throw error;
+    }
 };
-  
+
 export { signInProfile, signUpProfile, surveyQuestionProfile, userDataProfile, updateUserProfile };
