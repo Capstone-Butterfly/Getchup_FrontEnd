@@ -11,11 +11,13 @@ import {
 import { useEffect } from 'react';
 import useCreateTaskStore from '../../store/createTaskStore';
 import useTaskStore from '../../store/taskStore';
+import useAddTaskDateModelStore from '../../store/addTaskDateModelStore';
 import profileStore from '../../store/profileStore'
 import { addTask, getAISubTasks } from '../../services/tasks';
 import { useMutation } from '@tanstack/react-query';
 import queryClient from '../../services/QueryClient';
 import TitleModalScreen from './TitleModelScreen';
+import ToggleSwitch from "../../components/ToggleSwitch";
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
 import DateTimeModelScreen from './DateTimeModelScreen'
@@ -39,28 +41,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState(null);
     const [warningMessage, setWarningMessage] = useState('');
     const { task_reminder, setTaskReminder } = useCreateTaskStore();
-
-    const handleOpenTitleModal = () => setModalTitleVisible(true);
-    const handleCloseTitleModal = () => setModalTitleVisible(false);
-
-    const handleOpenNoteModal = () => setModalNoteVisible(true);
-    const handleCloseNoteModal = () => setModalNoteVisible(false);
-
-    const handleOpenPriorityModal = () => setModalPriorityVisible(true);
-    const handleClosePriorityModal = () => setModalPriorityVisible(false);
-    
-    const handleOpenDateTimeModal = () => setModalDateTimeVisible(true);
-    const handleCloseDateTimeModal = () => setModalDateTimeVisible(false);
-
-    const handleOpenSubTaskModal = (index) => {
-        setSelectedSubTaskIndex(index);
-        setModalSubTaskVisible(true);
-    };
-
-    const handleCloseSubTaskModal = () => {
-        setSelectedSubTaskIndex(null);
-        setModalSubTaskVisible(false);
-    };
+    const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
 
     const { addDataTask, setSelectedDate } = useTaskStore((state) => ({
         addDataTask: state.addDataTask,
@@ -83,6 +64,55 @@ const AddTaskScreen = ({ navigation }) => {
         end_time: state.end_time,
         user_estimate_duration: state.user_estimate_duration,
     }));
+    
+    const { clearAddTaskDateModelStore} =
+    useAddTaskDateModelStore((state) => ({
+        clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
+    }));
+
+
+    const handleOpenTitleModal = () => setModalTitleVisible(true);
+    const handleCloseTitleModal = () => setModalTitleVisible(false);
+
+    const handleOpenNoteModal = () => setModalNoteVisible(true);
+    const handleCloseNoteModal = () => setModalNoteVisible(false);
+
+    const handleOpenPriorityModal = () => setModalPriorityVisible(true);
+    const handleClosePriorityModal = () => setModalPriorityVisible(false);
+    
+    const handleOpenDateTimeModal = () => setModalDateTimeVisible(true);
+    const handleCloseDateTimeModal = () => {
+        const startDate = new Date(start_date);
+        const endDate = new Date(end_date);
+        if (endDate < startDate) {
+            setDateTimeWarningMessage("End date must be after start date.");
+            return;
+        }
+
+        const startTimeDate = new Date();
+        const endTimeDate = new Date();
+        const [startHour, startMinute] = start_time.split(":").map(Number);
+        const [endHour, endMinute] =end_time.split(":").map(Number);
+        startTimeDate.setHours(startHour, startMinute);
+        endTimeDate.setHours(endHour, endMinute);
+        if (endTimeDate < startTimeDate) {
+            setDateTimeWarningMessage("End time must be after start time.");
+            return;
+        }
+
+        setModalDateTimeVisible(false);
+        setDateTimeWarningMessage('');
+    }
+
+    const handleOpenSubTaskModal = (index) => {
+        setSelectedSubTaskIndex(index);
+        setModalSubTaskVisible(true);
+    };
+
+    const handleCloseSubTaskModal = () => {
+        setSelectedSubTaskIndex(null);
+        setModalSubTaskVisible(false);
+    };
 
 
     // const {first_name, userId} = profileStore((state) => ({
@@ -172,6 +202,7 @@ const handleSaveTask = async () => {
 
         await saveTaskMutation.mutateAsync(newTask);
         clearCreateTaskStore();
+        clearAddTaskDateModelStore();
         navigation.navigate('Home');
     } catch (error) {
         console.error('Error adding task:', error);
@@ -180,7 +211,8 @@ const handleSaveTask = async () => {
 
 
     const handleCancel = () => {
-        clearCreateTaskStore(); 
+        clearCreateTaskStore();
+        clearAddTaskDateModelStore(); 
         navigation.navigate('HomeScreen'); 
     };
 
@@ -215,6 +247,9 @@ const handleSaveTask = async () => {
                         <Text color="black" fontWeight={"$bold"}>{task_urgency? task_urgency : "Task priority"}</Text>
                     </View>
                 </Pressable>
+            </Card>
+            <Card style={styles.cardBody}>
+                <ToggleSwitch />
             </Card>
             <Card style={styles.cardBody}>
                 <Pressable onPress={() => console.log('Title')} style={styles.bottomLine}>
@@ -299,6 +334,11 @@ const handleSaveTask = async () => {
                         <Icon as={CloseIcon} />
                     </ModalCloseButton>
                     <VStack space={4} style={styles.modalBody}>
+                        {dateTimeWarningMessage ? (
+                            <Box style={styles.warningBox}>
+                            <Text style={styles.warningText}>{dateTimeWarningMessage}</Text>
+                            </Box>
+                        ) : null}
                         <DateTimeModelScreen/>
                     </VStack>
                 </ModalContent>
