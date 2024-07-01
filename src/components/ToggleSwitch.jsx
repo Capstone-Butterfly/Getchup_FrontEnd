@@ -1,10 +1,10 @@
 import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Switch, HStack } from "@gluestack-ui/themed";
-import profileStore from "../store/profileStore";
+import useCreateTaskStore from "../store/createTaskStore";
 
 const ToggleSwitch = () => {
-  const { movement_reminder, setMovementReminder } = profileStore((state) => ({
+  const { movement_reminder, setMovementReminder } = useCreateTaskStore((state) => ({
     movement_reminder: state.movement_reminder,
     setMovementReminder: state.setMovementReminder,
   }));

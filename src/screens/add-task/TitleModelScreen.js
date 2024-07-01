@@ -2,14 +2,12 @@ import React from "react";
 import { Text} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import TitleInputForm from "../../components/TitleInputForm";
-import ToggleSwitch from "../../components/ToggleSwitch";
 import TaskLibraryContainer from "../../components/TaskLibraryContainer"
 
 const TitleModelScreen = () => {
   return (
     <SafeAreaView>
       <TitleInputForm />
-      <ToggleSwitch />
       <TaskLibraryContainer />
     </SafeAreaView>
   );

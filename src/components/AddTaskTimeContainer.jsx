@@ -72,7 +72,7 @@ const TimeModelScreen = () => {
   };
 
   const applyEndTime = () => {
-    if (selectedTime < selectedEndTime) {
+    // if (selectedTime < selectedEndTime) {
       setEndTime(
         selectedEndTime.toLocaleTimeString([], {
           hour: "2-digit",
@@ -80,10 +80,9 @@ const TimeModelScreen = () => {
           hour12: false,
         })
       );
-    } else {
-      console.warn("End time must be after start time.");
-    }
-
+    // } else {
+      // console.warn("End time must be after start time.");
+    // }
     setEndTimePickerVisible(false);
   };
 

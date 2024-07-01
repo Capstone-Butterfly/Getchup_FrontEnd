@@ -16,6 +16,7 @@ import useAddTaskDateModelStore from "../store/addTaskDateModelStore";
 import usecreateTaskStore from "../store/createTaskStore";
 
 const DateModelScreen = () => {
+
   const { dateLabel, setDateLabel} =
     useAddTaskDateModelStore((state) => ({
       dateLabel: state.dateLabel,
@@ -215,4 +216,5 @@ const styles = StyleSheet.create({
   modalBody: {
     paddingTop: 30,
   },
+
 });
