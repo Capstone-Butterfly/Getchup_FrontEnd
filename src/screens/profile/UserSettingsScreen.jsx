@@ -21,7 +21,7 @@ function UserSettingsScreen({ navigation }) {
       };
       console.log(updatedSettings);
 
-      const response = await fetch(`http://52.55.48.104:8080/api/v1/update/${userId}`, {
+      const response = await fetch(`https://api.getchup.ca/api/v1/update/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

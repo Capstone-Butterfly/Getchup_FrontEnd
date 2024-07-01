@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { VStack, HStack, Icon, Input, InputField, FormControl, Heading, Button, ButtonText } from '@gluestack-ui/themed';
+import { VStack, HStack, Icon, Input, InputField, FormControl, Heading, Button, ButtonText, Image } from '@gluestack-ui/themed';
 import { EditIcon } from '@gluestack-ui/themed';
 import { updateUserProfile, userDataProfile } from '../../services/profile';
 import profileStore from '../../store/profileStore';
@@ -8,7 +8,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 function EditProfileScreen({ navigation }) {
 
-  const { email, first_name, last_name, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword } = profileStore((state) => state);
+  const { email, first_name, last_name, profile_img, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword } = profileStore((state) => state);
 
 
   const [editableField, setEditableField] = useState('');
@@ -67,6 +67,17 @@ function EditProfileScreen({ navigation }) {
             User Profile
           </Heading>
 
+          <VStack space="xs">
+            <HStack justifyContent="space-between" alignItems="center">
+              <Image
+                size="md"
+                borderRadius="$none"
+                source={{
+                  uri: profile_img,
+                }}
+              />
+            </HStack>
+          </VStack>
           <VStack space="xs">
             <HStack justifyContent="space-between" alignItems="center">
               <Text color="$text500" lineHeight="$xs" flex={1}>
@@ -173,7 +184,7 @@ function EditProfileScreen({ navigation }) {
                 />
               </Input>
             ) : (
-              <Text>*********</Text> // Display placeholder for password
+              <Text>*********</Text> 
             )}
           </VStack>
 
@@ -183,7 +194,7 @@ function EditProfileScreen({ navigation }) {
       <Button onPress={handleSubmit}>
         <ButtonText>Save Changes</ButtonText>
       </Button>
-    </View>
+    </View >
   );
 }
 

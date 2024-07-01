@@ -1,32 +1,56 @@
-import {GestureHandlerRootView} from 'react-native-gesture-handler'; //THIS HAS TO BE AT LINE NUMBER 1
+import { GestureHandlerRootView } from 'react-native-gesture-handler'; // THIS HAS TO BE AT LINE NUMBER 1
 import React from 'react';
-import { Image } from '@gluestack-ui/themed';
 import { GluestackUIProvider, StatusBar } from '@gluestack-ui/themed';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Navigator from './src/navigation/Navigator';
 import { config } from '@gluestack-ui/config';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import queryClient from './src/services/QueryClient';
 import { QueryClientProvider } from '@tanstack/react-query';
+import queryClient from './src/services/QueryClient';
+import profileStore from './src/store/profileStore';
+import SignInScreen from './src/screens/profile/SignInScreen';
+import HomeScreen from './src/screens/home/HomeScreen'; // Import your HomeScreen
+import SignUpScreen from './src/screens/profile/SignUpScreen'; // Import your SignUpScreen
+import Navigator from './src/navigation/Navigator';
+import SurveyQuestionScreen from './src/screens/profile/SurveyQuestionScreen';
+import ADHDCatScreen from './src/screens/profile/ADHDCatScreen';
+
+const Stack = createStackNavigator();
+
+const AppNavigator = () => (
+    <Stack.Navigator initialRouteName="SignIn">
+        <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Screen name="SignUp" component={SignUpScreen} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="SurveyQuestionScreen" component={SurveyQuestionScreen} />
+        <Stack.Screen name="ADHDCatScreen" component={ADHDCatScreen} />
+    </Stack.Navigator>
+);
 
 const App = () => {
+    const { is_login } = profileStore((state) => state);
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-        <QueryClientProvider client={queryClient}>
-            <NavigationContainer>
-                <SafeAreaProvider>
-                <GluestackUIProvider config={config}>
-                        <StatusBar bg='#2c3e50' />
-                        <Navigator />
-                    </GluestackUIProvider>
-                </SafeAreaProvider>
-            </NavigationContainer>
-        </QueryClientProvider> 
+            <QueryClientProvider client={queryClient}>
+                <NavigationContainer>
+                    <SafeAreaProvider>
+                        <GluestackUIProvider config={config}>
+                            <StatusBar bg='#2c3e50' />
+                            {is_login ? (
+                                <Navigator />
+                            ) : (
+                                <AppNavigator />
+                            )}
+                        </GluestackUIProvider>
+                    </SafeAreaProvider>
+                </NavigationContainer>
+            </QueryClientProvider>
         </GestureHandlerRootView>
     )
-}
+};
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -36,4 +60,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default App
+export default App;
