@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, Switch, Alert } from 'react-native';
 import { Button, ButtonText, Image } from '@gluestack-ui/themed';
 import { Accelerometer } from 'expo-sensors';
 import { updateTaskStartTime, updateTaskEndTime, pauseTask } from '../../services/tasks';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import MusicPlayer from './MusicPlayer'; 
 
 const StepScreen = ({ route }) => {
     const navigation = useNavigation();
     const [isTaskInProgress, setIsTaskInProgress] = useState(false);
     const [isTaskCompleted, setIsTaskCompleted] = useState(false);
-    const [isTaskStarted, setIsTaskStarted] = useState(false); // Track if the task has started
+    const [isTaskStarted, setIsTaskStarted] = useState(false); 
     const { stepNumber, stepDescription, imageSource, imageAlt, totalSteps, taskSubtasks, task } = route.params;
 
     const hasNextStep = (currentStep, totalSteps) => currentStep < totalSteps;
     const hasPreviousStep = (currentStep) => currentStep > 1;
 
-    const [isMusicEnabled, setIsMusicEnabled] = useState(false);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
     const [isAlertShown, setIsAlertShown] = useState(false);
 
-    const toggleMusicSwitch = () => setIsMusicEnabled(previousState => !previousState);
+    const musicPlayerRef = useRef(null);
+
     const toggleMovementSwitch = () => setIsMovementEnabled(previousState => !previousState);
 
     useEffect(() => {
@@ -118,13 +119,29 @@ const StepScreen = ({ route }) => {
     };
 
     const handleBackToHome = () => {
+        if (musicPlayerRef.current) {
+            musicPlayerRef.current.stopMusic();
+        }
         navigation.navigate('HomeScreen'); 
     };
 
     const navigateToNextStep = () => {
+        if (musicPlayerRef.current) {
+            musicPlayerRef.current.stopMusic();
+        }
         const nextStepNumber = stepNumber + 1;
-        navigation.navigate(`Step ${nextStepNumber}`);
+        navigation.navigate(`Step ${nextStepNumber}`, { ...route.params, stepNumber: nextStepNumber });
     };
+
+    useFocusEffect(
+        React.useCallback(() => {
+            return () => {
+                if (musicPlayerRef.current) {
+                    musicPlayerRef.current.stopMusic();
+                }
+            };
+        }, [])
+    );
 
     return (
         <View style={styles.container}>
@@ -193,15 +210,6 @@ const StepScreen = ({ route }) => {
                 <View style={styles.toggleContainer}>
                     <View style={[styles.toggleColumn, styles.card]}>
                         <View style={styles.toggleRow}>
-                            <Text style={styles.toggleLabel}>Music</Text>
-                            <Switch
-                                onValueChange={toggleMusicSwitch}
-                                value={isMusicEnabled}
-                            />
-                        </View>
-                    </View>
-                    <View style={[styles.toggleColumn, styles.card]}>
-                        <View style={styles.toggleRow}>
                             <Text style={styles.toggleLabel}>Movement</Text>
                             <Switch
                                 onValueChange={toggleMovementSwitch}
@@ -209,14 +217,17 @@ const StepScreen = ({ route }) => {
                             />
                         </View>
                     </View>
+                    <View style={[styles.toggleColumn, styles.card]}>
+                        <View style={styles.toggleRow}>
+                            <Text style={styles.toggleLabel}>Music</Text>
+                            <MusicPlayer ref={musicPlayerRef} />
+                        </View>
+                    </View>
                 </View>
             )}
         </View>
     );
 };
-
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -262,7 +273,7 @@ const styles = StyleSheet.create({
     toggleRow: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems:'center',
     },
     toggleLabel: {
         fontSize: 14,
@@ -286,8 +297,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     smallButtonText: {
-        fontSize: 14,  
+        fontSize: 14,
     },
-});
-
-export default StepScreen;
+    });
+    
+    export default StepScreen;
