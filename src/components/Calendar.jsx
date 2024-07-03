@@ -7,11 +7,15 @@ import { fetchTasksByUserId } from '../services/tasks';
 import { useQuery } from '@tanstack/react-query';
 
 const MonthlyCalendar = ({ userId }) => {
+
+
+
     const navigation = useNavigation();
-    const { tasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
+    const { tasks, selectedDate, setSelectedDate, setTasks } = useTaskStore((state) => ({
         tasks: state.tasks,
         selectedDate: state.selectedDate,
-        setSelectedDate: state.setSelectedDate
+        setSelectedDate: state.setSelectedDate,
+        setTasks: state.setTasks,
     }));
 
     const handleDateSelected = useCallback((day) => {
