@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, FlatList, Heading, Text, Image, SafeAreaView, View, VStack, Progress, ProgressFilledTrack } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
-import { getTodayProgress } from "../services/progress";
+import { getTodayChartDetails } from "../services/progress";
 import { useQuery } from '@tanstack/react-query';
 
 
@@ -9,11 +9,13 @@ const TodayProgressChart = () => {
     const userId = '6668b7f95dbce97bc28322d2';
 
     const { data: todayProgress, isLoading, error, refetch } = useQuery({
-        queryKey: ['todayProgress', userId], 
-        queryFn: () => getTodayProgress(userId),
+        queryKey: ['todayProgressChart', userId], 
+        queryFn: () => getTodayChartDetails(userId),
         refetchOnMount: true,
         refetchOnReconnect: true,
     });
+
+    console.log("todayProgress" +JSON.stringify(todayProgress));
 
     if (isLoading) {
         return (
@@ -43,14 +45,14 @@ const TodayProgressChart = () => {
                     <ProgressFilledTrack h='$1' />
                     </Progress>
                 </VStack>
-                <Text>{todayProgress.completedTasks} out of {todayProgress.totalTasks} tasks completed</Text>
+                <Text>{todayProgress.totalCompletedTasks} out of {todayProgress.totalTasks} tasks completed</Text>
             </Card>
-            <Card>
+            {/* <Card>
                 <Text>Today</Text>
-                <Text>{todayProgress.completedTasks} Completed</Text>
-                <Text>{todayProgress.incompleteTasks} On Going</Text>
+                <Text>{todayProgress.totalCompletedTasks} Completed</Text>
+                <Text>{todayProgress.totalIncompleteTasks} On Going</Text>
                 <Text>Overall Rate : {todayProgress.completionPercentage}%</Text>
-            </Card>
+            </Card> */}
 
             
             
