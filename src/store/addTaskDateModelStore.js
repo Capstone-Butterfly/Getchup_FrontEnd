@@ -10,8 +10,8 @@ const useAddTaskDateModelStore = create((set) => ({
 
   clearAddTaskDateModelStore: () =>
     set({
-      setDateLabel: "",
-      setTimeLabel: "",
+      setDateLabel: "Today",
+      setTimeLabel: "Anytime",
     }),
 }));
 
