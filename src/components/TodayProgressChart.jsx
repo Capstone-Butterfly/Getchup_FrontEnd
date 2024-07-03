@@ -5,8 +5,7 @@ import { getTodayChartDetails } from "../services/progress";
 import { useQuery } from '@tanstack/react-query';
 
 
-const TodayProgressChart = () => {
-    const userId = '6668b7f95dbce97bc28322d2';
+const TodayProgressChart = ({name, userId}) => {
 
     const { data: todayProgress, isLoading, error, refetch } = useQuery({
         queryKey: ['todayProgressChart', userId], 
@@ -15,7 +14,7 @@ const TodayProgressChart = () => {
         refetchOnReconnect: true,
     });
 
-    console.log("todayProgress" +JSON.stringify(todayProgress));
+    //console.log("todayProgress" +JSON.stringify(todayProgress));
 
     if (isLoading) {
         return (
@@ -38,7 +37,7 @@ const TodayProgressChart = () => {
             <Heading>Progress</Heading>
             <Card style={styles.cardBody}>
                 <Image source={require('../../assets/girl.png')} style={styles.icon} alt='girl'/>
-                <Text>Nam</Text>
+                <Text>{name}</Text>
                 <VStack space="lg">
                     <Text size="lg">Activity Progress</Text>
                     <Progress value={todayProgress.completionPercentage} w='$80' h='$1'>

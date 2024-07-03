@@ -38,8 +38,7 @@ const renderTitle = (data) => {
   );
 };
 
-const TodayProgressChartDetail = () => {
-  const userId = "6668b7f95dbce97bc28322d2";
+const TodayProgressChartDetail = ({userId}) => {
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ["todayProgressChart", userId],

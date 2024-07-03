@@ -89,7 +89,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
             {isLoading ? (
                 <Text>Loading...</Text>
             ) : error ? (
-                <Text>Error: {error.message}</Text>
+                <Text>No Tasks!</Text>
             ) : filteredTasks && filteredTasks.length === 0 ? (
                 <Text>There are no tasks here yet, yay!</Text>
             ) : (

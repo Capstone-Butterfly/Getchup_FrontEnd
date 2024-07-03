@@ -3,21 +3,27 @@ import React, { useState, useEffect } from 'react';
 import { Button, Text, View, Platform } from 'react-native';
 import Header from '../../components/Header';
 import Greeting from '../../components/Greeting';
-import WeeklyCalendar from '../../components/WeeklyCalendar2';
+import WeeklyCalendar from '../../components/WeeklyCalendar';
 import { useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, getUnreadNotifications } from '../../services/notificationService';
 import useNotificationStore from '../../store/notificationStore';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const userId = '6668b7f95dbce97bc28322d2';
+import profileStore from '../../store/profileStore';
 
 const HomeScreen = ({ navigation }) => {
 
     const { expoPushToken, setExpoPushToken, channels, setChannels, notification, setNotification } = useNotificationStore();
     const notificationListener = useRef();
     const responseListener = useRef();
+
+    const {first_name, userId} = profileStore((state) => ({
+        first_name: state.first_name,
+        userId: state.userId
+    }));
+    
+    console.log(userId);
 
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
@@ -48,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <Header />
-            <Greeting />
+            <Greeting name={first_name}/>
             <WeeklyCalendar userId={userId} navigation={navigation}/>
 
         </SafeAreaView>
