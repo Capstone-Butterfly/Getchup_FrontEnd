@@ -9,6 +9,8 @@
         "web": "expo start --web"
     },
     "dependencies": {
+        "@expo-google-fonts/archivo": "^0.2.3",
+        "@expo-google-fonts/work-sans": "^0.2.3",
         "@expo/metro-runtime": "^3.2.1",
         "@gluestack-style/react": "^1.0.56",
         "@gluestack-ui/config": "^1.1.18",
@@ -26,6 +28,7 @@
         "expo": "^51.0.14",
         "expo-constants": "~16.0.2",
         "expo-device": "~6.0.2",
+        "expo-font": "~12.0.7",
         "expo-notifications": "~0.28.9",
         "expo-sensors": "~13.0.8",
         "expo-status-bar": "~1.12.1",

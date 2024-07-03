@@ -15,6 +15,9 @@ import SignUpScreen from './src/screens/profile/SignUpScreen'; // Import your Si
 import Navigator from './src/navigation/Navigator';
 import SurveyQuestionScreen from './src/screens/profile/SurveyQuestionScreen';
 import ADHDCatScreen from './src/screens/profile/ADHDCatScreen';
+import { Archivo_400Regular, Archivo_600SemiBold } from '@expo-google-fonts/archivo';
+import { WorkSans_700Bold, WorkSans_600SemiBold } from '@expo-google-fonts/work-sans';
+import { useFonts } from "expo-font";
 
 const Stack = createStackNavigator();
 
@@ -29,6 +32,14 @@ const AppNavigator = () => (
 );
 
 const App = () => {
+
+    const [fontsLoaded] = useFonts({
+        Archivo_400Regular,
+        Archivo_600SemiBold,
+        WorkSans_700Bold,
+        WorkSans_600SemiBold
+      });
+
     const { is_login } = profileStore((state) => state);
 
     return (

@@ -792,6 +792,16 @@
   dependencies:
     "@types/hammerjs" "^2.0.36"
 
+"@expo-google-fonts/archivo@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/archivo/-/archivo-0.2.3.tgz#0acf86c8e182545c27af4f2382299f9eaba63269"
+  integrity sha512-WD3Ad+oMOqCCBwJDPJcmFWyhqT2tF1aPOtKPT0xZejYMExcHCiqbog1om/mAupR1A+7q2f5qt1lEBecDiG+ClA==
+
+"@expo-google-fonts/work-sans@^0.2.3":
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/work-sans/-/work-sans-0.2.3.tgz#c367622484a6b9eb474d425f88412197d9058b44"
+  integrity sha512-wtr3WGNSNRf4Azd8141eZYw4GAu91BEiuSXmuwihT8cYuDlRrNvwdQmAZm8ebn+r6SAgQkoxLOtk6I2yle0nxw==
+
 "@expo/bunyan@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@expo/bunyan/-/bunyan-4.0.0.tgz#be0c1de943c7987a9fbd309ea0b1acd605890c7b"
