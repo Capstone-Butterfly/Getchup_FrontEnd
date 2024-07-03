@@ -77,15 +77,15 @@ const TodayProgressChartDetail = () => {
         <VStack space={4}>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
             <Text style={styles.textLabel}>Most Productive Time</Text>
-            <Text style={styles.textValue}>Afternoon</Text>
+            <Text style={styles.textValue}>{data.mostProductiveTime}</Text>
           </HStack>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
             <Text style={styles.textLabel}>Least Productive Time</Text>
-            <Text style={styles.textValue}>Night</Text>
+            <Text style={styles.textValue}>{data.leastProductiveTime}</Text>
           </HStack>
           <HStack space={4} style={styles.hstack}>
             <Text style={styles.textLabel}>Overall Rate</Text>
-            <Text style={styles.textValue}>75%</Text>
+            <Text style={styles.textValue}>{data.completionPercentage}%</Text>
           </HStack>
         </VStack>
       </Card>
