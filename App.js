@@ -32,6 +32,7 @@ const AppNavigator = () => (
 );
 
 const App = () => {
+    const { is_login } = profileStore((state) => state);
 
     const [fontsLoaded] = useFonts({
         Archivo_400Regular,
@@ -40,7 +41,10 @@ const App = () => {
         WorkSans_600SemiBold
       });
 
-    const { is_login } = profileStore((state) => state);
+      if (!fontsLoaded) {
+        return <Text>Loading...</Text>;
+      }
+
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

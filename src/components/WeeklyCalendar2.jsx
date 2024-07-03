@@ -120,7 +120,7 @@ export default WeeklyCalendar;
 
 const styles = StyleSheet.create({
     calendarStrip: {
-        borderRadius: '20px',
+        borderRadius: 20,
         // flexShrink: 0,
         // height: 150,
         marginBottom: 24,
@@ -152,13 +152,13 @@ const styles = StyleSheet.create({
         marginBottom: 6,
     },
     dayContainerStyle: {
-        borderRadius: '10px',
+        borderRadius: 10,
         // height: '100%',
     },
     daySelectionAnimation: {
         type: 'background',
         duration: 200,
-        borderRadius: '0px',
+        borderRadius: 0,
         borderWidth: 1,
         highlightColor: '#f1938e',
         padding: 2,
