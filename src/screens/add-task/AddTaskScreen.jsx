@@ -118,16 +118,6 @@ const AddTaskScreen = ({ navigation }) => {
         setModalSubTaskVisible(false);
     };
 
-
-    
-
-    // useEffect(() => {
-    //     if (!userId) {
-    //         navigation.navigate('ProfileStack', { screen: 'SignIn' });
-    //     }
-    //     else {console.log("userId !!!" , userId != null ? userId: 0)}
-    // }, [userId, navigation]);
-
     const getAIMutation = useMutation({
         mutationFn: async (title) => await getAISubTasks(title),
         onSuccess: (data) => {

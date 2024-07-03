@@ -14,7 +14,7 @@ const TodayProgressChart = ({name, userId}) => {
         refetchOnReconnect: true,
     });
 
-    console.log("todayProgress" +JSON.stringify(todayProgress));
+    //console.log("todayProgress" +JSON.stringify(todayProgress));
 
     if (isLoading) {
         return (

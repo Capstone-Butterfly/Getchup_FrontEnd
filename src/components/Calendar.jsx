@@ -14,12 +14,6 @@ const MonthlyCalendar = ({ userId }) => {
         setSelectedDate: state.setSelectedDate
     }));
 
-    const { data: fetchedTask, isLoading, error } = useQuery({
-        queryKey: ['tasks', userId], 
-        queryFn: () => fetchTasksByUserId(userId),
-        enabled: !tasks || tasks.length === 0,
-    });
-
     const handleDateSelected = useCallback((day) => {
         const selectedDate = new Date(day.timestamp);
         setSelectedDate(selectedDate);
@@ -43,8 +37,7 @@ const MonthlyCalendar = ({ userId }) => {
             <CalendarList
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
-                //selected={selectedDate.toISOString().split('T')[0]}
-                selected={selectedDate.toLocaleString('en-CA').split(",")[0]}
+                selected={new Date(selectedDate).toLocaleString('en-CA').split(",")[0]}
             />
         </SafeAreaView>
     );
