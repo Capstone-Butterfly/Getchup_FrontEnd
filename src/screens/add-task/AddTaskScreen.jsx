@@ -32,7 +32,6 @@ import { scheduleNotification } from '../../services/notificationService'
 const { width, height } = Dimensions.get('window');
 
 const AddTaskScreen = ({ navigation }) => {
-    const userId = '6668b7f95dbce97bc28322d2';
     const [modalTitleVisible, setModalTitleVisible] = useState(false);
     const [modalNoteVisible, setModalNoteVisible] = useState(false);
     const [modalPriorityVisible, setModalPriorityVisible] = useState(false);
@@ -42,6 +41,11 @@ const AddTaskScreen = ({ navigation }) => {
     const [warningMessage, setWarningMessage] = useState('');
     const { task_reminder, setTaskReminder } = useCreateTaskStore();
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
+
+    const {first_name, userId} = profileStore((state) => ({
+        first_name: state.first_name,
+        userId: state.userId
+    }));
 
     const { addDataTask, setSelectedDate } = useTaskStore((state) => ({
         addDataTask: state.addDataTask,
@@ -115,10 +119,7 @@ const AddTaskScreen = ({ navigation }) => {
     };
 
 
-    // const {first_name, userId} = profileStore((state) => ({
-    //     first_name: state.first_name,
-    //     userId: state.userId
-    // }));
+    
 
     // useEffect(() => {
     //     if (!userId) {

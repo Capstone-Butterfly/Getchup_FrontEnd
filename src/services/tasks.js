@@ -14,8 +14,7 @@ const fetchTasksByTaskId = async (taskId) => {
 };
 
 const fetchTasksByUserId = async (userId) => {
-    //console.log("userId : ", userId);
-    console.log("fetch data from axio!!!!!!!!!!!!!!!!!!!!!!!");
+    console.log("fetch data from axio!!!");
     const { data } = await axios.get( `${base_url}/tasks/user/${userId}`);
     return data;
 };
