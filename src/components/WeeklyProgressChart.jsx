@@ -3,15 +3,13 @@ import { Card, FlatList, Heading, Text, Image, SafeAreaView, View, VStack, Progr
 import { StyleSheet } from "react-native";
 import { getTodayChartDetails } from "../services/progress";
 import { useQuery } from '@tanstack/react-query';
-import DateFormatter from '../utils/DateFormatter';
 
 
-const TodayProgressChart = ({name, userId}) => {
-    const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
+const WeeklyProgressChart = ({name, userId, weeklyStartDate, weeklyEndDate}) => {
 
     const { data: todayProgress, isLoading, error, refetch } = useQuery({
-        queryKey: ['todayProgressChart', userId, todayDate, todayDate], 
-        queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
+        queryKey: ['weeklyProgressDetail', userId, weeklyStartDate, weeklyEndDate], 
+        queryFn: () => getTodayChartDetails(userId, weeklyStartDate, weeklyEndDate),
         refetchOnMount: true,
         refetchOnReconnect: true,
     });
@@ -50,7 +48,7 @@ const TodayProgressChart = ({name, userId}) => {
     )
 };
 
-export default TodayProgressChart;
+export default WeeklyProgressChart;
 
 const styles = StyleSheet.create({
   container: {
