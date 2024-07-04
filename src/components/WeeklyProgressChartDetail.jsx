@@ -26,20 +26,30 @@ const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => 
   }
 
   const transformData = (wData) => {
-    const timePeriods = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const timePeriods = [
+      { full: "Sunday", short: "S" },
+      { full: "Monday", short: "M" },
+      { full: "Tuesday", short: "T" },
+      { full: "Wednesday", short: "W" },
+      { full: "Thursday", short: "T" },
+      { full: "Friday", short: "F" },
+      { full: "Saturday", short: "S" }
+    ];
+  
     const stackData = timePeriods.map((period) => {
-      const completeCount = wData.sortedTasksByDay[period]?.completeCount || 0;
-      const incompleteCount = wData.sortedTasksByDay[period]?.incompleteCount || 0;
+      const completeCount = wData.sortedTasksByDay[period.full]?.completeCount || 0;
+      const incompleteCount = wData.sortedTasksByDay[period.full]?.incompleteCount || 0;
       return {
         stacks: [
           { value: incompleteCount, color: "#F1938E", marginBottom: 2 },
-          { value: completeCount, color: "#94B6EF" },
+          { value: completeCount, color: "#94B6EF" }
         ],
-        label: period.charAt(0).toUpperCase() + period.slice(1),
+        label: period.short
       };
     });
+  
     return stackData;
-  };
+  };  
   
   const renderTitle = (tData) => {
     return (
@@ -66,9 +76,9 @@ const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => 
         {renderTitle(todayData)}
         <BarChart
           width={240}
-          noOfSections={5}
-          //   barWidth={40}
-          //   barBorderRadius={30}
+          noOfSections={7}
+          barWidth={15}
+          //barBorderRadius={30}
           yAxisThickness={0}
           rulesType="solid"
           stackData={stackData}
