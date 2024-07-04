@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query';
 const WeeklyProgressChart = ({name, userId, weeklyStartDate, weeklyEndDate}) => {
 
     const { data: todayProgress, isLoading, error, refetch } = useQuery({
-        queryKey: ['weeklyProgressChart', userId, weeklyStartDate, weeklyEndDate], 
+        queryKey: ['weeklyProgressDetail', userId, weeklyStartDate, weeklyEndDate], 
         queryFn: () => getTodayChartDetails(userId, weeklyStartDate, weeklyEndDate),
         refetchOnMount: true,
         refetchOnReconnect: true,

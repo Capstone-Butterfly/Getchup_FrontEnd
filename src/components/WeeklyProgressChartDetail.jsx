@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => {
 
   const { data: weeklyData, isLoading: isWeeklyLoading, isError: isWeeklyError, error: weeklyError } = useQuery({
-    queryKey: ['anotherProgressData', userId, weeklyStartDate, weeklyEndDate], 
+    queryKey: ['weeklyProgressChart', userId, weeklyStartDate, weeklyEndDate], 
     queryFn: () => getWeeklyChartDetails(userId, weeklyStartDate, weeklyEndDate),
   });
 
@@ -26,7 +26,6 @@ const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => 
   }
 
   const transformData = (wData) => {
-    console.log("weeklyData", wData);
     const timePeriods = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const stackData = timePeriods.map((period) => {
       const completeCount = wData.sortedTasksByDay[period]?.completeCount || 0;
@@ -43,7 +42,6 @@ const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => 
   };
   
   const renderTitle = (tData) => {
-    console.log("todayData", tData);
     return (
       <View style={styles.titleContainer}>
         <View style={styles.titleRow}>
