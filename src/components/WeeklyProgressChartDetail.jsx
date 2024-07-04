@@ -4,17 +4,52 @@ import { Card, Text, View, VStack, HStack } from "@gluestack-ui/themed";
 import { getTodayChartDetails, getWeeklyChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
 import { useQuery } from "@tanstack/react-query";
+import ProgressCalendar from "./ProgressCalendar";
+import ProgressDateRangeTab from "./ProgressDateRangeTab";
+import useProgressDateRangeStore from "../store/progressDateRangeStore";
+import dayjs from "dayjs";
 
-const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => {
+const WeeklyProgressChartDetail = ({userId}) => {
+
+  const { activeDateRangeTab, chartSelectedStartDate, chartSelectedEndDate , setchartSelectedStartDate, 
+    setchartSelectedEndDate} = useProgressDateRangeStore((state) => ({
+      activeDateRangeTab : state.activeDateRangeTab,
+      chartSelectedStartDate : state.chartSelectedStartDate,
+      chartSelectedEndDate : state.chartSelectedEndDate,
+      setchartSelectedStartDate: state.setchartSelectedStartDate,
+      setchartSelectedEndDate: state.setchartSelectedEndDate,
+  }));
+
+  useEffect(() => {
+    const updateDateRange = () => {
+      const today = dayjs().format('YYYY-MM-DD');
+      let startDate;
+      let endDate;
+      
+      if (activeDateRangeTab === 'Day') {
+        startDate = today;
+        endDate = today;
+      } else if (activeDateRangeTab === 'Weekly' || activeDateRangeTab === 'Monthly') {
+        const startOfWeek = dayjs().startOf('week').format('YYYY-MM-DD');
+        const endOfWeek = dayjs().endOf('week').format('YYYY-MM-DD');
+        startDate = startOfWeek;
+        endDate = endOfWeek;
+      }
+
+      setchartSelectedStartDate(startDate);
+      setchartSelectedEndDate(endDate);
+    };
+      updateDateRange();
+    }, [activeDateRangeTab, setchartSelectedStartDate, setchartSelectedEndDate]);
 
   const { data: weeklyData, isLoading: isWeeklyLoading, isError: isWeeklyError, error: weeklyError } = useQuery({
-    queryKey: ['weeklyProgressChart', userId, weeklyStartDate, weeklyEndDate], 
-    queryFn: () => getWeeklyChartDetails(userId, weeklyStartDate, weeklyEndDate),
+    queryKey: ['weeklyProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
+    queryFn: () => getWeeklyChartDetails(userId, chartSelectedStartDate, chartSelectedEndDate),
   });
 
   const { data: todayData , isLoading: isTodayLoading, isError: isTodayError, error: todayError} = useQuery({
-    queryKey: ['todayProgressChart', userId, weeklyStartDate, weeklyEndDate], 
-    queryFn: () => getTodayChartDetails(userId, weeklyStartDate, weeklyEndDate),
+    queryKey: ['todayProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
+    queryFn: () => getTodayChartDetails(userId, chartSelectedStartDate, chartSelectedEndDate),
   });
 
   if (isWeeklyLoading || isTodayLoading) {
@@ -73,6 +108,8 @@ const WeeklyProgressChartDetail = ({userId, weeklyStartDate, weeklyEndDate}) => 
   return (
     <View>
       <Card style={styles.cardBody}>
+        <ProgressDateRangeTab />
+        <ProgressCalendar chartStartDate={chartSelectedStartDate} chartEndDate={chartSelectedEndDate}/>
         {renderTitle(todayData)}
         <BarChart
           width={240}

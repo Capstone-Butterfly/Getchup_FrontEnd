@@ -1,15 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet  } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import DateDisplayFormat from '../utils/DateDisplayFormat';
+import useProgressDateRangeStore from '../store/progressDateRangeStore';
 
 dayjs.extend(isoWeek);
 
-const ProgressCalendar = () => {
+const ProgressCalendar = ({chartStartDate, chartEndDate}) => {
+    const { activeDateRangeTab, setActiveDateRangeTab, 
+      chartSelectedStartDate, setchartSelectedStartDate,
+      chartSelectedEndDate, setchartSelectedEndDate } = useProgressDateRangeStore((state) => ({
+        activeDateRangeTab : state.activeDateRangeTab,
+        setActiveDateRangeTab : state.setActiveDateRangeTab,
+        chartSelectedStartDate : state.chartSelectedStartDate,
+        setchartSelectedStartDate : state.setchartSelectedStartDate,
+        chartSelectedEndDate : state.chartSelectedEndDate,
+        setchartSelectedEndDate : state.setchartSelectedEndDate,
+    }));
+
+    useEffect(() => {
+      setchartSelectedStartDate(chartStartDate);
+      setchartSelectedEndDate(chartEndDate);
+    }, [chartStartDate, setchartSelectedStartDate, chartEndDate, setchartSelectedEndDate]);
+
     const today = dayjs().format('YYYY-MM-DD');
-    const [selectedDates, setSelectedDates] = useState({ start: today, end: today });
+    //const [selectedDates, setSelectedDates] = useState({ start: today, end: today });
     const [selectedWeek, setSelectedWeek] = useState({});
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -28,7 +45,9 @@ const ProgressCalendar = () => {
             weekDays[currentDay] = { selected: true, marked: true, selectedColor: 'blue' };
         }
         setSelectedWeek(weekDays);
-        setSelectedDates({ start: startOfWeek.format('YYYY-MM-DD'), end: endOfWeek.format('YYYY-MM-DD') });
+        setchartSelectedStartDate(startOfWeek.format('YYYY-MM-DD'));
+        setchartSelectedEndDate(endOfWeek.format('YYYY-MM-DD'));
+        //setSelectedDates({ start: startOfWeek.format('YYYY-MM-DD'), end: endOfWeek.format('YYYY-MM-DD') });
         setModalVisible(false);
     };
 
@@ -36,7 +55,7 @@ const ProgressCalendar = () => {
     <View style={styles.container}>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.pressable}>
             <Text style={styles.dateText}>
-            { DateDisplayFormat(selectedDates.start, selectedDates.end) }
+            { DateDisplayFormat(chartSelectedStartDate, chartSelectedEndDate) }
             </Text>
         </TouchableOpacity>
         <Modal visible={modalVisible} transparent={true}>
