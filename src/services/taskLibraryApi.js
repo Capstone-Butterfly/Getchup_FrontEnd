@@ -8,8 +8,8 @@ const fetchCommonTasks = async () => {
   return data;
 };
 
-const fetchRepeatedTasks = async () => {
-  const { data } = await axios.get( `${base_url}/repeatedTasks`);
+const fetchRepeatedTasks = async (userId) => {
+  const { data } = await axios.get( `${base_url}/repeatedTasks/${userId}`);
   return data;
 };
 

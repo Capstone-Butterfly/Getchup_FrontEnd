@@ -3,6 +3,7 @@ import { FlatList, StyleSheet } from "react-native";
 import { Text } from "@gluestack-ui/themed"
 import TodayProgressChart from "../../components/TodayProgressChart";
 import TodayProgressChartDetail from "../../components/TodayProgressChartDetail";
+import ProgressDateRangeTab from "../../components/ProgressDateRangeTab";
 import profileStore from "../../store/profileStore";
 import ProgressCalendar from "../../components/ProgressCalendar";
 
@@ -15,6 +16,7 @@ const ProgressScreen = ({ navigation }) => {
 
     const components = [
       { key: 'TodayProgressChart', component: <TodayProgressChart name={first_name} userId={userId}/> },
+      { key: 'ProgressDateRangeTab', component: <ProgressDateRangeTab /> },
       { key: 'ProgressCalendar', component: <ProgressCalendar/> },
       { key: 'TodayProgressChartDetail', component: <TodayProgressChartDetail userId={userId}/> },
     ];
