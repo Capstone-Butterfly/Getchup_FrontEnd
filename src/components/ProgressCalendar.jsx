@@ -36,26 +36,21 @@ const ProgressCalendar = () => {
     <View style={styles.container}>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.pressable}>
             <Text style={styles.dateText}>
-            { DateDisplayFormat(selectedDates.start, selectedDates.end)}
+            { DateDisplayFormat(selectedDates.start, selectedDates.end) }
             </Text>
         </TouchableOpacity>
         <Modal visible={modalVisible} transparent={true}>
             <View style={styles.modalContainer}>
-            <View style={styles.calendarContainer}>
-                <Calendar
-                    onDayPress={onDayPress}
-                    markedDates={selectedWeek}
-                    markingType={'simple'}
-                />
-                {/* <Calendar
-                    onDayPress={onDayPress}
-                    markedDates={{ [selectedDates.start]: { selected: true, selectedColor: 'blue' }, [selectedDates.end]: { selected: true, selectedColor: 'blue' } }}
-                    markingType={'simple'}
-                /> */}
-                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>Close</Text>
-                </TouchableOpacity>
-            </View>
+              <View style={styles.calendarContainer}>
+                  <Calendar
+                      onDayPress={onDayPress}
+                      markedDates={selectedWeek}
+                      markingType={'simple'}
+                  />
+                  <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
+                  <Text style={styles.closeButtonText}>Close</Text>
+                  </TouchableOpacity>
+              </View>
             </View>
       </Modal>
     </View>

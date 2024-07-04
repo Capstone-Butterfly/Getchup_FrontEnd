@@ -4,6 +4,7 @@ import { Card, Text, View, VStack, HStack } from "@gluestack-ui/themed";
 import { getTodayChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
 import { useQuery } from "@tanstack/react-query";
+import DateFormatter from '../utils/DateFormatter';
 
 const transformData = (data) => {
   const timePeriods = ["morning", "afternoon", "evening", "night"];
@@ -39,10 +40,11 @@ const renderTitle = (data) => {
 };
 
 const TodayProgressChartDetail = ({userId}) => {
+  const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["todayProgressChart", userId],
-    queryFn: () => getTodayChartDetails(userId),
+    queryKey: ['todayProgressChart', userId, todayDate, todayDate], 
+      queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
     refetchOnMount: true,
     refetchOnReconnect: true,
   });
@@ -54,8 +56,6 @@ const TodayProgressChartDetail = ({userId}) => {
   if (isError) {
     return <Text>Error: {error.message}</Text>;
   }
-
-  console.log(data);
 
   const stackData = transformData(data);
   return (
