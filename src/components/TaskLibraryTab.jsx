@@ -8,6 +8,7 @@ import {
 } from "../services/taskLibraryApi";
 import { useQuery } from "@tanstack/react-query";
 import usecreateTaskStore from "../store/createTaskStore";
+import profileStore from "../store/profileStore";
 
 const CommonTasks = ({ fetchedCommonTask }) => {
   const { title, subTasks, setTitle, addSubtask } = usecreateTaskStore(
@@ -90,6 +91,10 @@ const TaskLibraryTab = () => {
     setActiveTab: state.setActiveTab,
   }));
 
+  const { userId} = profileStore((state) => ({
+    userId: state.userId
+  }));
+
   const {
     data: fetchedCommonTask,
     isLoading,
@@ -102,9 +107,9 @@ const TaskLibraryTab = () => {
 
   const { data: fetchedRepeatedTask } = useQuery({
     queryKey: ["repeatedTasks"],
-    queryFn: () => fetchRepeatedTasks(),
+    queryFn: () => fetchRepeatedTasks(userId),
   });
-  // console.log("repeatedTasks" + fetchedRepeatedTask);
+  console.log("repeatedTasks" + fetchedRepeatedTask);
 
   return (
     <View>

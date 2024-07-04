@@ -4,6 +4,7 @@ import { Text } from "@gluestack-ui/themed"
 import profileStore from "../../store/profileStore";
 import TodayProgressChart from "../../components/TodayProgressChart";
 import TodayProgressChartDetail from "../../components/TodayProgressChartDetail";
+import ProgressDateRangeTab from "../../components/ProgressDateRangeTab";
 import ProgressCalendar from "../../components/ProgressCalendar";
 import WeeklyProgressChart from "../../components/WeeklyProgressChart";
 import WeeklyProgressChartDetail from "../../components/WeeklyProgressChartDetail";
@@ -21,6 +22,7 @@ const ProgressScreen = ({ navigation }) => {
     const components = [
       { key: 'TodayProgressChart', component: <TodayProgressChart name={first_name} userId={userId}/> },
       { key: 'WeeklyProgressChart', component: <WeeklyProgressChart name={first_name} userId={userId} weeklyStartDate={wStartDate} weeklyEndDate={wEndDate}/> },
+      { key: 'ProgressDateRangeTab', component: <ProgressDateRangeTab /> },
       { key: 'ProgressCalendar', component: <ProgressCalendar/> },
       { key: 'TodayProgressChartDetail', component: <TodayProgressChartDetail userId={userId}/> },
       { key: 'WeeklyProgressChartDetail', component: <WeeklyProgressChartDetail userId={userId}  weeklyStartDate={wStartDate} weeklyEndDate={wEndDate} />},

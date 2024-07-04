@@ -144,9 +144,9 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   incompleteIndicator: {
-    height: 12,
-    width: 12,
-    borderRadius: 6,
+    height: 20,
+    width: 20,
+    borderRadius: 10,
     backgroundColor: "#F1938E",
     marginRight: 8,
   },

@@ -25,9 +25,16 @@ const Greeting = ({name}) => {
     }, []);
 
     return (
-        <SafeAreaView>
-            <Heading>Good morning, Nam!</Heading>
-            <Text>Rise up, start fresh!</Text>
+        <SafeAreaView style={styles.container}>
+            <HStack style={styles.hstack}>
+                <VStack style={styles.vstack}>
+                    <Heading style={defaultStyles.TypographyH2}>{greeting.split('\n')[0]}</Heading>
+                    <Text style={[defaultStyles.TypographyBody, styles.text]}>{greeting.split('\n')[1]}</Text>
+                </VStack>
+                <VStack style={styles.vstack}>
+                    <Text textAlign="center">Image here</Text>
+                </VStack>
+            </HStack>
         </SafeAreaView>
     );
 };
