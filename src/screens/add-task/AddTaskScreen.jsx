@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
 import {
     Box, Button, ButtonText, Card, Center, CloseIcon, FlatList, 
@@ -9,6 +9,7 @@ import {
     CloseCircleIcon,
 } from "@gluestack-ui/themed";
 import { useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native'; 
 import useCreateTaskStore from '../../store/createTaskStore';
 import useTaskStore from '../../store/taskStore';
 import useAddTaskDateModelStore from '../../store/addTaskDateModelStore';
@@ -75,10 +76,16 @@ const AddTaskScreen = ({ navigation }) => {
         setMovementReminder: state.setMovementReminder,
     }));
 
-    useEffect(() => {
-        setMovementReminder(profile_movement_reminder);
-        setTaskReminder(profile_task_reminder);
-      }, [profile_movement_reminder, setMovementReminder, profile_task_reminder, setTaskReminder]);
+    useFocusEffect(
+        useCallback(() => {
+          setMovementReminder(profile_movement_reminder);
+          setTaskReminder(profile_task_reminder);
+        }, [profile_movement_reminder, profile_task_reminder])
+      );
+    // useEffect(() => {
+    //     setMovementReminder(profile_movement_reminder);
+    //     setTaskReminder(profile_task_reminder);
+    //   }, [profile_movement_reminder, setMovementReminder, profile_task_reminder, setTaskReminder]);
     
     
     const { clearAddTaskDateModelStore} =
