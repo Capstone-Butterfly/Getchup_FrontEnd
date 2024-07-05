@@ -2,11 +2,11 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ConvertTimeStamp from '../utils/ConvertTimeStamp';
-import { defaultStyles } from '../styles/styles'
-import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, VStack } from '@gluestack-ui/themed';
+import { defaultStyles } from '../styles/styles';
+import { HStack, VStack } from '@gluestack-ui/themed';
 
 const TaskCard = ({ task, navigation }) => {
-    const formatEstimateStartTime = (time) => {
+    const formatEstimateTime = (time) => {
         if (time === 0 || time === null) {
             return '';
         }
@@ -53,7 +53,10 @@ const TaskCard = ({ task, navigation }) => {
                     <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
                         {/* <Text>Total Subtasks: {task.subtask.length}</Text> */}
                 </VStack>
-                        <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
+                <VStack style={styles.taskTimeContainer}>
+                    <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateTime(task.estimate_start_time)}</Text>
+                    <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateTime(task.estimate_end_time)}</Text>
+                </VStack>
             </HStack>
         </TouchableOpacity>
     );
@@ -92,6 +95,10 @@ const styles = StyleSheet.create({
     taskInfo: {
         flexShrink: 1,
         flexGrow: 1,
+    },
+    taskTimeContainer: {
+        flexShrink: 0,
+        alignItems: 'flex-end',
     },
     taskTime: {
         flexShrink: 0,
