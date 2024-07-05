@@ -7,6 +7,7 @@ import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
 import { signInProfile, userDataProfile } from '../../services/profile';
 import { config } from '../../styles/themeConfig'; // Import the theme configuration
+import { defaultStyles } from './../../styles/styles'
 
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
@@ -64,9 +65,9 @@ function SignInScreen() {
         style={styles.formBox}
       >
         <VStack space="xl">
-          <Heading style={styles.heading}>Sign In</Heading>
+          <Heading style={[styles.heading, defaultStyles.TypographyH1 ]}>Sign In</Heading>
           <VStack space="xs">
-            <Text style={styles.inputLabel}>Email</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>Email</Text>
             <Input style={styles.inputContainer} >
               <InputField
                 value={email}
@@ -76,7 +77,7 @@ function SignInScreen() {
             </Input>
           </VStack>
           <VStack space="xs">
-            <Text style={styles.inputLabel}>Password</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>Password</Text>
             <Input style={styles.inputContainer}>
               <InputField
                 value={password}
@@ -90,7 +91,7 @@ function SignInScreen() {
           </VStack>
           
           <Button style={styles.submitButton} onPress={handleLogin} isLoading={isLoading}>
-            <ButtonText style={styles.submitButtonText}>Sign In</ButtonText>
+            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Sign In</ButtonText>
           </Button>
          <Text style={styles.textInfo}>
          Do not have an Account yet?
@@ -118,21 +119,11 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   heading: {
-    color: config.tokens.colors.primaryDark,
-    fontWeight: '700',
-    fontSize: 24,
-    lineHeight: 30,
     textAlign: 'center',
-  },
-  inputLabel: {
-    color: config.tokens.colors.secondary,
-    fontWeight: '900',
-    fontSize: 18,
-    paddingBottom: config.tokens.spacing.xs,
   },
   inputContainer: {
     borderRadius: config.tokens.borderRadius.sm,
-    borderColor: config.tokens.colors.inputBorder,
+    borderColor: '#00000080',
     borderWidth: 0.5,
   },
   submitButton: {
@@ -142,6 +133,9 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
     marginVertical: config.tokens.spacing.md,
     marginHorizontal: 'auto',
+  },
+  submitButtonText: {
+color:config.tokens.colors.white,
   },
   textInfo: {
     color: config.tokens.colors.textInfo,

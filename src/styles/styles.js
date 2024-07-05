@@ -2,71 +2,60 @@ import { StyleSheet } from "react-native";
 import { config } from "./themeConfig";
 const defaultStyles = StyleSheet.create({
     TypographyH1: {
-        color: config.tokens.colors.black,
         fontFamily: "WorkSans_700Bold",
         fontSize: 24,
         letterSpacing: -0.02,
         lineHeight: 30,
     },
     TypographyH2: {
-        color: config.tokens.colors.black,
         fontFamily: "WorkSans_600SemiBold",
         fontSize: 20,
         letterSpacing: -0.02,
         lineHeight: 24,
     },
     TypographyH3: {
-        color: config.tokens.colors.black,
         fontFamily: "WorkSans_600SemiBold",
         fontSize: 16,
         letterSpacing: -0.02, 
         lineHeight: 22,
     },
     TypographyBody: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_400Regular",
         fontSize: 16,
         lineHeight: 22,
     },
     TypographyBodyHeavy: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_600SemiBold",
         fontSize: 16,
         lineHeight: 22,
     },
     TypographyBodyHeavyStrikethrough: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_600SemiBold",
         fontSize: 16,
         lineHeight: 22,
         textDecorationLine: "line-through",
     },
     TypographyBodySmall: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_400Regular",
         fontSize: 14,
         lineHeight: 19,
     },
     TypographyBodySmallHeavy: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_600SemiBold",
         fontSize: 14,
         lineHeight: 19,
     },
     TypographyLabelSmall: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_400Regular",
         fontSize: 11,
         lineHeight: 14,
     },
     TypographyLabelSmallHeavy: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_600SemiBold",
         fontSize: 11,
         lineHeight: 14,
     },
     TypographyLink: {
-        color: config.tokens.colors.black,
         fontFamily: "Archivo_600SemiBold",
         fontSize: 16,
         lineHeight: 22,
