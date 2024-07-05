@@ -2,13 +2,9 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, StyleSheet } from "react-native";
 import { Text } from "@gluestack-ui/themed"
 import profileStore from "../../store/profileStore";
-import TodayProgressChart from "../../components/TodayProgressChart";
-import TodayProgressChartDetail from "../../components/TodayProgressChartDetail";
-import ProgressDateRangeTab from "../../components/ProgressDateRangeTab";
-import ProgressCalendar from "../../components/ProgressCalendar";
-import WeeklyProgressChart from "../../components/WeeklyProgressChart";
-import WeeklyProgressChartDetail from "../../components/WeeklyProgressChartDetail";
 import useProgressDateRangeStore from "../../store/progressDateRangeStore";
+import ProgressChart from "../../components/ProgressChart";
+import ProgressChartDetail from "../../components/ProgressChartDetails";
 
 const ProgressScreen = ({ navigation }) => {
   const {first_name, userId} = profileStore((state) => ({
@@ -28,12 +24,8 @@ const ProgressScreen = ({ navigation }) => {
   }));
 
     const components = [
-      { key: 'TodayProgressChart', component: <TodayProgressChart name={first_name} userId={userId}/> },
-      //{ key: 'WeeklyProgressChart', component: <WeeklyProgressChart name={first_name} userId={userId} weeklyStartDate={chartSelectedStartDate} weeklyEndDate={chartSelectedEndDate}/> },
-      //{ key: 'ProgressDateRangeTab', component: <ProgressDateRangeTab /> },
-      // { key: 'ProgressCalendar', component: <ProgressCalendar/> },
-      { key: 'TodayProgressChartDetail', component: <TodayProgressChartDetail userId={userId}/> },
-      { key: 'WeeklyProgressChartDetail', component: <WeeklyProgressChartDetail userId={userId} />},
+      { key: 'ProgressChart', component: <ProgressChart name={first_name} userId={userId}/> },
+      { key: 'ProgressChartDetail', component: <ProgressChartDetail userId={userId}/> },
     ];
   
     return (

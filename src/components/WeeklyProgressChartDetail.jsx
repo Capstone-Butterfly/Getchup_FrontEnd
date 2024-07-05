@@ -107,9 +107,6 @@ const WeeklyProgressChartDetail = ({userId}) => {
   
   return (
     <View>
-      <Card style={styles.cardBody}>
-        <ProgressDateRangeTab />
-        <ProgressCalendar chartStartDate={chartSelectedStartDate} chartEndDate={chartSelectedEndDate}/>
         {renderTitle(todayData)}
         <BarChart
           width={240}
@@ -120,8 +117,6 @@ const WeeklyProgressChartDetail = ({userId}) => {
           rulesType="solid"
           stackData={stackData}
         />
-      </Card>
-      <Card style={styles.cardBody}>
         <VStack space={4}>
           <HStack space={4} style={styles.hstack}>
             <Text style={styles.textLabel}>Perfect Days</Text>
@@ -129,8 +124,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
               {weeklyData.perfectDaysCount === 0 
                 ? '0 day' 
                 : `${weeklyData.perfectDaysCount} ${weeklyData.perfectDaysCount === 1 ? 'day' : 'days'}`}
-            </Text>
-            
+            </Text> 
           </HStack>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
             <Text style={styles.textLabel}>Most Productive Time</Text>
@@ -145,7 +139,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
             <Text style={styles.textValue}>{todayData.completionPercentage}%</Text>
           </HStack>
         </VStack>
-      </Card>
+      
     </View>
   );
 };

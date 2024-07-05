@@ -84,11 +84,10 @@ const styles = StyleSheet.create({
     },
     pressable: {
       padding: 10,
-      backgroundColor: '#007AFF',
       borderRadius: 5,
     },
     dateText: {
-      color: '#fff',
+      color: '#000',
       fontSize: 16,
     },
     modalContainer: {

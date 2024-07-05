@@ -5,7 +5,7 @@ import useProgressDateRangeStore from "../store/progressDateRangeStore";
 const ProgressDateRangeTab = () => {
   const { activeDateRangeTab, setActiveDateRangeTab } =
     useProgressDateRangeStore();
-console.log("activeDateRangeTab" +activeDateRangeTab);
+  console.log("activeDateRangeTab" +activeDateRangeTab);
   const [index, setIndex] = useState(0);
   const routes = [
     { key: "Day", title: "Day" },

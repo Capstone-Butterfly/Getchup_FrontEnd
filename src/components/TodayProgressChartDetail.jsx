@@ -60,19 +60,15 @@ const TodayProgressChartDetail = ({userId}) => {
   const stackData = transformData(data);
   return (
     <View>
-      <Card style={styles.cardBody}>
         {renderTitle(data)}
         <BarChart
           width={240}
           noOfSections={5}
-          //   barWidth={40}
-          //   barBorderRadius={30}
           yAxisThickness={0}
           rulesType="solid"
           stackData={stackData}
         />
-      </Card>
-      <Card style={styles.cardBody}>
+      
         <VStack space={4}>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
             <Text style={styles.textLabel}>Most Productive Time</Text>
@@ -87,7 +83,6 @@ const TodayProgressChartDetail = ({userId}) => {
             <Text style={styles.textValue}>{data.completionPercentage}%</Text>
           </HStack>
         </VStack>
-      </Card>
     </View>
   );
 };
