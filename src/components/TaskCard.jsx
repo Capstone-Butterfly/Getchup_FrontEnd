@@ -3,7 +3,10 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 import { defaultStyles } from '../styles/styles'
-import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, VStack } from '@gluestack-ui/themed';
+import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, Icon, VStack } from '@gluestack-ui/themed';
+import { Svg, SvgUri } from 'react-native-svg';
+
+const noTask = require('../../assets/icons/no-task.svg')
 
 const TaskCard = ({ task, navigation }) => {
     const formatEstimateStartTime = (time) => {
@@ -30,7 +33,7 @@ const TaskCard = ({ task, navigation }) => {
             default:
                 borderColor = 'transparent';
         }
-        return [styles.card, { borderLeftWidth: 7, borderLeftColor: borderColor }];
+        return [styles.card, { borderLeftWidth: 7, borderLeftColor: borderColor, elevation: 0 }];
     };
 
     return (
@@ -44,16 +47,17 @@ const TaskCard = ({ task, navigation }) => {
                         <CheckboxIcon as={CheckIcon} />
                     </CheckboxIndicator>
                 </Checkbox> */}
-                
+                {/* <SvgUri uri={noTask} style={styles.icon} /> */}
+
                 <VStack style={styles.taskInfo}>
-                        <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
-                        {/* <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
-                        {/* <Text>{task.estimate_start_date.split('T')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
-                        {/* <Text>{task.estimate_start_date.split('T')[0]} {formatEstimateStartTime(task.estimate_start_time)}</Text> */}
+                    <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
+                    {/* <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
+                    {/* <Text>{task.estimate_start_date.split('T')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
+                    {/* <Text>{task.estimate_start_date.split('T')[0]} {formatEstimateStartTime(task.estimate_start_time)}</Text> */}
                     <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
-                        {/* <Text>Total Subtasks: {task.subtask.length}</Text> */}
+                    {/* <Text>Total Subtasks: {task.subtask.length}</Text> */}
                 </VStack>
-                        <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
+                <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
             </HStack>
         </TouchableOpacity>
     );
@@ -66,7 +70,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingHorizontal: 11,
         paddingVertical: 5,
-        marginVertical: 10,
+        marginVertical: 12,
         borderRadius: 8,
         elevation: 3,
         width: '100%',
@@ -79,6 +83,10 @@ const styles = StyleSheet.create({
         marginRight: 11,
         flexShrink: 0,
         alignSelf: 'left',
+    },
+    icon: {
+        width: 24,
+        height: 24,
     },
     subtask: {
         width: '100%',

@@ -28,9 +28,9 @@ async function scheduleNotification(task) {
 
     console.log('interval:', interval)
     let defaultTrigger = 45 * 60 // 45 minutes
-  
+
     let trigger;
-    
+
     if (interval <= defaultTrigger) { //if start time is more than 45 minutes away
         trigger = 10
     } else {
@@ -44,40 +44,44 @@ async function scheduleNotification(task) {
         };
 
         // Schedule notification using Expo Notifications module
-        const notificationId = await Notifications.scheduleNotificationAsync({
+        const identifier = await Notifications.scheduleNotificationAsync({
             content: notificationContent,
             trigger: { seconds: trigger },
         });
 
-        console.log('Notification scheduled with ID:', notificationId);
-        return notificationId;
+        console.log('Notification scheduled with ID:', identifier);
+        return identifier;
     } catch (error) {
         console.error('Error scheduling notification:', error);
         throw error; // Propagate the error further if needed
     }
 }
 
+async function cancelNotification(identifier) {
 
-
-async function cancelNotification(notificationId) {
-
-    await Notifications.cancelScheduledNotificationAsync(notificationId).then(
+    await Notifications.cancelScheduledNotificationAsync(identifier).then(
 
         console.log('notification cancelled')
     )
 }
 
-async function saveNotification(newNotification) {
+const fetchNotificationsByUserId = async (userId) => {
+    console.log("fetch notifications from axios!!!");
+    const { data } = await axios.get(`${base_url}/notifications/user/${userId}`);
+    return data;
+};
+
+const saveNotification = async (newNotification) => {
     try {
       const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
       return data;
     } catch (error) {
-      console.error("Error adding task:", error);
+      console.error("Error adding notification:", error);
       throw error;
     }
   };
 
-  async function getUnreadNotifications() {
+async function getUnreadNotifications() { //fetches from the notification tray
     try {
         const notifications = await Notifications.getPresentedNotificationsAsync();
         console.log('Presented Notifications:', notifications);
@@ -149,4 +153,4 @@ const convertToSeconds = (timestamp) => {
     return differenceInSeconds;
 }
 
-export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications, formatNotificationDate };
+export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications, formatNotificationDate, fetchNotificationsByUserId };

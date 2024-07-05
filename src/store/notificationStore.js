@@ -18,6 +18,14 @@ const useNotificationStore = create(set => ({
     set({ notifications });
   },
 
+  // Fetch notifications by user ID
+  userNotifications: [],
+  setUserNotifications: (notifications) => set({ userNotifications: notifications }),
+  fetchNotificationsByUserId: async (userId) => {
+    const notifications = await fetchNotificationsByUserId(userId);
+    set({ userNotifications: notifications });
+  },
+
   //notification popover in the header:
   isOpen: false,
   openPopover: () => set({ isOpen: true }),

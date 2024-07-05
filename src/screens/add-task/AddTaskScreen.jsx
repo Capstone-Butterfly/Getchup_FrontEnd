@@ -27,7 +27,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@gluestack-ui/themed';
 import DateFormatter from '../../utils/DateFormatter';
 import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
-import { scheduleNotification } from '../../services/notificationService'
+import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
+import useNotificationStore from '../../store/notificationStore';
 
 const { width, height } = Dimensions.get('window');
 
@@ -74,6 +75,7 @@ const AddTaskScreen = ({ navigation }) => {
         clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
     }));
 
+    const { fetchNotificationsByUserId, setUserNotifications } = useNotificationStore()
 
     const handleOpenTitleModal = () => setModalTitleVisible(true);
     const handleCloseTitleModal = () => setModalTitleVisible(false);
@@ -163,15 +165,15 @@ const handleSaveTask = async () => {
     }
     setWarningMessage('');
     try {
-        let notificationId = null;
+        let identifier = null; // identifier: notification unique id, from the notification service
         if (task_reminder) { // schedule notification
             console.log('calling scheduleNotification')
-            notificationId = await scheduleNotification({
+            identifier = await scheduleNotification({
                 title,
                 start_date,
                 start_time
             });
-            console.log('Returned notification ID:', notificationId);
+            console.log('Returned notification ID:', identifier);
         }
 
         const adjustedTaskUrgency = task_urgency === '' ? 'medium' : task_urgency;
@@ -188,7 +190,7 @@ const handleSaveTask = async () => {
             estimate_start_time: ConvertTimeStamp.convertTimeStringToMilliseconds(start_time),
             estimate_end_time: ConvertTimeStamp.convertTimeStringToMilliseconds(end_time),
             user_estimate_duration,
-            notification_id: notificationId
+            notification_id: identifier
         };
 
         await saveTaskMutation.mutateAsync(newTask);

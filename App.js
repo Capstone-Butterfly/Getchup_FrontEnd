@@ -1,7 +1,7 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler'; // THIS HAS TO BE AT LINE NUMBER 1
 import React from 'react';
 import { GluestackUIProvider, StatusBar } from '@gluestack-ui/themed';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { config } from '@gluestack-ui/config';
@@ -18,8 +18,11 @@ import ADHDCatScreen from './src/screens/profile/ADHDCatScreen';
 import { Archivo_400Regular, Archivo_600SemiBold } from '@expo-google-fonts/archivo';
 import { WorkSans_700Bold, WorkSans_600SemiBold } from '@expo-google-fonts/work-sans';
 import { useFonts } from "expo-font";
+import './src/styles/styles.css'
+// import image from './assets/background/background.png'
 
 const Stack = createStackNavigator();
+const image = require('./assets/background/background.png');
 
 const AppNavigator = () => (
     <Stack.Navigator initialRouteName="SignIn">
@@ -54,7 +57,11 @@ const App = () => {
                         <GluestackUIProvider config={config}>
                             <StatusBar bg='#2c3e50' />
                             {is_login ? (
+                                // <View style={styles.container}>
+                                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                                 <Navigator />
+                                </ImageBackground>
+                                // </View>
                             ) : (
                                 <AppNavigator />
                             )}
@@ -71,8 +78,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center'
-    }
+        justifyContent: 'center',
+        width: 100
+    },
+
+    image: {
+        flex: 1,
+        justifyContent: 'center',
+      },
 });
 
 export default App;

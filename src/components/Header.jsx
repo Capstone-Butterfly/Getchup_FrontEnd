@@ -13,7 +13,7 @@ const Header = () => {
     return (
         <SafeAreaView style={styles.container}>
             <HStack style={styles.hstack}>
-                <Text style={defaultStyles.TypographyH1}>Getchup!</Text>
+                <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
                 <Icon as={BellIcon} title="open" onPress={openPopover} style={styles.icon}/>
                 
                 <Modal isOpen={isOpen} onClose={closePopover}>
@@ -35,17 +35,26 @@ const Header = () => {
 };
 
 const styles = StyleSheet.create({
+    brand: {
+        flexGrow: 1,
+    },
     container: {
-        
+        display: 'flex',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '100%',
     },
     hstack: {
         display: 'flex',
         justifyContent: 'space-between',
         paddingBottom: 16,
+        paddingHorizontal: 20,
+        paddingTop: 20,
     },
     icon: {
         display: 'flex',
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     modalContent: {
         width: '100%',
