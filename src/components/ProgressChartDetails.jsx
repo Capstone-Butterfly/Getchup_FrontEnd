@@ -27,11 +27,16 @@ const ProgressChartDetail = ({userId}) => {
       if (activeDateRangeTab === 'Day') {
         startDate = today;
         endDate = today;
-      } else if (activeDateRangeTab === 'Weekly' || activeDateRangeTab === 'Monthly') {
+      } else if (activeDateRangeTab === 'Weekly') {
         const startOfWeek = dayjs().startOf('week').format('YYYY-MM-DD');
         const endOfWeek = dayjs().endOf('week').format('YYYY-MM-DD');
         startDate = startOfWeek;
         endDate = endOfWeek;
+      } else if (activeDateRangeTab === 'Monthly') {
+        const startOfMonth = dayjs().startOf('month').format('YYYY-MM-DD');
+        const endOfMonth = dayjs().endOf('month').format('YYYY-MM-DD');
+        startDate = startOfMonth;
+        endDate = endOfMonth;
       }
 
       setchartSelectedStartDate(startDate);
