@@ -4,14 +4,21 @@ import { StyleSheet } from "react-native";
 import { getTodayChartDetails } from "../services/progress";
 import { useQuery } from '@tanstack/react-query';
 import DateFormatter from '../utils/DateFormatter';
+import useProgressDateRangeStore from '../store/progressDateRangeStore';
 
 
 const TodayProgressChart = ({name, userId}) => {
+    const { activeDateRangeTab, chartSelectedStartDate, chartSelectedEndDate } = useProgressDateRangeStore((state) => ({
+        activeDateRangeTab : state.activeDateRangeTab,
+        chartSelectedStartDate : state.chartSelectedStartDate,
+        chartSelectedEndDate : state.chartSelectedEndDate,
+    }));
+
     const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
 
     const { data: todayProgress, isLoading, error, refetch } = useQuery({
-        queryKey: ['todayProgressChart', userId, todayDate, todayDate], 
-        queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
+        queryKey: ['todayProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
+        queryFn: () => getTodayChartDetails(userId, chartSelectedStartDate, chartSelectedEndDate),
         refetchOnMount: true,
         refetchOnReconnect: true,
     });

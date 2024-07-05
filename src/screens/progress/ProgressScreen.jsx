@@ -8,7 +8,7 @@ import ProgressDateRangeTab from "../../components/ProgressDateRangeTab";
 import ProgressCalendar from "../../components/ProgressCalendar";
 import WeeklyProgressChart from "../../components/WeeklyProgressChart";
 import WeeklyProgressChartDetail from "../../components/WeeklyProgressChartDetail";
-
+import useProgressDateRangeStore from "../../store/progressDateRangeStore";
 
 const ProgressScreen = ({ navigation }) => {
   const {first_name, userId} = profileStore((state) => ({
@@ -16,16 +16,24 @@ const ProgressScreen = ({ navigation }) => {
     userId: state.userId
   }));
 
-  const wStartDate = '2024-06-30';
-  const wEndDate = '2024-07-06';
+  const { activeDateRangeTab, setActiveDateRangeTab, 
+    chartSelectedStartDate, setchartSelectedStartDate,
+    chartSelectedEndDate, setchartSelectedEndDate } = useProgressDateRangeStore((state) => ({
+      activeDateRangeTab : state.activeDateRangeTab,
+      setActiveDateRangeTab : state.setActiveDateRangeTab,
+      chartSelectedStartDate : state.chartSelectedStartDate,
+      setchartSelectedStartDate : state.setchartSelectedStartDate,
+      chartSelectedEndDate : state.chartSelectedEndDate,
+      setchartSelectedEndDate : state.setchartSelectedEndDate,
+  }));
 
     const components = [
       { key: 'TodayProgressChart', component: <TodayProgressChart name={first_name} userId={userId}/> },
-      { key: 'WeeklyProgressChart', component: <WeeklyProgressChart name={first_name} userId={userId} weeklyStartDate={wStartDate} weeklyEndDate={wEndDate}/> },
-      { key: 'ProgressDateRangeTab', component: <ProgressDateRangeTab /> },
-      { key: 'ProgressCalendar', component: <ProgressCalendar/> },
+      //{ key: 'WeeklyProgressChart', component: <WeeklyProgressChart name={first_name} userId={userId} weeklyStartDate={chartSelectedStartDate} weeklyEndDate={chartSelectedEndDate}/> },
+      //{ key: 'ProgressDateRangeTab', component: <ProgressDateRangeTab /> },
+      // { key: 'ProgressCalendar', component: <ProgressCalendar/> },
       { key: 'TodayProgressChartDetail', component: <TodayProgressChartDetail userId={userId}/> },
-      { key: 'WeeklyProgressChartDetail', component: <WeeklyProgressChartDetail userId={userId}  weeklyStartDate={wStartDate} weeklyEndDate={wEndDate} />},
+      { key: 'WeeklyProgressChartDetail', component: <WeeklyProgressChartDetail userId={userId} />},
     ];
   
     return (
