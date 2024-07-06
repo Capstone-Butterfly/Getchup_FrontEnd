@@ -6,20 +6,17 @@ import { defaultStyles } from '../styles/styles';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import NoTaskImg from '../../assets/illustrations/no-task.svg';
 
 const NoTasksCard = ({navigation}) => {
 
     const handleAddTask = () => {
-        navigation.navigate('AddTaskStack', {screen: 'AddTaskScreen'});
+        navigation.navigate('Add Task');
     };
 
     return (
         <SafeAreaView style={styles.container}>
-            <Image
-                source={require('../../assets/illustrations/no-task.png')}
-                style={styles.image}
-                alt=""
-            />
+            <NoTaskImg style={styles.image} />
             <Box style={styles.textContainer}>
                 <Heading style={[defaultStyles.TypographyH2, styles.heading]}>No tasks yet</Heading>
                 <Text style={[defaultStyles.TypographyBody, styles.text]}>Ready to add one?</Text>
@@ -30,7 +27,7 @@ const NoTasksCard = ({navigation}) => {
                 action="primary"
                 isDisabled={false}
                 isFocusVisible={false}
-                onPress={() => navigation.navigate('AddTaskScreen')}
+                onPress={handleAddTask}
                 style={[defaultStyles.ButtonDefault, styles.button]}
             >
                 <ButtonText verticalAlign="middle" style={[defaultStyles.TypographyBodyHeavy, styles.buttonText]}>Add New Task</ButtonText>

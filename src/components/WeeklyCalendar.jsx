@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query';
 import { defaultStyles } from '../styles/styles';
 import { formatDateToString } from '../services/weeklyCalendar';
 import NoTasksCard from './NoTasksCard';
+import TasksCompletedCard from './TasksCompletedCard';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
     const { tasks, setTasks, selectedDate, setSelectedDate, addDataTask, updateDataTask } = useTaskStore((state) => ({
@@ -61,7 +62,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 calendarColor={'white'}
                 calendarHeaderStyle={[defaultStyles.TypographyH3, styles.calendarHeaderStyle]}
                 dateNameStyle={[defaultStyles.TypographyLabelSmall, styles.dateNameStyle]}
-                dateNumberStyle={[defaultStyles.TypographyBody, styles.dateNumberStyle]}
+                dateNumberStyle={[defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle]}
                 dayContainerStyle={styles.dayContainer}
                 daySelectionAnimation={styles.daySelectionAnimation}
                 disabledDateNameStyle={{ color: 'grey' }}
@@ -75,6 +76,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 scrollable
                 selectedDate={selectedDate}
                 style={styles.calendarStrip}
+                shouldAllowFontScaling = {true}
             />
             {isLoading ? (
                 <Text>Loading...</Text>
@@ -83,6 +85,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
             ) : filteredTasks && filteredTasks.length === 0 ? (
                 <Box style={[styles.tasksContainer]}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
+                    {/* <NoTasksCard navigation={navigation} /> */}
                     <NoTasksCard />
                 </Box>
             ) : (
@@ -112,10 +115,11 @@ const styles = StyleSheet.create({
     // CALENDAR STRIP
     calendarStrip: {
         borderRadius: 20,
-        height: 126,
-        marginBottom: 24,
-        marginHorizontal: 20,
+        height: 110,
+        // marginBottom: 24,
+        // marginHorizontal: 20,
         padding: 20,
+        margin:20
     },
     calendarHeaderStyle: {
         marginBottom: 8,
@@ -125,24 +129,30 @@ const styles = StyleSheet.create({
     },
     dateNameStyle: {
         fontWeight: 'normal',
-        marginTop: 6,
-        marginBottom: 10,
+        // marginTop: 4,
+        // marginBottom: 4,
         textTransform: 'capitalize',
     },
     dateNumberStyle: {
-        fontWeight: 'normal',
-        marginBottom: 6,
+        // fontWeight: 'normal',
+        // marginBottom: 6,
     },
     dayContainer: {
-        height: 56,
-        borderRadius: 10,
+        // height: 45,
+        borderRadius: 8,
+        // justifyContent: 'center',
+        // alignContent: 'center',
+        // alignItems: 'center',
+        // justifyItems: 'center'
+        padding: 4
     },
     daySelectionAnimation: {
         type: 'background',
-        duration: 200,
-        borderRadius: 10,
-        borderWidth: 1,
-        highlightColor: '#f1938e',
+        // duration: 200,
+        // borderRadius: 10,
+        // borderWidth: 1,
+        highlightColor: '#94b6ef',
+
     },
     highlightDateNumberStyle: {
         // marginBottom: 6,
@@ -175,4 +185,5 @@ const styles = StyleSheet.create({
         flex: 1,
         marginTop: 24,
     },
+    
 });

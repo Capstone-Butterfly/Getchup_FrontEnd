@@ -6,35 +6,17 @@ import { defaultStyles } from '../styles/styles';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import CompleteImg from '../../assets/illustrations/complete.svg'
 
 const TasksCompletedCard = ({navigation}) => {
 
-    const handleAddTask = () => {
-        navigation.navigate('Navigator', {screen: 'AddTaskScreen'});
-    };
-
     return (
         <SafeAreaView style={styles.container}>
-            <Image
-                source={require('../../assets/illustrations/no-task.png')}
-                style={styles.image}
-                alt=""
-            />
+            <CompleteImg style={styles.image}/>
             <Box style={styles.textContainer}>
-                <Heading style={[defaultStyles.TypographyH2, styles.heading]}>No tasks yet</Heading>
-                <Text style={[defaultStyles.TypographyBody, styles.text]}>Ready to add one?</Text>
+                <Heading style={[defaultStyles.TypographyH2, styles.heading]}>All tasks completed</Heading>
+                <Text style={[defaultStyles.TypographyBody, styles.text]}>Enjoy the rest of the day</Text>
             </Box>
-            <Button
-                size="md"
-                variant="contained"
-                action="primary"
-                isDisabled={false}
-                isFocusVisible={false}
-                onPress={() => navigation.navigate('AddTaskScreen')}
-                style={[defaultStyles.ButtonDefault, styles.button]}
-            >
-                <ButtonText verticalAlign="middle" style={[defaultStyles.TypographyBodyHeavy, styles.buttonText]}>Add New Task</ButtonText>
-            </Button>
 
         </SafeAreaView>
     );
@@ -57,8 +39,8 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     image: {
-        width: 160,
-        height: 160,
+        width: 200,
+        height: 150,
         marginBottom: 16,
     },
     text: {

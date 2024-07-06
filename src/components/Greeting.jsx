@@ -1,40 +1,41 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState, useEffect } from 'react';
 import { Box, HStack, Heading, Text, VStack } from "@gluestack-ui/themed";
-import { StyleSheet, Image } from "react-native";
+import { StyleSheet } from "react-native";
 import { defaultStyles } from "../styles/styles";
-
+import DayImg from '../../assets/illustrations/day.svg';
+import NightImg from '../../assets/illustrations/night.svg';
 
 const Greeting = ({ name }) => {
     const [greeting, setGreeting] = useState('');
-    const [imagePath, setImagePath] = useState(null);
+    const [ImageComponent, setImageComponent] = useState(null);
 
     useEffect(() => {
         const getGreetingMessageAndImage = (name) => {
             const currentHour = new Date().getHours();
             let message = '';
-            let image = null;
+            let Image = null;
 
             if (currentHour >= 5 && currentHour < 12) {
                 message = `Good morning, ${name}!\nRise up, start fresh!`;
-                image = require('../../assets/illustrations/day.png'); // Replace with your morning image path
+                Image = DayImg;
             } else if (currentHour >= 12 && currentHour < 17) {
                 message = `Good afternoon, ${name}!\nKeep going, you're halfway to your goal!`;
-                image = require('../../assets/illustrations/day.png'); // Replace with your afternoon image path
+                Image = DayImg;
             } else if (currentHour >= 17 && currentHour < 21) {
                 message = `Good evening, ${name}!\nRelax and recharge`;
-                image = require('../../assets/illustrations/night.png'); // Replace with your evening image path
+                Image = NightImg;
             } else {
                 message = `Good night, ${name}!\nRest well, for tomorrow brings new chances`;
-                image = require('../../assets/illustrations/night.png'); // Replace with your night image path
+                Image = NightImg;
             }
 
-            return { message, image };
+            return { message, Image };
         };
 
-        const { message, image } = getGreetingMessageAndImage(name);
+        const { message, Image } = getGreetingMessageAndImage(name);
         setGreeting(message);
-        setImagePath(image);
+        setImageComponent(() => Image);
     }, [name]);
 
     return (
@@ -45,8 +46,8 @@ const Greeting = ({ name }) => {
                     <Text style={[defaultStyles.TypographyBody, styles.text]}>{greeting.split('\n')[1]}</Text>
                 </VStack>
                 <VStack style={styles.vstack}>
-                    {imagePath ? (
-                        <Image source={imagePath} style={styles.image} />
+                    {ImageComponent ? (
+                        <ImageComponent style={styles.image} />
                     ) : (
                         <Text textAlign="center">Image here</Text>
                     )}
@@ -77,7 +78,6 @@ const styles = StyleSheet.create({
     },
     vstack: {
         width: '60%',
-    
     },
     image: {
         alignSelf: 'center',

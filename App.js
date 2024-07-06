@@ -10,19 +10,16 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from './src/services/QueryClient';
 import profileStore from './src/store/profileStore';
 import SignInScreen from './src/screens/profile/SignInScreen';
-import HomeScreen from './src/screens/home/HomeScreen'; // Import your HomeScreen
-import SignUpScreen from './src/screens/profile/SignUpScreen'; // Import your SignUpScreen
+import HomeScreen from './src/screens/home/HomeScreen';
+import SignUpScreen from './src/screens/profile/SignUpScreen';
 import Navigator from './src/navigation/Navigator';
 import SurveyQuestionScreen from './src/screens/profile/SurveyQuestionScreen';
 import ADHDCatScreen from './src/screens/profile/ADHDCatScreen';
 import { Archivo_400Regular, Archivo_600SemiBold } from '@expo-google-fonts/archivo';
 import { WorkSans_700Bold, WorkSans_600SemiBold } from '@expo-google-fonts/work-sans';
 import { useFonts } from "expo-font";
-import './src/styles/styles.css'
-// import image from './assets/background/background.png'
 
 const Stack = createStackNavigator();
-const image = require('./assets/background/background.png');
 
 const AppNavigator = () => (
     <Stack.Navigator initialRouteName="SignIn">
@@ -57,11 +54,7 @@ const App = () => {
                         <GluestackUIProvider config={config}>
                             <StatusBar bg='#2c3e50' />
                             {is_login ? (
-                                // <View style={styles.container}>
-                                <ImageBackground source={image} resizeMode="cover" style={styles.image}>
                                 <Navigator />
-                                </ImageBackground>
-                                // </View>
                             ) : (
                                 <AppNavigator />
                             )}
