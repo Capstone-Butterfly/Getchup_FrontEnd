@@ -1,6 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import { Button, Text, View, Platform } from 'react-native';
+import { Button, Text, View, Platform, StyleSheet } from 'react-native';
 import Header from '../../components/Header';
 import Greeting from '../../components/Greeting';
 import WeeklyCalendar from '../../components/WeeklyCalendar';
@@ -8,22 +7,21 @@ import { useRef } from 'react';
 import * as Notifications from 'expo-notifications';
 import { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, getUnreadNotifications } from '../../services/notificationService';
 import useNotificationStore from '../../store/notificationStore';
-import { StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import profileStore from '../../store/profileStore';
+import { ImageBackground } from '@gluestack-ui/themed';
+
+const image = require('../../../assets/background/background.png');
 
 const HomeScreen = ({ navigation }) => {
-
     const { expoPushToken, setExpoPushToken, channels, setChannels, notification, setNotification } = useNotificationStore();
     const notificationListener = useRef();
     const responseListener = useRef();
 
-    const {first_name, userId} = profileStore((state) => ({
+    const { first_name, userId } = profileStore((state) => ({
         first_name: state.first_name,
         userId: state.userId
     }));
-    
-    console.log(userId);
 
     useEffect(() => {
         registerForPushNotificationsAsync().then(token => token && setExpoPushToken(token));
@@ -34,7 +32,6 @@ const HomeScreen = ({ navigation }) => {
 
         notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
             setNotification(notification);
-            console.log(notification)
         });
 
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
@@ -53,21 +50,27 @@ const HomeScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Header />
-            <Greeting name={first_name}/>
-            <WeeklyCalendar userId={userId} navigation={navigation}/>
-
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+                <Header />
+                <Greeting name={first_name} />
+                <View style={styles.calendarContainer}>
+                    <WeeklyCalendar userId={userId} navigation={navigation} />
+                </View>
+            </ImageBackground>
         </SafeAreaView>
     );
 };
-
-
 
 export default HomeScreen;
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 20,
+    },
+    image: {
+        flex: 1,
+    },
+    calendarContainer: {
+        flex: 1,
     },
 });

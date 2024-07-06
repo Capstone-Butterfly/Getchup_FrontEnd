@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Modal, ModalContent, Popover, Button, BellIcon, HStack, Icon, Text, VStack, ModalCloseButton, Heading } from "@gluestack-ui/themed";
+import { Modal, ModalContent, Popover, Button, HStack, Icon, Text, VStack, ModalCloseButton, Heading } from "@gluestack-ui/themed";
 import { CloseIcon } from '@gluestack-ui/themed';
 import useNotificationStore from '../store/notificationStore';
 import NotificationsList from './NotificationList';
 import { defaultStyles } from '../styles/styles';
+import NotificationIcon from '../../assets/icons/notification.svg'
 
 const Header = () => {
     const { isOpen, openPopover, closePopover } = useNotificationStore();
@@ -13,8 +14,8 @@ const Header = () => {
     return (
         <SafeAreaView style={styles.container}>
             <HStack style={styles.hstack}>
-                <Text style={defaultStyles.TypographyH1}>Getchup!</Text>
-                <Icon as={BellIcon} title="open" onPress={openPopover} style={styles.icon}/>
+                <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
+                <NotificationIcon />
                 
                 <Modal isOpen={isOpen} onClose={closePopover}>
                 <ModalContent style={styles.modalContent}>
@@ -35,17 +36,26 @@ const Header = () => {
 };
 
 const styles = StyleSheet.create({
+    brand: {
+        flexGrow: 1,
+    },
     container: {
-        
+        display: 'flex',
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        width: '100%',
     },
     hstack: {
         display: 'flex',
         justifyContent: 'space-between',
         paddingBottom: 16,
+        paddingHorizontal: 20,
+        paddingTop: 20,
     },
     icon: {
         display: 'flex',
-        alignSelf: 'center'
+        alignSelf: 'center',
     },
     modalContent: {
         width: '100%',

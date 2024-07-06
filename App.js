@@ -1,7 +1,7 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler'; // THIS HAS TO BE AT LINE NUMBER 1
 import React from 'react';
 import { GluestackUIProvider, StatusBar } from '@gluestack-ui/themed';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { config } from '@gluestack-ui/config';
@@ -10,8 +10,8 @@ import { QueryClientProvider } from '@tanstack/react-query';
 import queryClient from './src/services/QueryClient';
 import profileStore from './src/store/profileStore';
 import SignInScreen from './src/screens/profile/SignInScreen';
-import HomeScreen from './src/screens/home/HomeScreen'; // Import your HomeScreen
-import SignUpScreen from './src/screens/profile/SignUpScreen'; // Import your SignUpScreen
+import HomeScreen from './src/screens/home/HomeScreen';
+import SignUpScreen from './src/screens/profile/SignUpScreen';
 import Navigator from './src/navigation/Navigator';
 import SurveyQuestionScreen from './src/screens/profile/SurveyQuestionScreen';
 import ADHDCatScreen from './src/screens/profile/ADHDCatScreen';
@@ -71,8 +71,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
-        justifyContent: 'center'
-    }
+        justifyContent: 'center',
+        width: 100
+    },
+
+    image: {
+        flex: 1,
+        justifyContent: 'center',
+      },
 });
 
 export default App;

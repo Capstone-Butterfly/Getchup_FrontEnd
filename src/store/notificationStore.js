@@ -12,15 +12,13 @@ const useNotificationStore = create(set => ({
 	notification: undefined,
 	setNotification: (notification) => set({ notification }),
 
-	//define notifications array:
-	notifications: [],
-	setNotifications: (notifications) => set({ notifications }),
-
-	//unread notifications from the notification tray:
-	fetchNotificationsFromTray: async () => {
-		const notifications = await getUnreadNotifications();
-		set({ notifications });
-	},
+  //unread notifications from the notification tray:
+  notifications: [],
+  setNotifications: (notifications) => set({ notifications }),
+  fetchNotifications: async () => {
+    const notifications = await getUnreadNotifications();
+    set({ notifications });
+  },
 
 	//notification popover in the header:
 	isOpen: false,

@@ -28,7 +28,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@gluestack-ui/themed';
 import DateFormatter from '../../utils/DateFormatter';
 import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
-import { scheduleNotification } from '../../services/notificationService'
+import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
+import useNotificationStore from '../../store/notificationStore';
 
 const { width, height } = Dimensions.get('window');
 
@@ -93,6 +94,7 @@ const AddTaskScreen = ({ navigation }) => {
         clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
     }));
 
+    const { fetchNotificationsByUserId, setUserNotifications } = useNotificationStore()
 
     const handleOpenTitleModal = () => setModalTitleVisible(true);
     const handleCloseTitleModal = () => setModalTitleVisible(false);
