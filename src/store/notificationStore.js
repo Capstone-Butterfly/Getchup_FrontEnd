@@ -3,25 +3,29 @@ import { create } from 'zustand';
 import { getUnreadNotifications } from '../services/notificationService';
 
 const useNotificationStore = create(set => ({
-  expoPushToken: '',
-  setExpoPushToken: (token) => set({ expoPushToken: token }),
-  channels: [],
-  setChannels: (channels) => set({ channels }),
-  notification: undefined,
-  setNotification: (notification) => set({ notification }),
 
-  //unread notifications from the notification tray:
-  notifications: [],
-  setNotifications: (notifications) => set({ notifications }),
-  fetchNotifications: async () => {
-    const notifications = await getUnreadNotifications();
-    set({ notifications });
-  },
+	//push notifications:
+	expoPushToken: '',
+	setExpoPushToken: (token) => set({ expoPushToken: token }),
+	channels: [],
+	setChannels: (channels) => set({ channels }),
+	notification: undefined,
+	setNotification: (notification) => set({ notification }),
 
-  //notification popover in the header:
-  isOpen: false,
-  openPopover: () => set({ isOpen: true }),
-  closePopover: () => set({ isOpen: false }),
+	//define notifications array:
+	notifications: [],
+	setNotifications: (notifications) => set({ notifications }),
+
+	//unread notifications from the notification tray:
+	fetchNotificationsFromTray: async () => {
+		const notifications = await getUnreadNotifications();
+		set({ notifications });
+	},
+
+	//notification popover in the header:
+	isOpen: false,
+	openPopover: () => set({ isOpen: true }),
+	closePopover: () => set({ isOpen: false }),
 }));
 
 export default useNotificationStore;

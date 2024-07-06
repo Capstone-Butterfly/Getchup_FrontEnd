@@ -28,9 +28,9 @@ async function scheduleNotification(task) {
 
     console.log('interval:', interval)
     let defaultTrigger = 45 * 60 // 45 minutes
-  
+
     let trigger;
-    
+
     if (interval <= defaultTrigger) { //if start time is more than 45 minutes away
         trigger = 10
     } else {
@@ -57,7 +57,11 @@ async function scheduleNotification(task) {
     }
 }
 
-
+const fetchNotificationsByUserId = async (userId) => {
+    console.log("fetching notifications...");
+    const { data } = await axios.get(`${base_url}/notifications/user/${userId}`);
+    return data;
+};
 
 async function cancelNotification(notificationId) {
 
@@ -69,15 +73,15 @@ async function cancelNotification(notificationId) {
 
 async function saveNotification(newNotification) {
     try {
-      const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
-      return data;
+        const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
+        return data;
     } catch (error) {
-      console.error("Error adding task:", error);
-      throw error;
+        console.error("Error adding task:", error);
+        throw error;
     }
-  };
+};
 
-  async function getUnreadNotifications() {
+async function getUnreadNotificationsFromTray() {
     try {
         const notifications = await Notifications.getPresentedNotificationsAsync();
         console.log('Presented Notifications:', notifications);
@@ -149,4 +153,12 @@ const convertToSeconds = (timestamp) => {
     return differenceInSeconds;
 }
 
-export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications, formatNotificationDate };
+export {
+    registerForPushNotificationsAsync,
+    scheduleNotification,
+    cancelNotification,
+    saveNotification,
+    getUnreadNotificationsFromTray,
+    formatNotificationDate,
+    fetchNotificationsByUserId
+};
