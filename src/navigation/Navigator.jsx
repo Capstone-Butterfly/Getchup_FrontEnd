@@ -10,13 +10,19 @@ const Tab = createBottomTabNavigator();
 
 const Navigator = () => {
     return (
-    <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeTab} options={{ headerShown: false }} />
-        <Tab.Screen name="Calendar" component={CalendarTab} options={{ headerShown: false }} />
-        <Tab.Screen name="Add Task" component={AddTaskTab} options={{ headerShown: false }} />
-        <Tab.Screen name="Progress" component={ProgressTab} options={{ headerShown: false }} />
-        <Tab.Screen name="Profile" component={ProfileTab} options={{ headerShown: false }} />
-    </Tab.Navigator>
+        <Tab.Navigator>
+            <Tab.Screen
+                name="Home"
+                component={HomeTab}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Tab.Screen name="Calendar" component={CalendarTab} options={{ headerShown: false }} />
+            <Tab.Screen name="Add Task" component={AddTaskTab} options={{ headerShown: false }} />
+            <Tab.Screen name="Progress" component={ProgressTab} options={{ headerShown: false }} />
+            <Tab.Screen name="Profile" component={ProfileTab} options={{ headerShown: false }} />
+        </Tab.Navigator>
     )
 }
 

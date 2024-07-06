@@ -1,6 +1,12 @@
 import { StyleSheet } from "react-native";
 import { config } from "./themeConfig";
 const defaultStyles = StyleSheet.create({
+    ButtonDefault: {
+        backgroundColor: "#006655",
+        borderRadius: 10,
+        height: 48,
+        width: "100%",
+    },
     TypographyH1: {
         fontFamily: "WorkSans_700Bold",
         fontSize: 24,

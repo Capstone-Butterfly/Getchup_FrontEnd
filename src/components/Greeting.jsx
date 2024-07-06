@@ -1,28 +1,42 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState, useEffect } from 'react';
-import { Box, HStack, Heading, Text, VStack } from "@gluestack-ui/themed"
+import { Box, HStack, Heading, Text, VStack } from "@gluestack-ui/themed";
 import { StyleSheet } from "react-native";
 import { defaultStyles } from "../styles/styles";
+import DayImg from '../../assets/illustrations/day.svg';
+import NightImg from '../../assets/illustrations/night.svg';
 
-const Greeting = ({name}) => {
+const Greeting = ({ name }) => {
     const [greeting, setGreeting] = useState('');
+    const [ImageComponent, setImageComponent] = useState(null);
 
     useEffect(() => {
-        const getGreetingMessage = (name) => {
+        const getGreetingMessageAndImage = (name) => {
             const currentHour = new Date().getHours();
+            let message = '';
+            let Image = null;
+
             if (currentHour >= 5 && currentHour < 12) {
-                return `Good morning, ${name}!\nRise up, start fresh!`;
+                message = `Good morning, ${name}!\nRise up, start fresh!`;
+                Image = DayImg;
             } else if (currentHour >= 12 && currentHour < 17) {
-                return `Good afternoon, ${name}!\nKeep going, you're halfway to your goal!`;
+                message = `Good afternoon, ${name}!\nKeep going, you're halfway to your goal!`;
+                Image = DayImg;
             } else if (currentHour >= 17 && currentHour < 21) {
-                return `Good evening, ${name}!\nRelax and recharge`;
+                message = `Good evening, ${name}!\nRelax and recharge`;
+                Image = NightImg;
             } else {
-                return `Good night, ${name}!\nRest well, for tomorrow brings new chances`;
+                message = `Good night, ${name}!\nRest well, for tomorrow brings new chances`;
+                Image = NightImg;
             }
+
+            return { message, Image };
         };
 
-        setGreeting(getGreetingMessage(name));
-    }, []);
+        const { message, Image } = getGreetingMessageAndImage(name);
+        setGreeting(message);
+        setImageComponent(() => Image);
+    }, [name]);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -32,7 +46,11 @@ const Greeting = ({name}) => {
                     <Text style={[defaultStyles.TypographyBody, styles.text]}>{greeting.split('\n')[1]}</Text>
                 </VStack>
                 <VStack style={styles.vstack}>
-                    <Text textAlign="center">Image here</Text>
+                    {ImageComponent ? (
+                        <ImageComponent style={styles.image} />
+                    ) : (
+                        <Text textAlign="center">Image here</Text>
+                    )}
                 </VStack>
             </HStack>
         </SafeAreaView>
@@ -42,18 +60,31 @@ const Greeting = ({name}) => {
 const styles = StyleSheet.create({
     container: {
         display: 'flex',
+        flexShrink: 0,
+        marginTop: 40,
+        paddingHorizontal: 20,
         width: '100%',
+        marginBottom: 1,
     },
     hstack: {
         width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        flexShrink: 0,
     },
     text: {
-        marginTop: 8,
+        marginTop: 12,
     },
     vstack: {
-        width: '50%',
+        width: '60%',
     },
-
-})
+    image: {
+        alignSelf: 'center',
+        height: 120, // Adjust the size as needed
+        marginRight: 38,
+        width: 116,
+    },
+});
 
 export default Greeting;
