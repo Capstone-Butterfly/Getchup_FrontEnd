@@ -106,6 +106,11 @@ const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) 
   }
 };
 
+const manualCompleteTask = async (taskId) => {
+  const { data } = await axios.patch( `${base_url}/tasks/manualcomplete/${taskId}`);
+  return data;
+};
+
 const handleAxiosError = (error) => {
   if (error.response) {
     console.error("Response data:", error.response.data);
@@ -119,4 +124,6 @@ const handleAxiosError = (error) => {
   throw error;
 };
 
-export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, addTask, getAISubTasks, updateTaskStartTime, updateTaskEndTime, pauseTask, handleAxiosError};
+export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, 
+  addTask, getAISubTasks, updateTaskStartTime, updateTaskEndTime, 
+  pauseTask, manualCompleteTask, handleAxiosError};

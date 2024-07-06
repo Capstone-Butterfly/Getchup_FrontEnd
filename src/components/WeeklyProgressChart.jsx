@@ -3,22 +3,13 @@ import { Card, FlatList, Heading, Text, Image, SafeAreaView, View, VStack, Progr
 import { StyleSheet } from "react-native";
 import { getTodayChartDetails } from "../services/progress";
 import { useQuery } from '@tanstack/react-query';
-import DateFormatter from '../utils/DateFormatter';
-import useProgressDateRangeStore from '../store/progressDateRangeStore';
 
 
-const TodayProgressChart = ({name, userId}) => {
-    const { activeDateRangeTab, chartSelectedStartDate, chartSelectedEndDate } = useProgressDateRangeStore((state) => ({
-        activeDateRangeTab : state.activeDateRangeTab,
-        chartSelectedStartDate : state.chartSelectedStartDate,
-        chartSelectedEndDate : state.chartSelectedEndDate,
-    }));
-
-    const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
+const WeeklyProgressChart = ({name, userId, weeklyStartDate, weeklyEndDate}) => {
 
     const { data: todayProgress, isLoading, error, refetch } = useQuery({
-        queryKey: ['todayProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
-        queryFn: () => getTodayChartDetails(userId, chartSelectedStartDate, chartSelectedEndDate),
+        queryKey: ['weeklyProgressDetail', userId, weeklyStartDate, weeklyEndDate], 
+        queryFn: () => getTodayChartDetails(userId, weeklyStartDate, weeklyEndDate),
         refetchOnMount: true,
         refetchOnReconnect: true,
     });
@@ -57,7 +48,7 @@ const TodayProgressChart = ({name, userId}) => {
     )
 };
 
-export default TodayProgressChart;
+export default WeeklyProgressChart;
 
 const styles = StyleSheet.create({
   container: {

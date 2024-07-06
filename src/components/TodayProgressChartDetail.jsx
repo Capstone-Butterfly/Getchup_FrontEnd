@@ -4,6 +4,7 @@ import { Card, Text, View, VStack, HStack } from "@gluestack-ui/themed";
 import { getTodayChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
 import { useQuery } from "@tanstack/react-query";
+import DateFormatter from '../utils/DateFormatter';
 
 const transformData = (data) => {
   const timePeriods = ["morning", "afternoon", "evening", "night"];
@@ -39,10 +40,11 @@ const renderTitle = (data) => {
 };
 
 const TodayProgressChartDetail = ({userId}) => {
+  const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["todayProgressChart", userId],
-    queryFn: () => getTodayChartDetails(userId),
+    queryKey: ['todayProgressChart', userId, todayDate, todayDate], 
+      queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
     refetchOnMount: true,
     refetchOnReconnect: true,
   });
@@ -55,24 +57,18 @@ const TodayProgressChartDetail = ({userId}) => {
     return <Text>Error: {error.message}</Text>;
   }
 
-  console.log(data);
-
   const stackData = transformData(data);
   return (
     <View>
-      <Card style={styles.cardBody}>
         {renderTitle(data)}
         <BarChart
           width={240}
           noOfSections={5}
-          //   barWidth={40}
-          //   barBorderRadius={30}
           yAxisThickness={0}
           rulesType="solid"
           stackData={stackData}
         />
-      </Card>
-      <Card style={styles.cardBody}>
+      
         <VStack space={4}>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
             <Text style={styles.textLabel}>Most Productive Time</Text>
@@ -87,7 +83,6 @@ const TodayProgressChartDetail = ({userId}) => {
             <Text style={styles.textValue}>{data.completionPercentage}%</Text>
           </HStack>
         </VStack>
-      </Card>
     </View>
   );
 };

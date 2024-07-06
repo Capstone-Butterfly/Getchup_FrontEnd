@@ -1,18 +1,20 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  Text,
+  View,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   VStack,
   HStack,
-  Box,
-  Modal,
-  ModalContent,
-  ModalCloseButton,
-  Icon,
-  CloseIcon,
-  Button,
+  Box
 } from "@gluestack-ui/themed";
-import DateTimePicker from "@react-native-community/datetimepicker";
+// import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useAddTaskDateModelStore from "../store/addTaskDateModelStore";
 import usecreateTaskStore from "../store/createTaskStore";
 
@@ -53,16 +55,16 @@ const TimeModelScreen = () => {
     setSelectedEndTime(currentEndTime);
   };
 
-  const applyTime = () => {
+  const applyTime = (selectedDate) => {
     setStartTime(
-      selectedTime.toLocaleTimeString([], {
+      selectedDate.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
       })
     );
     setTimeLabel(
-      selectedTime.toLocaleTimeString([], {
+      selectedDate.toLocaleTimeString([], {
         hour: "2-digit",
         minute: "2-digit",
         hour12: true,
@@ -71,18 +73,14 @@ const TimeModelScreen = () => {
     setTimePickerVisible(false);
   };
 
-  const applyEndTime = () => {
-    // if (selectedTime < selectedEndTime) {
-      setEndTime(
-        selectedEndTime.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        })
-      );
-    // } else {
-      // console.warn("End time must be after start time.");
-    // }
+  const applyEndTime = (selectedDate) => {
+    setEndTime(
+      selectedDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    );
     setEndTimePickerVisible(false);
   };
 
@@ -97,22 +95,22 @@ const TimeModelScreen = () => {
   useEffect(() => {
     if (timeLabel === "Anytime") {
       const defaultStartTime = new Date();
-            defaultStartTime.setHours(6, 0, 0); 
-        
-            setStartTime(
-              defaultStartTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })
-            );
-            setEndTime(
-              defaultStartTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })
-            );
+      defaultStartTime.setHours(6, 0, 0);
+
+      setStartTime(
+        defaultStartTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
+      setEndTime(
+        defaultStartTime.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })
+      );
     }
   }, [timeLabel]);
 
@@ -127,10 +125,6 @@ const TimeModelScreen = () => {
 
     console.log("start_time:", start_time);
     console.log("end_time:", end_time);
-
-    // if (selectedTime > selectedEndTime) { 
-    //   console.warn("End time must be after start time.");
-    // }
 
   }, [start_time, end_time, timeLabel]);
 
@@ -148,8 +142,8 @@ const TimeModelScreen = () => {
         <TouchableOpacity
           onPress={() => {
             const defaultStartTime = new Date();
-            defaultStartTime.setHours(6, 0, 0); 
-        
+            defaultStartTime.setHours(6, 0, 0);
+
             setStartTime(
               defaultStartTime.toLocaleTimeString([], {
                 hour: "2-digit",
@@ -197,54 +191,88 @@ const TimeModelScreen = () => {
           </HStack>
         </TouchableOpacity>
       </VStack>
-
-      <Modal isOpen={isTimePickerVisible} onClose={toggleTimePicker}>
-        <ModalContent style={styles.modalContent}>
-          <ModalCloseButton
-            style={styles.closeButton}
-            onPress={toggleTimePicker}
+     
+      <DateTimePickerModal
+        isVisible={isTimePickerVisible}
+        mode="time"
+        is24Hour={false}
+        onConfirm={applyTime}
+        onCancel={toggleTimePicker}
+        customConfirmButtonIOS={(props) => (
+          <TouchableOpacity
+            onPress={props.onPress}
+            style={{ borderTopWidth: 1, borderColor: "lightgrey" }}
           >
-            <Icon as={CloseIcon} />
-          </ModalCloseButton>
-          <VStack space={4} style={styles.modalBody}>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={selectedTime}
-              mode="time"
-              is24Hour={true}
-              display="spinner"
-              onChange={handleTimeChange}
-            />
-            <Button onPress={applyTime} style={styles.applyButton}>
-              <Text>Apply</Text>
-            </Button>
-          </VStack>
-        </ModalContent>
-      </Modal>
-
-      <Modal isOpen={isEndTimePickerVisible} onClose={toggleEndTimePicker}>
-        <ModalContent style={styles.modalContent}>
-          <ModalCloseButton
-            style={styles.closeButton}
-            onPress={toggleEndTimePicker}
+            <Text
+              style={{
+                color: "green",
+                padding: 14,
+                textAlign: "center",
+                fontSize: 20,
+              }}
+            >
+              Confirm
+            </Text>
+          </TouchableOpacity>
+        )}
+        customCancelButtonIOS={(props) => (
+          <TouchableOpacity
+            onPress={props.onPress}
+            style={{
+              backgroundColor: "#E6E6E6",
+              padding: 12,
+              borderRadius: 10,
+            }}
           >
-            <Icon as={CloseIcon} />
-          </ModalCloseButton>
-          <VStack space={4} style={styles.modalBody}>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={selectedEndTime}
-              mode="time"
-              is24Hour={true}
-              display="spinner"
-              onChange={handleEndTimeChange}
-            />
-            <Button onPress={applyEndTime} style={styles.applyButton}>
-              <Text>Apply</Text>
-            </Button>
-          </VStack>
-        </ModalContent>
-      </Modal>
+            <Text
+              style={{ color: "#545F71", textAlign: "center", fontSize: 20 }}
+            >
+              Cancel
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
+
+      <DateTimePickerModal
+        isVisible={isEndTimePickerVisible}
+        mode="time"
+        is24Hour={false}
+        onConfirm={applyEndTime}
+        onCancel={toggleEndTimePicker}
+        customConfirmButtonIOS={(props) => (
+          <TouchableOpacity
+            onPress={props.onPress}
+            style={{ borderTopWidth: 1, borderColor: "lightgrey" }}
+          >
+            <Text
+              style={{
+                color: "green",
+                padding: 14,
+                textAlign: "center",
+                fontSize: 20,
+              }}
+            >
+              Confirm
+            </Text>
+          </TouchableOpacity>
+        )}
+        customCancelButtonIOS={(props) => (
+          <TouchableOpacity
+            onPress={props.onPress}
+            style={{
+              backgroundColor: "#E6E6E6",
+              padding: 12,
+              borderRadius: 10,
+            }}
+          >
+            <Text
+              style={{ color: "#545F71", textAlign: "center", fontSize: 20 }}
+            >
+              Cancel
+            </Text>
+          </TouchableOpacity>
+        )}
+      />
     </SafeAreaView>
   );
 };

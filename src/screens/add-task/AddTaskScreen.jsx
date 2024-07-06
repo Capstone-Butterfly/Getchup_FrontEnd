@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
 import {
     Box, Button, ButtonText, Card, Center, CloseIcon, FlatList, 
@@ -9,6 +9,7 @@ import {
     CloseCircleIcon,
 } from "@gluestack-ui/themed";
 import { useEffect } from 'react';
+import { useFocusEffect } from '@react-navigation/native'; 
 import useCreateTaskStore from '../../store/createTaskStore';
 import useTaskStore from '../../store/taskStore';
 import useAddTaskDateModelStore from '../../store/addTaskDateModelStore';
@@ -40,12 +41,13 @@ const AddTaskScreen = ({ navigation }) => {
     const [modalSubTaskVisible, setModalSubTaskVisible] = useState(false);
     const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState(null);
     const [warningMessage, setWarningMessage] = useState('');
-    const { task_reminder, setTaskReminder } = useCreateTaskStore();
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
 
-    const {first_name, userId} = profileStore((state) => ({
+    const {first_name, userId, profile_movement_reminder, profile_task_reminder} = profileStore((state) => ({
         first_name: state.first_name,
-        userId: state.userId
+        userId: state.userId,
+        profile_movement_reminder: state.movement_reminder,
+        profile_task_reminder: state.task_reminder
     }));
 
     const { addDataTask, setSelectedDate } = useTaskStore((state) => ({
@@ -54,7 +56,8 @@ const AddTaskScreen = ({ navigation }) => {
     }));
 
     const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore, 
-        start_date, end_date, start_time, end_time, user_estimate_duration } = useCreateTaskStore((state) => ({
+        start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder, 
+        setMovementReminder, task_reminder, setTaskReminder } = useCreateTaskStore((state) => ({
         subTasks: state.subTasks,
         title: state.title,
         setTitle: state.setTitle,
@@ -68,10 +71,26 @@ const AddTaskScreen = ({ navigation }) => {
         start_time: state.start_time,
         end_time: state.end_time,
         user_estimate_duration: state.user_estimate_duration,
+        task_reminder: state.task_reminder,
+        setTaskReminder: state.setTaskReminder,
+        movement_reminder: state.movement_reminder,
+        setMovementReminder: state.setMovementReminder,
     }));
+
+    useFocusEffect(
+        useCallback(() => {
+          setMovementReminder(profile_movement_reminder);
+          setTaskReminder(profile_task_reminder);
+        }, [profile_movement_reminder, profile_task_reminder])
+      );
+    // useEffect(() => {
+    //     setMovementReminder(profile_movement_reminder);
+    //     setTaskReminder(profile_task_reminder);
+    //   }, [profile_movement_reminder, setMovementReminder, profile_task_reminder, setTaskReminder]);
+    
     
     const { clearAddTaskDateModelStore} =
-    useAddTaskDateModelStore((state) => ({
+        useAddTaskDateModelStore((state) => ({
         clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
     }));
 
@@ -146,62 +165,63 @@ const AddTaskScreen = ({ navigation }) => {
         }
     };
 
-const handleSaveTask = async () => {
-    if (!userId || userId.length === 0) {
-        setWarningMessage('User ID is required');
-        return;
-    }
-    if (!title || title.length === 0) {
-        setWarningMessage('Title is required');
-        return;
-    }
-    if (!subTasks || subTasks.length === 0) {
-        setWarningMessage('At least one subtask is required');
-        return;
-    }
-    if (!start_date || start_date.length === 0) {
-        setWarningMessage('Schedule Date is require');
-        return;
-    }
-    setWarningMessage('');
-    try {
-        let identifier = null; // identifier: notification unique id, from the notification service
-        if (task_reminder) { // schedule notification
-            console.log('calling scheduleNotification')
-            identifier = await scheduleNotification({
-                title,
-                start_date,
-                start_time
-            });
-            console.log('Returned notification ID:', identifier);
+    const handleSaveTask = async () => {
+        if (!userId || userId.length === 0) {
+            setWarningMessage('User ID is required');
+            return;
         }
+        if (!title || title.length === 0) {
+            setWarningMessage('Title is required');
+            return;
+        }
+        if (!subTasks || subTasks.length === 0) {
+            setWarningMessage('At least one subtask is required');
+            return;
+        }
+        if (!start_date || start_date.length === 0) {
+            setWarningMessage('Schedule Date is require');
+            return;
+        }
+        setWarningMessage('');
+        try {
+            let notificationId = null;
+            if (task_reminder) { // schedule notification
+                console.log('calling scheduleNotification')
+                notificationId = await scheduleNotification({
+                    title,
+                    start_date,
+                    start_time
+                });
+                console.log('Returned notification ID:', notificationId);
+            }
 
-        const adjustedTaskUrgency = task_urgency === '' ? 'medium' : task_urgency;
+            const adjustedTaskUrgency = task_urgency === '' ? 'medium' : task_urgency;
 
-        const newTask = {
-            user_id: userId,
-            title,
-            notes,
-            task_urgency: adjustedTaskUrgency ,
-            subtask: subTasks,
-            is_repeated: false,
-            estimate_start_date: start_date,
-            due_date: end_date,
-            estimate_start_time: ConvertTimeStamp.convertTimeStringToMilliseconds(start_time),
-            estimate_end_time: ConvertTimeStamp.convertTimeStringToMilliseconds(end_time),
-            user_estimate_duration,
-            notification_id: identifier
-        };
+            const newTask = {
+                user_id: userId,
+                title,
+                notes,
+                task_urgency: adjustedTaskUrgency ,
+                subtask: subTasks,
+                is_repeated: false,
+                estimate_start_date: start_date,
+                due_date: end_date,
+                estimate_start_time: ConvertTimeStamp.convertTimeStringToMilliseconds(start_time),
+                estimate_end_time: ConvertTimeStamp.convertTimeStringToMilliseconds(end_time),
+                user_estimate_duration,
+                notification_id: notificationId,
+                movement_tracking: movement_reminder,
+                task_reminder: task_reminder,
+            };
 
-        await saveTaskMutation.mutateAsync(newTask);
-        clearCreateTaskStore();
-        clearAddTaskDateModelStore();
-        navigation.navigate('Home');
-    } catch (error) {
-        console.error('Error adding task:', error);
-    }
-};
-
+            await saveTaskMutation.mutateAsync(newTask);
+            clearCreateTaskStore();
+            clearAddTaskDateModelStore();
+            navigation.navigate('Home');
+        } catch (error) {
+            console.error('Error adding task:', error);
+        }
+    };
 
     const handleCancel = () => {
         clearCreateTaskStore();

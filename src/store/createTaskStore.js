@@ -56,7 +56,8 @@ const useCreateTaskStore = create((set) => ({
       start_time: "",
       end_time: "",
       user_estimate_duration: "",
-      task_reminder: false
+      task_reminder: false,
+      movement_reminder: false
     }),
   }));
 

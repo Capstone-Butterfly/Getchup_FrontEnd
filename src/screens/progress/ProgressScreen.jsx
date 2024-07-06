@@ -1,12 +1,10 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, StyleSheet } from "react-native";
 import { Text } from "@gluestack-ui/themed"
-import TodayProgressChart from "../../components/TodayProgressChart";
-import TodayProgressChartDetail from "../../components/TodayProgressChartDetail";
-import ProgressDateRangeTab from "../../components/ProgressDateRangeTab";
 import profileStore from "../../store/profileStore";
-import ProgressCalendar from "../../components/ProgressCalendar";
-
+import useProgressDateRangeStore from "../../store/progressDateRangeStore";
+import ProgressChart from "../../components/ProgressChart";
+import ProgressChartDetail from "../../components/ProgressChartDetails";
 
 const ProgressScreen = ({ navigation }) => {
   const {first_name, userId} = profileStore((state) => ({
@@ -14,11 +12,20 @@ const ProgressScreen = ({ navigation }) => {
     userId: state.userId
   }));
 
+  const { activeDateRangeTab, setActiveDateRangeTab, 
+    chartSelectedStartDate, setchartSelectedStartDate,
+    chartSelectedEndDate, setchartSelectedEndDate } = useProgressDateRangeStore((state) => ({
+      activeDateRangeTab : state.activeDateRangeTab,
+      setActiveDateRangeTab : state.setActiveDateRangeTab,
+      chartSelectedStartDate : state.chartSelectedStartDate,
+      setchartSelectedStartDate : state.setchartSelectedStartDate,
+      chartSelectedEndDate : state.chartSelectedEndDate,
+      setchartSelectedEndDate : state.setchartSelectedEndDate,
+  }));
+
     const components = [
-      { key: 'TodayProgressChart', component: <TodayProgressChart name={first_name} userId={userId}/> },
-      { key: 'ProgressDateRangeTab', component: <ProgressDateRangeTab /> },
-      { key: 'ProgressCalendar', component: <ProgressCalendar/> },
-      { key: 'TodayProgressChartDetail', component: <TodayProgressChartDetail userId={userId}/> },
+      { key: 'ProgressChart', component: <ProgressChart name={first_name} userId={userId}/> },
+      { key: 'ProgressChartDetail', component: <ProgressChartDetail userId={userId}/> },
     ];
   
     return (

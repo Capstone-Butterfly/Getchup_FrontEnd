@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
+import { Center, EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
 import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
 import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
 import { signInProfile, userDataProfile } from '../../services/profile';
+import { config } from '../../styles/themeConfig'; // Import the theme configuration
+import { defaultStyles } from './../../styles/styles'
+
+// Get device dimensions
+const { width, height } = Dimensions.get('window');
 
 function SignInScreen() {
-  const { email, password, userId,setIsLogin, setEmail, setPassword, setUserId, setToken, setPhone, setLastName, setFirstName, setNotification, setTaskReminder, setMovementReminder, setUserType, setSurveyDone } = profileStore((state) => state);
+  const { email, password, setIsLogin, setEmail, setPassword, setUserId, setToken, setPhone, setLastName, setFirstName, setNotification, setTaskReminder, setMovementReminder, setUserType, setSurveyDone } = profileStore((state) => state);
   const navigation = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
 
-
-
-  const { mutate: handleLogin, isLoading, mutationFn } = useMutation(
+  const { mutate: handleLogin, isLoading } = useMutation(
     {
       mutationFn: async () => {
         const data = await signInProfile(email, password);
@@ -50,8 +53,7 @@ function SignInScreen() {
   };
 
   return (
-    <View>
-      <Text fontWeight="bold">Sign In</Text>
+    <View style={styles.container}>
       <FormControl
         p="$4"
         borderWidth="$1"
@@ -60,12 +62,13 @@ function SignInScreen() {
         $dark-borderWidth="$1"
         $dark-borderRadius="$lg"
         $dark-borderColor="$borderDark800"
+        style={styles.formBox}
       >
         <VStack space="xl">
-          <Heading color="$text900" lineHeight="$md">Login</Heading>
+          <Heading style={[styles.heading, defaultStyles.TypographyH1 ]}>Sign In</Heading>
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Email</Text>
-            <Input>
+            <Text style={defaultStyles.TypographyBodyHeavy}>Email</Text>
+            <Input style={styles.inputContainer} >
               <InputField
                 value={email}
                 onChangeText={setEmail}
@@ -74,8 +77,8 @@ function SignInScreen() {
             </Input>
           </VStack>
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Password</Text>
-            <Input textAlign="center">
+            <Text style={defaultStyles.TypographyBodyHeavy}>Password</Text>
+            <Input style={styles.inputContainer}>
               <InputField
                 value={password}
                 onChangeText={setPassword}
@@ -86,19 +89,95 @@ function SignInScreen() {
               </InputSlot>
             </Input>
           </VStack>
-          <Button backgroundColor='$blue' onPress={handleLogin} isLoading={isLoading}>
-            <ButtonText>Save</ButtonText>
+          
+          <Button style={styles.submitButton} onPress={handleLogin} isLoading={isLoading}>
+            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Sign In</ButtonText>
           </Button>
+         <Text style={styles.textInfo}>
+         Do not have an Account yet?
+         </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <LinkText>Create an account!</LinkText>
+            <LinkText style={styles.callToNavigate}>Create an account!</LinkText>
           </TouchableOpacity>
         </VStack>
       </FormControl>
+      <View style={styles.circlesContainer}>
+        <View style={[styles.circle, styles.circleYellow]} />
+        <View style={[styles.circle, styles.circleRed]} />
+        <View style={[styles.circle, styles.circleBlue]} />
+      </View>
     </View>
   );
 }
 
+// Define styles at the bottom of the component file
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: config.tokens.spacing.lg,
+    backgroundColor: config.tokens.colors.background,
+    position: 'relative',
+  },
+  heading: {
+    textAlign: 'center',
+  },
+  inputContainer: {
+    borderRadius: config.tokens.borderRadius.sm,
+    borderColor: '#00000080',
+    borderWidth: 0.5,
+  },
+  submitButton: {
+    backgroundColor: config.tokens.colors.primaryDark,
+    borderRadius: config.tokens.borderRadius.sm,
+    fontSize: 20,
+    alignSelf: 'flex-start',
+    marginVertical: config.tokens.spacing.md,
+    marginHorizontal: 'auto',
+  },
+  submitButtonText: {
+color:config.tokens.colors.white,
+  },
+  textInfo: {
+    color: config.tokens.colors.textInfo,
+    fontWeight: '1000',
+    fontSize: 18,
+    paddingBottom: config.tokens.spacing.sm,
+    textAlign: 'center',
+  },
+  callToNavigate: {
+    color: config.tokens.colors.secondary,
+    textAlign: 'center',
+  },
+  formBox: {
+    backgroundColor: 'white',
+    borderRadius: config.tokens.borderRadius.md,
+    padding: config.tokens.spacing.md,
+    borderColor: config.tokens.colors.borderColor,
+  },
+  circlesContainer: {
+    position: 'absolute',
+    bottom: -180,
+    width: width,
+    height: height * 0.2,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
+  },
+  circle: {
+    width: 300,
+    height: 300,
+    borderRadius: config.tokens.borderRadius.xl,
+  },
+  circleYellow: {
+    backgroundColor: config.tokens.colors.mediumPriority,
+  },
+  circleRed: {
+    backgroundColor: config.tokens.colors.highPriority,
+    zIndex: 10,
+  },
+  circleBlue: {
+    backgroundColor: config.tokens.colors.blue,
+  },
+});
+
 export default SignInScreen;
-
-
-

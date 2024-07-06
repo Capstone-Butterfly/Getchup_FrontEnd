@@ -7,17 +7,17 @@ import DateFormatter from '../utils/DateFormatter';
 import useProgressDateRangeStore from '../store/progressDateRangeStore';
 
 
-const TodayProgressChart = ({name, userId}) => {
+const ProgressChart = ({name, userId}) => {
     const { activeDateRangeTab, chartSelectedStartDate, chartSelectedEndDate } = useProgressDateRangeStore((state) => ({
         activeDateRangeTab : state.activeDateRangeTab,
         chartSelectedStartDate : state.chartSelectedStartDate,
         chartSelectedEndDate : state.chartSelectedEndDate,
     }));
 
-    const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
+    //const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
 
-    const { data: todayProgress, isLoading, error, refetch } = useQuery({
-        queryKey: ['todayProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
+    const { data: progressCart, isLoading, error, refetch } = useQuery({
+        queryKey: ['ProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
         queryFn: () => getTodayChartDetails(userId, chartSelectedStartDate, chartSelectedEndDate),
         refetchOnMount: true,
         refetchOnReconnect: true,
@@ -47,17 +47,17 @@ const TodayProgressChart = ({name, userId}) => {
                 <Text>{name}</Text>
                 <VStack space="lg">
                     <Text size="lg">Activity Progress</Text>
-                    <Progress value={todayProgress.completionPercentage} w='$80' h='$1'>
+                    <Progress value={progressCart.completionPercentage} w='$80' h='$1'>
                     <ProgressFilledTrack h='$1' />
                     </Progress>
                 </VStack>
-                <Text>{todayProgress.totalCompletedTasks} out of {todayProgress.totalTasks} tasks completed</Text>
+                <Text>{progressCart.totalCompletedTasks} out of {progressCart.totalTasks} tasks completed</Text>
             </Card>
         </SafeAreaView>
     )
 };
 
-export default TodayProgressChart;
+export default ProgressChart;
 
 const styles = StyleSheet.create({
   container: {
