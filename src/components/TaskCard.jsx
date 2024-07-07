@@ -42,20 +42,9 @@ const TaskCard = ({ task, navigation }) => {
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <HStack style={styles.task}>
-                {/* <Checkbox style={styles.checkbox}>
-                    <CheckboxIndicator>
-                        <CheckboxIcon as={CheckIcon} />
-                    </CheckboxIndicator>
-                </Checkbox> */}
-                {/* <SvgUri uri={noTask} style={styles.icon} /> */}
-
                 <VStack style={styles.taskInfo}>
                     <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
-                    {/* <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
-                    {/* <Text>{task.estimate_start_date.split('T')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
-                    {/* <Text>{task.estimate_start_date.split('T')[0]} {formatEstimateStartTime(task.estimate_start_time)}</Text> */}
                     <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
-                    {/* <Text>Total Subtasks: {task.subtask.length}</Text> */}
                 </VStack>
                 <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
             </HStack>

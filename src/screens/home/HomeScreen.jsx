@@ -51,7 +51,7 @@ const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                <Header />
+                <Header userId={userId}/>
                 <Greeting name={first_name} />
                 <View style={styles.calendarContainer}>
                     <WeeklyCalendar userId={userId} navigation={navigation} />
