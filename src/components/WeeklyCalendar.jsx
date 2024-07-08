@@ -85,8 +85,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
             ) : filteredTasks && filteredTasks.length === 0 ? (
                 <Box style={[styles.tasksContainer]}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
-                    {/* <NoTasksCard navigation={navigation} /> */}
-                    <NoTasksCard />
+                    <NoTasksCard navigation={navigation}/>
                 </Box>
             ) : (
                 <Box style={styles.tasksContainer}>

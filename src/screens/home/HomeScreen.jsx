@@ -9,7 +9,7 @@ import { registerForPushNotificationsAsync, scheduleNotification, cancelNotifica
 import useNotificationStore from '../../store/notificationStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import profileStore from '../../store/profileStore';
-import { ImageBackground } from '@gluestack-ui/themed';
+import { ImageBackground, FlatList } from '@gluestack-ui/themed';
 
 const image = require('../../../assets/background/background.png');
 
@@ -48,17 +48,36 @@ const HomeScreen = ({ navigation }) => {
         };
     }, []);
 
+    const data = [
+        { key: 'header', component: <Header /> },
+        { key: 'greeting', component: <Greeting name={first_name} /> },
+        { key: 'calendar', component: <WeeklyCalendar userId={userId} navigation={navigation} /> },
+    ];
+
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-                <Header />
-                <Greeting name={first_name} />
-                <View style={styles.calendarContainer}>
-                    <WeeklyCalendar userId={userId} navigation={navigation} />
-                </View>
+                <FlatList
+                    data={data}
+                    renderItem={({ item }) => item.component}
+                    keyExtractor={(item) => item.key}
+                    contentContainerStyle={styles.listContainer}
+                />
             </ImageBackground>
         </SafeAreaView>
     );
+
+    // return (
+    //     <SafeAreaView style={styles.container}>
+    //         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+    //             <Header />
+    //             <Greeting name={first_name} />
+    //             <View style={styles.calendarContainer}>
+    //                 <WeeklyCalendar userId={userId} navigation={navigation} />
+    //             </View>
+    //         </ImageBackground>
+    //     </SafeAreaView>
+    // );
 };
 
 export default HomeScreen;
@@ -70,7 +89,7 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
     },
-    calendarContainer: {
-        flex: 1,
+    listContainer: {
+        flexGrow: 1,
     },
 });

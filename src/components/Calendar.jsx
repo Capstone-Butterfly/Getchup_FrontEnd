@@ -1,28 +1,20 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CalendarList } from "react-native-calendars";
 import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
-import { fetchTasksByUserId } from '../services/tasks';
-import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 
-const MonthlyCalendar = ({ userId }) => {
-
-
-
+const MonthlyCalendar = () => {
     const navigation = useNavigation();
-    const { tasks, selectedDate, setSelectedDate, setTasks } = useTaskStore((state) => ({
+    const { tasks} = useTaskStore((state) => ({
         tasks: state.tasks,
-        selectedDate: state.selectedDate,
-        setSelectedDate: state.setSelectedDate,
-        setTasks: state.setTasks,
     }));
 
     const handleDateSelected = useCallback((day) => {
-        const selectedDate = new Date(day.timestamp);
-        setSelectedDate(selectedDate);
-        navigation.navigate('AgendaScreen', { selectedDate: selectedDate.toISOString() });
-    }, [navigation, setSelectedDate]);
+        const date = dayjs(day.dateString);
+        navigation.navigate('AgendaScreen', { selectedDate: date.format('YYYY-MM-DD') });
+    }, [navigation]);
 
     const markedDates = useMemo(() => {
         const marks = {};
@@ -41,7 +33,6 @@ const MonthlyCalendar = ({ userId }) => {
             <CalendarList
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
-                selected={new Date(selectedDate).toLocaleString('en-CA').split(",")[0]}
             />
         </SafeAreaView>
     );
