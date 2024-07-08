@@ -1,6 +1,6 @@
-import React, { useEffect, useCallback, useMemo } from 'react';
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CalendarList } from "react-native-calendars";
+import React, { useCallback, useMemo } from 'react';
+import { SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { CalendarList } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks';
@@ -11,7 +11,8 @@ const MonthlyCalendar = ({ userId }) => {
 
 
     const navigation = useNavigation();
-    const { tasks, selectedDate, setSelectedDate, setTasks } = useTaskStore((state) => ({
+
+    const { tasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
         tasks: state.tasks,
         selectedDate: state.selectedDate,
         setSelectedDate: state.setSelectedDate,
@@ -21,17 +22,27 @@ const MonthlyCalendar = ({ userId }) => {
     const handleDateSelected = useCallback((day) => {
         const selectedDate = new Date(day.timestamp);
         setSelectedDate(selectedDate);
-        navigation.navigate('AgendaScreen', { selectedDate: selectedDate.toISOString() });
-    }, [navigation, setSelectedDate]);
+
+        // Check if there are tasks for the selected date
+        const hasTasks = tasks.some(task => {
+            const taskDate = new Date(task.estimate_start_date);
+            return taskDate.toDateString() === selectedDate.toDateString();
+        });
+
+        if (hasTasks) {
+            navigation.navigate('AgendaScreen', { selectedDate: selectedDate.toISOString(), initial: false });
+        } else {
+            // Optionally provide feedback that no tasks are available for this date
+            alert('No tasks available for this date');
+        }
+    }, [navigation, setSelectedDate, tasks]);
 
     const markedDates = useMemo(() => {
         const marks = {};
         tasks.forEach(task => {
-            let date = "";
-            if (task.estimate_start_date) {
-                date = task.estimate_start_date.split('T')[0];
-                marks[date] = { marked: true };
-            }
+            const taskDate = new Date(task.estimate_start_date);
+            const dateKey = taskDate.toISOString().split('T')[0];
+            marks[dateKey] = { marked: true };
         });
         return marks;
     }, [tasks]);
@@ -41,7 +52,7 @@ const MonthlyCalendar = ({ userId }) => {
             <CalendarList
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
-                selected={new Date(selectedDate).toLocaleString('en-CA').split(",")[0]}
+                selected={new Date(selectedDate).toLocaleString('en-CA').split(',')[0]}
             />
         </SafeAreaView>
     );

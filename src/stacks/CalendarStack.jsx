@@ -2,15 +2,19 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CalendarScreen from '../screens/calendar/CalendarScreen';
 import AgendaScreen from '../screens/calendar/AgendaScreen';
+import TaskDetailScreen from '../screens/task-detail/taskDetailScreen';
+import FocusModeScreen from '../screens/focus-mode/FocusModeScreen';
 
-const Stack = createNativeStackNavigator();
+const CStack = createNativeStackNavigator();
 
 const CalendarStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="CalendarScreen" component={CalendarScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="AgendaScreen" component={AgendaScreen} />
-    </Stack.Navigator>
+    <CStack.Navigator>
+      <CStack.Screen name="CalendarScreen" component={CalendarScreen} options={{ headerShown: false }} />
+      <CStack.Screen name="AgendaScreen" component={AgendaScreen} options={{ headerTitle: '' }}/>
+      <CStack.Screen name="TaskDetailScreen" component={TaskDetailScreen} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+      <CStack.Screen name="FocusModeScreen" component={FocusModeScreen} options={({ route }) => ({ headerTitle: route.params.task.title })} />
+    </CStack.Navigator>
   );
 }
 
