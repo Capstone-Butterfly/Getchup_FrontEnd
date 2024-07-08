@@ -27,8 +27,17 @@
       "expo-font"
     ],
     "packagerOpts": {
-      "sourceExts": ["js", "jsx", "svgx"],
+      "sourceExts": [
+        "js",
+        "jsx",
+        "svgx"
+      ],
       "transformer": "node_modules/react-native-svg-transformer/index.js"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "e23fa3aa-b866-4f4c-af5a-4f94791d1a90"
+      }
     }
   }
 }

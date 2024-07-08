@@ -68,7 +68,7 @@ async function cancelNotification(identifier) {
 const fetchNotificationsByUserId = async (userId) => {
     console.log("fetching notifications...");
     const { data } = await axios.get(`${base_url}/notifications/user/${userId}`);
-    console.log(data)
+    // console.log(data)
     return data;
 };
 
@@ -183,9 +183,10 @@ const formatDateToString = (date) => {
     }
 };
 
-
-
-export { formatDateToString }
+const markNotificationAsRead = async (notificationId) => {
+    const { data } = await axios.patch( `${base_url}/notifications/${notificationId}`);
+    return data;
+  };
 
 const convertToSeconds = (timestamp) => {
     const targetDate = new Date(timestamp);
@@ -202,5 +203,7 @@ export {
     saveNotification,
     getUnreadNotificationsFromTray,
     formatNotificationDate,
-    fetchNotificationsByUserId
+    fetchNotificationsByUserId,
+    formatDateToString,
+    markNotificationAsRead,
 };

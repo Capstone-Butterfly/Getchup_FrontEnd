@@ -5,6 +5,9 @@ import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 import { defaultStyles } from '../styles/styles'
 import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, Icon, VStack } from '@gluestack-ui/themed';
 import { Svg, SvgUri } from 'react-native-svg';
+import CheckboxEmpty from '../../assets/icons/checkbox-empty.svg'
+import CheckboxChecked from '../../assets/icons/checkbox-checked.svg'
+import { config } from '../styles/themeConfig';
 
 const noTask = require('../../assets/icons/no-task.svg')
 
@@ -42,11 +45,21 @@ const TaskCard = ({ task, navigation }) => {
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <HStack style={styles.task}>
-                <VStack style={styles.taskInfo}>
-                    <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
-                    <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
-                </VStack>
-                <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
+                {task.main_status === "complete" ? (
+                    <>
+                    <CheckboxChecked style={styles.checkbox} />
+                    <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>{task.title}</Text>
+                    </>
+                ) : (
+                    <>
+                    <CheckboxEmpty style={styles.checkbox} />
+                    <VStack style={styles.taskInfo}>
+                        <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
+                        <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
+                    </VStack>
+                    <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
+                    </>
+                )}
             </HStack>
         </TouchableOpacity>
     );
@@ -76,6 +89,9 @@ const styles = StyleSheet.create({
     icon: {
         width: 24,
         height: 24,
+    },
+    strikethrough: {
+        color: config.tokens.colors.neutral
     },
     subtask: {
         width: '100%',
