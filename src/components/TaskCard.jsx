@@ -1,25 +1,18 @@
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import ConvertTimeStamp from '../utils/ConvertTimeStamp';
-import { defaultStyles } from '../styles/styles'
-import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, Icon, VStack } from '@gluestack-ui/themed';
-import { Svg, SvgUri } from 'react-native-svg';
-import CheckboxEmpty from '../../assets/icons/checkbox-empty.svg'
-import CheckboxChecked from '../../assets/icons/checkbox-checked.svg'
-import { config } from '../styles/themeConfig';
+import { defaultStyles } from '../styles/styles';
+import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, VStack } from '@gluestack-ui/themed';
 
-const noTask = require('../../assets/icons/no-task.svg')
-
-const TaskCard = ({ task, navigation }) => {
-    const formatEstimateStartTime = (time) => {
+const TaskCard = ({ task, navigation, showStartTime = true, showEndTime }) => {
+    const formatEstimateTime = (time) => {
         if (time === 0 || time === null) {
             return '';
         }
         return ConvertTimeStamp.convertMillisecondsToTimeString(time);
     };
 
-    let urgency = task.task_urgency
+    let urgency = task.task_urgency;
 
     const getCardStyle = (urgency) => {
         let borderColor;
@@ -36,7 +29,7 @@ const TaskCard = ({ task, navigation }) => {
             default:
                 borderColor = 'transparent';
         }
-        return [styles.card, { borderLeftWidth: 7, borderLeftColor: borderColor, elevation: 0 }];
+        return [styles.card, { borderLeftWidth: 7, borderLeftColor: borderColor }];
     };
 
     return (
@@ -45,21 +38,32 @@ const TaskCard = ({ task, navigation }) => {
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <HStack style={styles.task}>
-                {task.main_status === "complete" ? (
-                    <>
-                    <CheckboxChecked style={styles.checkbox} />
-                    <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>{task.title}</Text>
-                    </>
-                ) : (
-                    <>
-                    <CheckboxEmpty style={styles.checkbox} />
-                    <VStack style={styles.taskInfo}>
+                <Checkbox style={styles.checkbox} accessibilityLabel="Select this option">
+                    <CheckboxIndicator>
+                        <CheckboxIcon as={CheckIcon} />
+                    </CheckboxIndicator>
+                </Checkbox> 
+                
+                <VStack style={styles.taskInfo}>
                         <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
-                        <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
-                    </VStack>
-                    <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>{formatEstimateStartTime(task.estimate_start_time)}</Text>
-                    </>
-                )}
+                        {/* <Text>{new Date(task.estimate_start_date).toLocaleString('en-CA').split(',')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
+                        {/* <Text>{task.estimate_start_date.split('T')[0]} {ConvertTimeStamp.convertMillisecondsToTimeString(task.estimate_start_time)}</Text> */}
+                        {/* <Text>{task.estimate_start_date.split('T')[0]} {formatEstimateStartTime(task.estimate_start_time)}</Text> */}
+                    <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
+                        {/* <Text>Total Subtasks: {task.subtask.length}</Text> */}
+                </VStack>
+                <VStack style={styles.taskTimeContainer}>
+                    {showStartTime && (
+                        <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>
+                            {formatEstimateTime(task.estimate_start_time)}
+                        </Text>
+                    )}
+                    {showEndTime && (
+                        <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>
+                             {formatEstimateTime(task.estimate_end_time)}
+                        </Text>
+                    )}
+                </VStack>
             </HStack>
         </TouchableOpacity>
     );
@@ -105,6 +109,12 @@ const styles = StyleSheet.create({
     taskInfo: {
         flexShrink: 1,
         flexGrow: 1,
+    },
+    taskTimeContainer: {
+        flexShrink: 0,
+        alignItems: 'flex-end',
+       
+            justifyContent: 'center', 
     },
     taskTime: {
         flexShrink: 0,
