@@ -1,15 +1,15 @@
 import React, { useState, useCallback } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
 import {
-    Box, Button, ButtonText, Card, Center, CloseIcon, FlatList, 
-    HStack, Heading, Icon, Text, Modal, 
+    Box, Button, ButtonText, Card, Center, CloseIcon, FlatList,
+    HStack, Heading, Icon, Text, Modal,
     ModalCloseButton, ModalContent, VStack,
     View,
     ButtonIcon,
     CloseCircleIcon,
 } from "@gluestack-ui/themed";
 import { useEffect } from 'react';
-import { useFocusEffect } from '@react-navigation/native'; 
+import { useFocusEffect } from '@react-navigation/native';
 import useCreateTaskStore from '../../store/createTaskStore';
 import useTaskStore from '../../store/taskStore';
 import useAddTaskDateModelStore from '../../store/addTaskDateModelStore';
@@ -30,6 +30,9 @@ import DateFormatter from '../../utils/DateFormatter';
 import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
 import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
 import useNotificationStore from '../../store/notificationStore';
+import AI4 from '../../../assets/icons/ai4.svg'
+import AI6 from '../../../assets/icons/ai6.svg'
+import { defaultStyles } from '../../styles/styles';
 
 const { width, height } = Dimensions.get('window');
 
@@ -43,7 +46,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [warningMessage, setWarningMessage] = useState('');
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
 
-    const {first_name, userId, profile_movement_reminder, profile_task_reminder} = profileStore((state) => ({
+    const { first_name, userId, profile_movement_reminder, profile_task_reminder } = profileStore((state) => ({
         first_name: state.first_name,
         userId: state.userId,
         profile_movement_reminder: state.movement_reminder,
@@ -55,44 +58,44 @@ const AddTaskScreen = ({ navigation }) => {
         setSelectedDate: state.setSelectedDate,
     }));
 
-    const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore, 
-        start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder, 
+    const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore,
+        start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder,
         setMovementReminder, task_reminder, setTaskReminder } = useCreateTaskStore((state) => ({
-        subTasks: state.subTasks,
-        title: state.title,
-        setTitle: state.setTitle,
-        addSubtask: state.addSubtask,
-        removeSubtask: state.removeSubtask,
-        notes: state.notes,
-        task_urgency: state.task_urgency,
-        clearCreateTaskStore: state.clearCreateTaskStore,
-        start_date: state.start_date,
-        end_date: state.end_date,
-        start_time: state.start_time,
-        end_time: state.end_time,
-        user_estimate_duration: state.user_estimate_duration,
-        task_reminder: state.task_reminder,
-        setTaskReminder: state.setTaskReminder,
-        movement_reminder: state.movement_reminder,
-        setMovementReminder: state.setMovementReminder,
-    }));
+            subTasks: state.subTasks,
+            title: state.title,
+            setTitle: state.setTitle,
+            addSubtask: state.addSubtask,
+            removeSubtask: state.removeSubtask,
+            notes: state.notes,
+            task_urgency: state.task_urgency,
+            clearCreateTaskStore: state.clearCreateTaskStore,
+            start_date: state.start_date,
+            end_date: state.end_date,
+            start_time: state.start_time,
+            end_time: state.end_time,
+            user_estimate_duration: state.user_estimate_duration,
+            task_reminder: state.task_reminder,
+            setTaskReminder: state.setTaskReminder,
+            movement_reminder: state.movement_reminder,
+            setMovementReminder: state.setMovementReminder,
+        }));
 
     useFocusEffect(
         useCallback(() => {
-          setMovementReminder(profile_movement_reminder);
-          setTaskReminder(profile_task_reminder);
+            setMovementReminder(profile_movement_reminder);
+            setTaskReminder(profile_task_reminder);
         }, [profile_movement_reminder, profile_task_reminder])
-      );
+    );
     // useEffect(() => {
     //     setMovementReminder(profile_movement_reminder);
     //     setTaskReminder(profile_task_reminder);
     //   }, [profile_movement_reminder, setMovementReminder, profile_task_reminder, setTaskReminder]);
-    
-    
-    const { clearAddTaskDateModelStore} =
+
+
+    const { clearAddTaskDateModelStore } =
         useAddTaskDateModelStore((state) => ({
-        clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
-    }));
+            clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
+        }));
 
     const { fetchNotificationsByUserId, setUserNotifications } = useNotificationStore()
 
@@ -104,7 +107,7 @@ const AddTaskScreen = ({ navigation }) => {
 
     const handleOpenPriorityModal = () => setModalPriorityVisible(true);
     const handleClosePriorityModal = () => setModalPriorityVisible(false);
-    
+
     const handleOpenDateTimeModal = () => setModalDateTimeVisible(true);
     const handleCloseDateTimeModal = () => {
         const startDate = new Date(start_date);
@@ -117,7 +120,7 @@ const AddTaskScreen = ({ navigation }) => {
         const startTimeDate = new Date();
         const endTimeDate = new Date();
         const [startHour, startMinute] = start_time.split(":").map(Number);
-        const [endHour, endMinute] =end_time.split(":").map(Number);
+        const [endHour, endMinute] = end_time.split(":").map(Number);
         startTimeDate.setHours(startHour, startMinute);
         endTimeDate.setHours(endHour, endMinute);
         if (endTimeDate < startTimeDate) {
@@ -201,7 +204,7 @@ const AddTaskScreen = ({ navigation }) => {
                 user_id: userId,
                 title,
                 notes,
-                task_urgency: adjustedTaskUrgency ,
+                task_urgency: adjustedTaskUrgency,
                 subtask: subTasks,
                 is_repeated: false,
                 estimate_start_date: start_date,
@@ -225,8 +228,8 @@ const AddTaskScreen = ({ navigation }) => {
 
     const handleCancel = () => {
         clearCreateTaskStore();
-        clearAddTaskDateModelStore(); 
-        navigation.navigate('HomeScreen'); 
+        clearAddTaskDateModelStore();
+        navigation.navigate('HomeScreen');
     };
 
     const handleDeleteSubtask = (index) => {
@@ -250,14 +253,14 @@ const AddTaskScreen = ({ navigation }) => {
                 </Pressable>
                 <Pressable onPress={handleOpenNoteModal} p="$5" style={styles.bottomLine}>
                     <View style={styles.detailItem}>
-                    <Image source={require('../../../assets/notes.png')} style={styles.icon} alt='add notes' />
-                        <Text color="black" fontWeight={"$bold"}>{notes? notes : "Notes"}</Text>
+                        <Image source={require('../../../assets/notes.png')} style={styles.icon} alt='add notes' />
+                        <Text color="black" fontWeight={"$bold"}>{notes ? notes : "Notes"}</Text>
                     </View>
                 </Pressable>
                 <Pressable onPress={handleOpenPriorityModal} p="$5">
                     <View style={styles.detailItem}>
-                        <Image source={require('../../../assets/Tasks.png')} style={styles.icon} alt='add priority'/>
-                        <Text color="black" fontWeight={"$bold"}>{task_urgency? task_urgency : "Task priority"}</Text>
+                        <Image source={require('../../../assets/Tasks.png')} style={styles.icon} alt='add priority' />
+                        <Text color="black" fontWeight={"$bold"}>{task_urgency ? task_urgency : "Task priority"}</Text>
                     </View>
                 </Pressable>
             </Card>
@@ -267,9 +270,9 @@ const AddTaskScreen = ({ navigation }) => {
             <Card style={styles.cardBody}>
                 <Pressable onPress={() => console.log('Title')} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
-                        <Image source={require('../../../assets/plus-circle.png')} style={styles.icon} alt='add subtasks'/>
+                        <Image source={require('../../../assets/plus-circle.png')} style={styles.icon} alt='add subtasks' />
                         <Text color="black" fontWeight={"$bold"}>Add subtask</Text>
-                    </View>                    
+                    </View>
                 </Pressable>
                 <FlatList
                     data={subTasks}
@@ -282,7 +285,7 @@ const AddTaskScreen = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity>
                             <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' >
-                                <ButtonIcon color="$black" as={CloseCircleIcon}/>
+                                <ButtonIcon color="$black" as={CloseCircleIcon} />
                             </Button>
                         </Box>
                     )}
@@ -291,8 +294,9 @@ const AddTaskScreen = ({ navigation }) => {
                     contentContainerStyle={styles.listContent}
                 />
                 <Text style={styles.txtCenter}>OR</Text>
-                <Button size="md" variant="solid" action="primary" isDisabled={false} isFocusVisible={false} onPress={getAISubTasksResult}>
-                    <ButtonText verticalAlign="middle">Add Subtask by AI</ButtonText>
+                <Button size="md" action="primary" isDisabled={false} isFocusVisible={false} onPress={getAISubTasksResult} style={[defaultStyles.ButtonDefault, styles.button]}>
+                    <ButtonIcon as={AI4} style={styles.buttonIcon}/>
+                    <ButtonText style={defaultStyles.TypographyBodyHeavy}>Add Subtask by AI</ButtonText>
                 </Button>
             </Card>
         </>
@@ -316,7 +320,7 @@ const AddTaskScreen = ({ navigation }) => {
                         <ButtonText verticalAlign="middle">Save</ButtonText>
                     </Button>
                 </Box>
-            </HStack> 
+            </HStack>
             {warningMessage ? (
                 <Box style={styles.warningBox}>
                     <Text style={styles.warningText}>{warningMessage}</Text>
@@ -324,7 +328,7 @@ const AddTaskScreen = ({ navigation }) => {
             ) : null}
             {/* {renderContent()} */}
             <FlatList
-                data={[{ key: 'content' }]} 
+                data={[{ key: 'content' }]}
                 renderItem={renderContent}
                 keyExtractor={(item) => item.key}
                 contentContainerStyle={styles.container}
@@ -336,7 +340,7 @@ const AddTaskScreen = ({ navigation }) => {
                         <Icon as={CloseIcon} />
                     </ModalCloseButton>
                     <VStack space={4} style={styles.modalBody}>
-                        <TitleModalScreen/>
+                        <TitleModalScreen />
                     </VStack>
                 </ModalContent>
             </Modal>
@@ -349,10 +353,10 @@ const AddTaskScreen = ({ navigation }) => {
                     <VStack space={4} style={styles.modalBody}>
                         {dateTimeWarningMessage ? (
                             <Box style={styles.warningBox}>
-                            <Text style={styles.warningText}>{dateTimeWarningMessage}</Text>
+                                <Text style={styles.warningText}>{dateTimeWarningMessage}</Text>
                             </Box>
                         ) : null}
-                        <DateTimeModelScreen/>
+                        <DateTimeModelScreen />
                     </VStack>
                 </ModalContent>
             </Modal>
@@ -389,14 +393,25 @@ const AddTaskScreen = ({ navigation }) => {
                     </VStack>
                 </ModalContent>
             </Modal>
-            
+
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    button: {
+        backgroundColor: "#006655",
+        borderRadius: 10,
+        height: 48,
+        width: "100%",
+    },
+    buttonIcon: {
+        height: 24,
+        marginRight: 10,
+        width: 24,
+    },
     headerContainer: {
-        paddingTop:20
+        paddingTop: 20
     },
     container: {
         //flex: 1,
@@ -408,7 +423,7 @@ const styles = StyleSheet.create({
         height: '90%',
         margin: 0,
         padding: 0,
-        borderRadius:20,
+        borderRadius: 20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -418,7 +433,7 @@ const styles = StyleSheet.create({
         height: '25%',
         margin: 0,
         padding: 0,
-        borderRadius:20,
+        borderRadius: 20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -428,7 +443,7 @@ const styles = StyleSheet.create({
         height: '55%',
         margin: 0,
         padding: 0,
-        borderRadius:20,
+        borderRadius: 20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -441,7 +456,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:50,
+        paddingTop: 50,
     },
     listContent: {
         paddingBottom: 20,
@@ -455,16 +470,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginBottom: 10,
         paddingHorizontal: 10,
-        paddingVertical:20,
+        paddingVertical: 20,
         justifyContent: 'space-between'
     },
     txtCenter: {
         textAlign: 'center',
-        marginBottom:20,
+        marginBottom: 20,
     },
-    cardBody:{
-        borderRadius:20,
-        marginBottom:20,
+    cardBody: {
+        borderRadius: 20,
+        marginBottom: 20,
     },
     bottomLine: {
         borderBottomWidth: 1,
