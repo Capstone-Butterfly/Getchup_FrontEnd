@@ -66,22 +66,23 @@ async function cancelNotification(identifier) {
 }
 
 const fetchNotificationsByUserId = async (userId) => {
-    console.log("fetch notifications from axios!!!");
+    console.log("fetching notifications...");
     const { data } = await axios.get(`${base_url}/notifications/user/${userId}`);
+    // console.log(data)
     return data;
 };
 
 const saveNotification = async (newNotification) => {
     try {
-      const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
-      return data;
+        const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
+        return data;
     } catch (error) {
-      console.error("Error adding notification:", error);
-      throw error;
+        console.error("Error adding notification:", error);
+        throw error;
     }
-  };
+};
 
-async function getUnreadNotifications() { //fetches from the notification tray
+async function getUnreadNotificationsFromTray() { //fetches from the notification tray
     try {
         const notifications = await Notifications.getPresentedNotificationsAsync();
         console.log('Presented Notifications:', notifications);
@@ -145,6 +146,48 @@ const formatNotificationDate = (timestamp) => {
     return `${day}/${month}/${year}`;
 };
 
+const formatDateToString = (date) => {
+    const today = new Date();
+    const dateToCompare = new Date(date);
+
+    if (isNaN(dateToCompare)) {
+        return 'Invalid date';
+    }
+
+    const diffInMilliseconds = today - dateToCompare;
+    const diffInMinutes = Math.floor(diffInMilliseconds / 1000 / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+
+    if (diffInMinutes < 60) {
+        return `${diffInMinutes} minutes ago`;
+    } else if (diffInHours < 24) {
+        return `${diffInHours} hours ago`;
+    } else if (diffInDays >= 1) {
+        return `${diffInDays} days ago`;
+    } else if (today.getDate() === dateToCompare.getDate() &&
+        today.getMonth() === dateToCompare.getMonth() &&
+        today.getFullYear() === dateToCompare.getFullYear()) {
+        return 'Today';
+    } else if (today.getFullYear() === dateToCompare.getFullYear()) {
+        return dateToCompare.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'short'
+        });
+    } else {
+        return dateToCompare.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+    }
+};
+
+const markNotificationAsRead = async (notificationId) => {
+    const { data } = await axios.patch( `${base_url}/notifications/${notificationId}`);
+    return data;
+  };
+
 const convertToSeconds = (timestamp) => {
     const targetDate = new Date(timestamp);
     const now = new Date();
@@ -153,4 +196,14 @@ const convertToSeconds = (timestamp) => {
     return differenceInSeconds;
 }
 
-export { registerForPushNotificationsAsync, scheduleNotification, cancelNotification, saveNotification, getUnreadNotifications, formatNotificationDate, fetchNotificationsByUserId };
+export {
+    registerForPushNotificationsAsync,
+    scheduleNotification,
+    cancelNotification,
+    saveNotification,
+    getUnreadNotificationsFromTray,
+    formatNotificationDate,
+    fetchNotificationsByUserId,
+    formatDateToString,
+    markNotificationAsRead,
+};

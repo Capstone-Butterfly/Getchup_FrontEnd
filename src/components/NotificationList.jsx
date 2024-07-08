@@ -1,29 +1,55 @@
-import React, {useEffect } from 'react';
-import { View, Text, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import useNotificationStore from '../store/notificationStore';
-import { Heading } from '@gluestack-ui/themed';
+import { Divider, Heading } from '@gluestack-ui/themed';
+import { fetchNotificationsByUserId, formatDateToString } from '../services/notificationService';
+import { useQuery } from '@tanstack/react-query';
+import NotificationCard from './NotificationCard';
 
-const NotificationsList = () => {
-    const { notifications, fetchNotifications } = useNotificationStore();
+const NotificationsList = ({ userId, navigation }) => {
+    const { notifications, setNotifications } = useNotificationStore((state) => ({
+        notifications: state.notifications,
+        setNotifications: state.setNotifications
+    }));
+
+    const { data: fetchedNotification, isLoading, error, refetch } = useQuery({
+        queryKey: ['notifications', userId],
+        queryFn: () => fetchNotificationsByUserId(userId),
+        refetchOnMount: true,
+        refetchOnReconnect: true,
+    });
 
     useEffect(() => {
-        fetchNotifications();
-    }, []);
-
-    const renderItem = ({ item }) => (
-        <View key={item.request.identifier} style={{ padding: 10, borderBottomWidth: 1, borderBottomColor: '#ccc' }}>
-            <Heading>{item.request.content.title}</Heading>
-            <Text>{item.request.content.body}</Text>
-        </View>
-    );
+        if (fetchedNotification) {
+            setNotifications(fetchedNotification);
+        }
+    }, [fetchedNotification]);
 
     return (
         <FlatList
             data={notifications}
-            keyExtractor={(item) => item.request.content.identifier}
-            renderItem={renderItem}
+            renderItem={({ item }) => (
+                <>
+                    <NotificationCard notification={item} navigation={navigation} />
+                    <Divider />
+                </>
+            )}
+            keyExtractor={(item) => item.identifier}
+            style={styles.flatlist}
+            contentContainerStyle={styles.flatlistContent}
+            nestedScrollEnabled={true}
+            scrollEnabled={false}
         />
     );
 };
 
 export default NotificationsList;
+
+const styles = StyleSheet.create({
+    flatlist: {
+        width: "100%",
+    },
+    flatlistContent: {
+        paddingHorizontal: 0, // Ensure no horizontal padding
+    },
+});
