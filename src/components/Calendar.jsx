@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback } from 'react';
-import { SafeAreaView } from "react-native-safe-area-context";
-import { CalendarList } from "react-native-calendars";
+import React, { useCallback, useMemo } from 'react';
+import { SafeAreaView, Text, TouchableOpacity } from 'react-native';
+import { CalendarList } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
 import dayjs from 'dayjs';
@@ -12,18 +12,26 @@ const MonthlyCalendar = () => {
     }));
 
     const handleDateSelected = useCallback((day) => {
-        const date = dayjs(day.dateString);
-        navigation.navigate('AgendaScreen', { selectedDate: date.format('YYYY-MM-DD') });
-    }, [navigation]);
+        const date = dayjs(day.dateString).format('YYYY-MM-DD');
+
+        const hasTasks = tasks.some(task => {
+            const taskDate = new Date(task.estimate_start_date);
+            return taskDate.toDateString() === date;
+        });
+
+        if (hasTasks) {
+            navigation.navigate('AgendaScreen', { selectedDate: date, initial: false });
+        } else {
+            alert('No tasks available for this date');
+        }
+    }, [navigation, tasks]);
 
     const markedDates = useMemo(() => {
         const marks = {};
         tasks.forEach(task => {
-            let date = "";
-            if (task.estimate_start_date) {
-                date = task.estimate_start_date.split('T')[0];
-                marks[date] = { marked: true };
-            }
+            const taskDate = new Date(task.estimate_start_date);
+            const dateKey = taskDate.toISOString().split('T')[0];
+            marks[dateKey] = { marked: true };
         });
         return marks;
     }, [tasks]);

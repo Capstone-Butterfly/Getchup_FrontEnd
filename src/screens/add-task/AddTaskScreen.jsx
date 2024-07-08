@@ -51,6 +51,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState(null);
     const [warningMessage, setWarningMessage] = useState('');
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
+    const [isAnyModalVisible, setIsAnyModalVisible] = useState(false);
 
     const {first_name, userId, profile_movement_reminder, profile_task_reminder} = profileStore((state) => ({
         first_name: state.first_name,
@@ -118,8 +119,17 @@ const AddTaskScreen = ({ navigation }) => {
 
     const getAISubTasksResult = async () => {
         try {
+            if (!title || title.trim() === '') {
+                setWarningMessage('Title is required to generate AI subtasks.');
+                return;
+            }
+            if (subTasks.length > 0) {
+                return;
+            }
+
             const newTitle = { title: title };
             await getAIMutation.mutateAsync(newTitle);
+            setWarningMessage('');
         } catch (error) {
             console.error('Error get AI subtasks:', error);
         }
@@ -196,18 +206,37 @@ const AddTaskScreen = ({ navigation }) => {
         removeSubtask(index);
     };
 
-    const handleOpenTitleModal = () => setModalTitleVisible(true);
+    const handleOpenTitleModal = () => {
+        setModalTitleVisible(true);
+        setIsAnyModalVisible(true);
+    }
     const handleCloseTitleModal = () => { 
         if (title && title.length > 0){
             setWarningMessage('');
         }
         setModalTitleVisible(false);
+        setIsAnyModalVisible(false);
     }
-    const handleOpenNoteModal = () => setModalNoteVisible(true);
-    const handleCloseNoteModal = () => setModalNoteVisible(false);
-    const handleOpenPriorityModal = () => setModalPriorityVisible(true);
-    const handleClosePriorityModal = () => setModalPriorityVisible(false);
-    const handleOpenDateTimeModal = () => setModalDateTimeVisible(true);
+    const handleOpenNoteModal = () => {
+        setModalNoteVisible(true);
+        setIsAnyModalVisible(true);
+    }
+    const handleCloseNoteModal = () => { 
+        setModalNoteVisible(false);
+        setIsAnyModalVisible(false);
+    }
+    const handleOpenPriorityModal = () => {
+        setModalPriorityVisible(true);
+        setIsAnyModalVisible(true);
+    }
+    const handleClosePriorityModal = () => {
+        setModalPriorityVisible(false);
+        setIsAnyModalVisible(false);
+    }
+    const handleOpenDateTimeModal = () => {
+        setModalDateTimeVisible(true);
+        setIsAnyModalVisible(true);
+    }
     const handleCloseDateTimeModal = () => {
         if (start_date && start_date.length > 0){
             setWarningMessage('');
@@ -231,17 +260,20 @@ const AddTaskScreen = ({ navigation }) => {
         }
 
         setModalDateTimeVisible(false);
+        setIsAnyModalVisible(false);
         setDateTimeWarningMessage('');
     }
 
     const handleOpenSubTaskModal = (index) => {
         setSelectedSubTaskIndex(index);
         setModalSubTaskVisible(true);
+        setIsAnyModalVisible(true);
     };
 
     const handleCloseSubTaskModal = () => {
         setSelectedSubTaskIndex(null);
         setModalSubTaskVisible(false);
+        setIsAnyModalVisible(false);
     };
 
 
@@ -287,11 +319,13 @@ const AddTaskScreen = ({ navigation }) => {
                     data={subTasks}
                     renderItem={({ item, index }) => (
                         <Box key={index} style={styles.subTaskContainer}>
-                            <TouchableOpacity key={index} onPress={() => handleOpenSubTaskModal(index)}>
+                           
                                 <HStack style={styles.detailSubTask} space={4} alignItems="center">
-                                <Box width="70%">
-                                    <Text style={[defaultStyles.TypographyBody]}>{item.sub_title}</Text>
-                                </Box>
+                                    <Box width="70%">
+                                        <TouchableOpacity key={index} onPress={() => handleOpenSubTaskModal(index)}>
+                                            <Text style={[defaultStyles.TypographyBody]}>{item.sub_title}</Text>
+                                        </TouchableOpacity>
+                                    </Box>
                                 <Box width="25%" style={[defaultStyles.TypographyBodySmall, styles.leftItem]}>
                                     <Text style={{ color: 'gray', textAlign: 'right', textAlignVertical: 'top' }}>
                                         {item.time.replace('minutes', 'min.').replace('minute', 'min.')}
@@ -303,7 +337,7 @@ const AddTaskScreen = ({ navigation }) => {
                                     </Button>
                                 </Box>   
                                 </HStack>
-                            </TouchableOpacity>
+                            
                         </Box>
                     )}
                     keyExtractor={(item) => item.sub_title}
@@ -332,7 +366,7 @@ const AddTaskScreen = ({ navigation }) => {
                 <Text style={[defaultStyles.TypographyBodySmall, styles.txtCenter]}>OR</Text>
                 <Button style={styles.submitButton} onPress={getAISubTasksResult}>
                     <Ai4Icon style={styles.icon} fill={config.tokens.colors.white}/>
-                    <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Add Subtask by AI</ButtonText>
+                    <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]} disabled={subTasks.length > 0}>Add Subtask by AI</ButtonText>
                 </Button>
             </Card>
         </>
@@ -342,6 +376,7 @@ const AddTaskScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>  
                 <AddTaskHeader handleCancel={handleCancel} handleSaveTask={handleSaveTask} />
+                {isAnyModalVisible && <View style={styles.dimmingOverlay} />}
                 <Box style={styles.overlay}> 
                     <Box style={styles.content}>
                         {warningMessage ? (
@@ -376,11 +411,11 @@ const AddTaskScreen = ({ navigation }) => {
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
                         <VStack space={4} style={styles.modalBody}>
-                            {/* {dateTimeWarningMessage ? (
+                            {dateTimeWarningMessage ? (
                                 <Box style={styles.warningBox}>
                                 <Text style={styles.warningText}>{dateTimeWarningMessage}</Text>
                                 </Box>
-                            ) : null} */}
+                            ) : null}
                             <DateTimeModelScreen/>
                         </VStack>
                     </ModalContent>
@@ -559,6 +594,15 @@ const styles = StyleSheet.create({
     rightItem: {
         alignItems: 'flex-end',
         
+    },
+    dimmingOverlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        zIndex: 1, // Ensure the overlay is above other components
     },
 });
 

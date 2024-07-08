@@ -49,7 +49,7 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const data = [
-        { key: 'header', component: <Header /> },
+        { key: 'header', component: <Header userId={userId}/> },
         { key: 'greeting', component: <Greeting name={first_name} /> },
         { key: 'calendar', component: <WeeklyCalendar userId={userId} navigation={navigation} /> },
     ];
@@ -66,18 +66,6 @@ const HomeScreen = ({ navigation }) => {
             </ImageBackground>
         </SafeAreaView>
     );
-
-    // return (
-    //     <SafeAreaView style={styles.container}>
-    //         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-    //             <Header />
-    //             <Greeting name={first_name} />
-    //             <View style={styles.calendarContainer}>
-    //                 <WeeklyCalendar userId={userId} navigation={navigation} />
-    //             </View>
-    //         </ImageBackground>
-    //     </SafeAreaView>
-    // );
 };
 
 export default HomeScreen;

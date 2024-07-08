@@ -3,33 +3,29 @@ import { create } from 'zustand';
 import { getUnreadNotifications } from '../services/notificationService';
 
 const useNotificationStore = create(set => ({
-  expoPushToken: '',
-  setExpoPushToken: (token) => set({ expoPushToken: token }),
-  channels: [],
-  setChannels: (channels) => set({ channels }),
-  notification: undefined,
-  setNotification: (notification) => set({ notification }),
 
-  //unread notifications from the notification tray:
-  notifications: [],
-  setNotifications: (notifications) => set({ notifications }),
-  fetchNotifications: async () => {
-    const notifications = await getUnreadNotifications();
-    set({ notifications });
-  },
+	//push notifications:
+	expoPushToken: '',
+	setExpoPushToken: (token) => set({ expoPushToken: token }),
+	channels: [],
+	setChannels: (channels) => set({ channels }),
+	notification: undefined,
+	setNotification: (notification) => set({ notification }),
 
-  // Fetch notifications by user ID
-  userNotifications: [],
-  setUserNotifications: (notifications) => set({ userNotifications: notifications }),
-  fetchNotificationsByUserId: async (userId) => {
-    const notifications = await fetchNotificationsByUserId(userId);
-    set({ userNotifications: notifications });
-  },
+	//define notifications array and setter
+	notifications: [],
+	setNotifications: (notifications) => set({ notifications }),
 
-  //notification popover in the header:
-  isOpen: false,
-  openPopover: () => set({ isOpen: true }),
-  closePopover: () => set({ isOpen: false }),
+	//unread notifications from the notification tray:
+	fetchNotificationsFromTray: async () => {
+		const notifications = await getUnreadNotificationsFromTray();
+		set({ notifications });
+	},
+
+	//notification popover in the header:
+	isOpen: false,
+	openPopover: () => set({ isOpen: true }),
+	closePopover: () => set({ isOpen: false }),
 }));
 
 export default useNotificationStore;

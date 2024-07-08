@@ -8,7 +8,7 @@ const CalendarScreen = ({ navigation }) => {
     return (
         <SafeAreaView>
             <Header />
-            <MonthlyCalendar />
+            <MonthlyCalendar navigation={navigation}/>
         </SafeAreaView>
     );
 };

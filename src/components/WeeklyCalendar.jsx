@@ -10,6 +10,7 @@ import { defaultStyles } from '../styles/styles';
 import { formatDateToString } from '../services/weeklyCalendar';
 import NoTasksCard from './NoTasksCard';
 import TasksCompletedCard from './TasksCompletedCard';
+import useNotificationStore from '../store/notificationStore';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
     const { tasks, setTasks, selectedDate, setSelectedDate, addDataTask, updateDataTask } = useTaskStore((state) => ({
