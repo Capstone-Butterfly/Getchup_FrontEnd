@@ -23,7 +23,6 @@ const MonthlyCalendar = ({ userId }) => {
         const selectedDate = new Date(day.timestamp);
         setSelectedDate(selectedDate);
 
-        // Check if there are tasks for the selected date
         const hasTasks = tasks.some(task => {
             const taskDate = new Date(task.estimate_start_date);
             return taskDate.toDateString() === selectedDate.toDateString();
@@ -32,7 +31,6 @@ const MonthlyCalendar = ({ userId }) => {
         if (hasTasks) {
             navigation.navigate('AgendaScreen', { selectedDate: selectedDate.toISOString(), initial: false });
         } else {
-            // Optionally provide feedback that no tasks are available for this date
             alert('No tasks available for this date');
         }
     }, [navigation, setSelectedDate, tasks]);
