@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
-import useTaskStore from '../store/taskStore'; 
-import TaskCard from './TaskCard'; 
-import { Divider } from '@gluestack-ui/themed';
+import useTaskStore from '../store/taskStore';
+import TaskCard from './TaskCard';
+import { defaultStyles } from '../styles/styles';
+import { Divider, ImageBackground, SafeAreaView } from '@gluestack-ui/themed';
+
+const image = require('../../assets/background/background.png');
 
 const AgendaDetails = ({ selectedDate, navigation }) => {
   const [loadedDates, setLoadedDates] = useState([selectedDate]);
@@ -14,6 +17,11 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
     const options = { month: 'short', day: 'numeric' };
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
     return isToday ? `Today, ${formattedDate}` : formattedDate;
+  };
+
+  const formatGroupDate = (date) => {
+    const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
+    return new Intl.DateTimeFormat('en-US', options).format(date);
   };
 
   const loadMoreDates = () => {
@@ -52,7 +60,7 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
       }
     } catch (error) {
       console.error('Error parsing task start date:', error.message);
-      return false; 
+      return false;
     }
 
     return loadedDates.some(date => isSameDate(taskStartDate, date));
@@ -65,38 +73,45 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
   }, [tasksForLoadedDates]);
 
   const groupedTasks = groupTasksByDate(tasksForLoadedDates);
+  const sortedDates = Object.keys(groupedTasks).sort((a, b) => new Date(a) - new Date(b));
 
   return (
-    <View>
-      <Text style={styles.todayDate}>{formatDate(today, true)}</Text>
-      {Object.keys(groupedTasks).length > 0 ? (
-        <FlatList
-          data={Object.keys(groupedTasks)}
-          renderItem={({ item: dateKey }) => (
-            <View style={styles.container}>
-              <Text style={styles.date}>{formatDate(new Date(dateKey))}</Text>
-              {groupedTasks[dateKey].map(task => (
-                <React.Fragment key={task._id}>
-                  <TaskCard
-                    key={task._id}
-                    task={task}
-                    navigation={navigation}
-                  />
-                  <Divider style={styles.divider} />
-                </React.Fragment>
-              ))}
-            </View>
+    <SafeAreaView>
+      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+        <View style={styles.mainContainer}>
+          <Text style={[defaultStyles.TypographyBodyHeavy, styles.todayDate]}>{formatDate(today, true)}</Text>
+          {sortedDates.length > 0 ? (
+            <FlatList
+              data={sortedDates}
+              renderItem={({ item: dateKey }) => (
+                <View style={styles.container}>
+                  <Text style={styles.date}>{formatGroupDate(new Date(dateKey))}</Text>
+                  {groupedTasks[dateKey].map(task => (
+                    <React.Fragment key={task._id}>
+                      <TaskCard
+                          key={task._id}
+                          task={task}
+                          navigation={navigation}
+                          showStartTime={true}
+                          showEndTime={true}
+                      />
+                      <Divider style={styles.divider} />
+                    </React.Fragment>
+                  ))}
+                </View>
+              )}
+              keyExtractor={(item) => item}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
+              onEndReached={loadMoreDates}
+              onEndReachedThreshold={0.5}
+              ListFooterComponent={loading && <ActivityIndicator size="large" color="#0000ff" />}
+            />
+          ) : (
+            <Text>Loading tasks...</Text>
           )}
-          keyExtractor={(item) => item}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-          onEndReached={loadMoreDates}
-          onEndReachedThreshold={0.5}
-          ListFooterComponent={loading && <ActivityIndicator size="large" color="#0000ff" />}
-        />
-      ) : (
-        <Text>Loading tasks...</Text>
-      )}
-    </View>
+        </View>
+      </ImageBackground>
+    </SafeAreaView>
   );
 };
 
@@ -107,6 +122,10 @@ const isSameDate = (date1, date2) => (
 );
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 20
+  },
   todayDate: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -117,7 +136,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 11,
     paddingVertical: 5,
     marginVertical: 12,
-    borderRadius: 8,
+    borderRadius: 20,
     elevation: 3,
     width: '100%',
     padding: 20,
@@ -126,6 +145,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     marginBottom: 10,
+    paddingTop: 10
   },
   divider: {
     backgroundColor: '#e6e6e6',

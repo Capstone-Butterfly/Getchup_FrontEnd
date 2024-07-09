@@ -7,7 +7,7 @@ import CheckboxEmpty from '../../assets/icons/checkbox-empty.svg'
 import CheckboxChecked from '../../assets/icons/checkbox-checked.svg'
 import { config } from '../styles/themeConfig';
 
-const TaskCard = ({ task, navigation, showStartTime = true, showEndTime }) => {
+const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false }) => {
     const formatEstimateTime = (time) => {
         if (time === 0 || time === null) {
             return '';
@@ -41,11 +41,6 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime }) => {
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <HStack style={styles.task}>
-                {/* <Checkbox style={styles.checkbox} accessibilityLabel="Select this option">
-                    <CheckboxIndicator>
-                        <CheckboxIcon as={CheckIcon} />
-                    </CheckboxIndicator>
-                </Checkbox>  */}
                 {task.main_status === "complete" ? (
                     <>
                         <TouchableOpacity>
