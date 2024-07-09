@@ -24,7 +24,7 @@ const MonthlyCalendar = () => {
         } else {
             alert('No tasks available for this date');
         }
-    }, [navigation, tasks]);
+    }, [navigation]);
 
     const markedDates = useMemo(() => {
         const marks = {};
