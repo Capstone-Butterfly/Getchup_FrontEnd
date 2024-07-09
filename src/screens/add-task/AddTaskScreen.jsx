@@ -19,6 +19,7 @@ import { useMutation } from '@tanstack/react-query';
 import queryClient from '../../services/QueryClient';
 import TitleModalScreen from './TitleModelScreen';
 import ToggleSwitch from "../../components/ToggleSwitch";
+import ToggleSwitch2 from "../../components/ToggleSwitch2";
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
 import DateTimeModelScreen from './DateTimeModelScreen'
@@ -265,7 +266,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Pressable>
             </Card>
             <Card style={styles.cardBody}>
-                <ToggleSwitch />
+                <ToggleSwitch2 />
             </Card>
             <Card style={styles.cardBody}>
                 <Pressable onPress={() => console.log('Title')} style={styles.bottomLine}>
