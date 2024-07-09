@@ -2,8 +2,8 @@ import React, { useState, useCallback } from 'react';
 import AddTaskHeader from '../../components/AddTaskHeader';
 import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
 import {
-    Box, Button, ButtonText, Card, Center, CloseIcon, FlatList, 
-    HStack, Heading, Icon, Text, Modal, 
+    Box, Button, ButtonText, Card, Center, CloseIcon, FlatList,
+    HStack, Heading, Icon, Text, Modal,
     ModalCloseButton, ModalContent, VStack,
     View,
     ButtonIcon,
@@ -20,6 +20,7 @@ import { useMutation } from '@tanstack/react-query';
 import queryClient from '../../services/QueryClient';
 import TitleModalScreen from './TitleModelScreen';
 import ToggleSwitch from "../../components/ToggleSwitch";
+import ToggleSwitch2 from "../../components/ToggleSwitch2";
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
 import DateTimeModelScreen from './DateTimeModelScreen'
@@ -28,19 +29,21 @@ import { Pressable } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@gluestack-ui/themed';
 import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
-import { scheduleNotification } from '../../services/notificationService'
+import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
+import useNotificationStore from '../../store/notificationStore';
 import dayjs from 'dayjs';
-import { config } from '../../styles/themeConfig'; // Import the theme configuration
-import { defaultStyles } from '../../styles/styles'
-import PlusCircleIcon from '../../../assets/icons/plus-circle.svg'
-import CalendarIcon from '../../../assets/icons/calendar.svg'
-import NotesIcon from '../../../assets/icons/notes.svg'
-import TasksIcon from '../../../assets/icons/tasks.svg'
-import Ai4Icon from '../../../assets/icons/ai4.svg'
-
-
+import { defaultStyles } from '../../styles/styles';
+import PlusCircleIcon from '../../../assets/icons/plus-circle.svg';
+import CalendarIcon from '../../../assets/icons/calendar.svg';
+import NotesIcon from '../../../assets/icons/notes.svg';
+import TasksIcon from '../../../assets/icons/tasks.svg';
+import Ai4Icon from '../../../assets/icons/ai4.svg';
+import AI4 from '../../../assets/icons/ai4.svg';
+import AI6 from '../../../assets/icons/ai6.svg';
 const image = require('../../../assets/background/background.png');
+
 const { width, height } = Dimensions.get('window');
+
 
 const AddTaskScreen = ({ navigation }) => {
     const [modalTitleVisible, setModalTitleVisible] = useState(false);
@@ -53,7 +56,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
     const [isAnyModalVisible, setIsAnyModalVisible] = useState(false);
 
-    const {first_name, userId, profile_movement_reminder, profile_task_reminder} = profileStore((state) => ({
+    const { first_name, userId, profile_movement_reminder, profile_task_reminder } = profileStore((state) => ({
         first_name: state.first_name,
         userId: state.userId,
         profile_movement_reminder: state.movement_reminder,
@@ -65,27 +68,27 @@ const AddTaskScreen = ({ navigation }) => {
         setSelectedDate: state.setSelectedDate,
     }));
 
-    const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore, 
-        start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder, 
+    const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore,
+        start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder,
         setMovementReminder, task_reminder, setTaskReminder } = useCreateTaskStore((state) => ({
-        subTasks: state.subTasks,
-        title: state.title,
-        setTitle: state.setTitle,
-        addSubtask: state.addSubtask,
-        removeSubtask: state.removeSubtask,
-        notes: state.notes,
-        task_urgency: state.task_urgency,
-        clearCreateTaskStore: state.clearCreateTaskStore,
-        start_date: state.start_date,
-        end_date: state.end_date,
-        start_time: state.start_time,
-        end_time: state.end_time,
-        user_estimate_duration: state.user_estimate_duration,
-        task_reminder: state.task_reminder,
-        setTaskReminder: state.setTaskReminder,
-        movement_reminder: state.movement_reminder,
-        setMovementReminder: state.setMovementReminder,
-    }));
+            subTasks: state.subTasks,
+            title: state.title,
+            setTitle: state.setTitle,
+            addSubtask: state.addSubtask,
+            removeSubtask: state.removeSubtask,
+            notes: state.notes,
+            task_urgency: state.task_urgency,
+            clearCreateTaskStore: state.clearCreateTaskStore,
+            start_date: state.start_date,
+            end_date: state.end_date,
+            start_time: state.start_time,
+            end_time: state.end_time,
+            user_estimate_duration: state.user_estimate_duration,
+            task_reminder: state.task_reminder,
+            setTaskReminder: state.setTaskReminder,
+            movement_reminder: state.movement_reminder,
+            setMovementReminder: state.setMovementReminder,
+        }));
 
     useFocusEffect(
         useCallback(() => {
@@ -172,7 +175,7 @@ const AddTaskScreen = ({ navigation }) => {
                 user_id: userId,
                 title,
                 notes,
-                task_urgency: adjustedTaskUrgency ,
+                task_urgency: adjustedTaskUrgency,
                 subtask: subTasks,
                 is_repeated: false,
                 estimate_start_date: start_date,
@@ -306,7 +309,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Pressable>
             </Card>
             <Card style={styles.cardBody}>
-                <ToggleSwitch />
+                <ToggleSwitch2 />
             </Card>
             <Card style={styles.cardBody}>
                 <Pressable onPress={() => console.log('Title')} style={styles.bottomLine}>
@@ -355,7 +358,7 @@ const AddTaskScreen = ({ navigation }) => {
                                 </View>
                             </TouchableOpacity>
                             <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' >
-                                <ButtonIcon color="$black" as={CloseCircleIcon}/>
+                                <ButtonIcon color="$black" as={CloseCircleIcon} />
                             </Button>
                         </Box>
                     )}
@@ -365,7 +368,7 @@ const AddTaskScreen = ({ navigation }) => {
                 /> */}
                 <Text style={[defaultStyles.TypographyBodySmall, styles.txtCenter]}>OR</Text>
                 <Button style={styles.submitButton} onPress={getAISubTasksResult}>
-                    <Ai4Icon style={styles.icon} fill={config.tokens.colors.white}/>
+                    <ButtonIcon as={AI4} style={styles.buttonIcon}/>
                     <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]} disabled={subTasks.length > 0}>Add Subtask by AI</ButtonText>
                 </Button>
             </Card>
@@ -459,6 +462,20 @@ const AddTaskScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+    button: {
+        backgroundColor: "#006655",
+        borderRadius: 10,
+        height: 48,
+        width: "100%",
+    },
+    buttonIcon: {
+        height: 24,
+        marginRight: 10,
+        width: 24,
+    },
+    headerContainer: {
+        paddingTop: 20
+    },
     container: {
         flex: 1,
     },
@@ -484,7 +501,7 @@ const styles = StyleSheet.create({
         height: '90%',
         margin: 0,
         padding: 0,
-        borderRadius:20,
+        borderRadius: 20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -494,7 +511,7 @@ const styles = StyleSheet.create({
         height: '25%',
         margin: 0,
         padding: 0,
-        borderRadius:20,
+        borderRadius: 20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -504,7 +521,7 @@ const styles = StyleSheet.create({
         height: '55%',
         margin: 0,
         padding: 0,
-        borderRadius:20,
+        borderRadius: 20,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -517,7 +534,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop:50,
+        paddingTop: 50,
     },
     listContent: {
         paddingBottom: 20,
