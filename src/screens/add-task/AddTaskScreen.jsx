@@ -20,11 +20,12 @@ import { useMutation } from '@tanstack/react-query';
 import queryClient from '../../services/QueryClient';
 import TitleModalScreen from './TitleModelScreen';
 import ToggleSwitch from "../../components/ToggleSwitch";
-import ToggleSwitch2 from "../../components/ToggleSwitch2";
+//import ToggleSwitch2 from "../../components/ToggleSwitch2";
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
 import DateTimeModelScreen from './DateTimeModelScreen'
 import SubTaskScreen from './SubTaskScreen';
+import AddSubTaskScreen from './AddSubTaskScreen';
 import { Pressable } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Image } from '@gluestack-ui/themed';
@@ -52,6 +53,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [modalPriorityVisible, setModalPriorityVisible] = useState(false);
     const [modalDateTimeVisible, setModalDateTimeVisible] = useState(false);
     const [modalSubTaskVisible, setModalSubTaskVisible] = useState(false);
+    const [modalAddSubTaskVisible, setModalAddSubTaskVisible] = useState(false);
     const [selectedSubTaskIndex, setSelectedSubTaskIndex] = useState(null);
     const [warningMessage, setWarningMessage] = useState('');
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
@@ -237,6 +239,14 @@ const AddTaskScreen = ({ navigation }) => {
         setModalPriorityVisible(false);
         setIsAnyModalVisible(false);
     }
+    const handleOpenAddSubTaskModal = () => {
+        setModalAddSubTaskVisible(true);
+        setIsAnyModalVisible(true);
+    }
+    const handleCloseAddSubTaskModal = () => {
+        setModalAddSubTaskVisible(false);
+        setIsAnyModalVisible(false);
+    }
     const handleOpenDateTimeModal = () => {
         setModalDateTimeVisible(true);
         setIsAnyModalVisible(true);
@@ -310,10 +320,10 @@ const AddTaskScreen = ({ navigation }) => {
                 </Pressable>
             </Card>
             <Card style={styles.cardBody}>
-                <ToggleSwitch2 />
+                <ToggleSwitch />
             </Card>
             <Card style={styles.cardBody}>
-                <Pressable onPress={() => console.log('Title')} style={styles.bottomLine}>
+                <Pressable onPress={handleOpenAddSubTaskModal} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
                         <Text style={[defaultStyles.TypographyBody]}>Add subtask</Text>
@@ -323,50 +333,29 @@ const AddTaskScreen = ({ navigation }) => {
                     data={subTasks}
                     renderItem={({ item, index }) => (
                         <Box key={index} style={styles.subTaskContainer}>
-                           
-                                <HStack style={styles.detailSubTask} space={4} alignItems="center">
-                                    <Box width="70%">
-                                        <TouchableOpacity key={index} onPress={() => handleOpenSubTaskModal(index)}>
-                                            <Text style={[defaultStyles.TypographyBody]}>{item.sub_title}</Text>
-                                        </TouchableOpacity>
-                                    </Box>
-                                <Box width="25%" style={[defaultStyles.TypographyBodySmall, styles.leftItem]}>
-                                    <Text style={{ color: 'gray', textAlign: 'right', textAlignVertical: 'top' }}>
-                                        {item.time.replace('minutes', 'min.').replace('minute', 'min.')}
-                                    </Text>
+                            <HStack style={styles.detailSubTask} space={4} alignItems="center">
+                                <Box width="70%">
+                                    <TouchableOpacity key={index} onPress={() => handleOpenSubTaskModal(index)}>
+                                        <Text style={[defaultStyles.TypographyBody]}>{item.sub_title}</Text>
+                                    </TouchableOpacity>
                                 </Box>
-                                <Box width="5%">
-                                    <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' style={[styles.taskTime, styles.rightItem]}>
-                                        <ButtonIcon color="$black" as={CloseCircleIcon} />
-                                    </Button>
-                                </Box>   
-                                </HStack>
-                            
+                            <Box width="25%" style={[defaultStyles.TypographyBodySmall, styles.leftItem]}>
+                                <Text style={{ color: 'gray', textAlign: 'right', textAlignVertical: 'top' }}>
+                                    {item.time.replace('minutes', 'min.').replace('minute', 'min.')}
+                                </Text>
+                            </Box>
+                            <Box width="5%">
+                                <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' style={[styles.taskTime, styles.rightItem]}>
+                                    <ButtonIcon color="$black" as={CloseCircleIcon} />
+                                </Button>
+                            </Box>   
+                            </HStack>
                         </Box>
                     )}
                     keyExtractor={(item) => item.sub_title}
                     windowSize={10}
                     contentContainerStyle={styles.listContent}
                 />
-                {/* <FlatList
-                    data={subTasks}
-                    renderItem={({ item, index }) => (
-                        <Box key={index} style={styles.subTaskContainer}>
-                            <TouchableOpacity key={index} onPress={() => handleOpenSubTaskModal(index)}>
-                                <View style={styles.detailSubTask}>
-                                    <Text style={[defaultStyles.TypographyBody]}>{item.sub_title}</Text>
-                                    <Text color="gray" textAlign='right'>{item.time.replace('minutes', 'min').replace('minute', 'min')}</Text>
-                                </View>
-                            </TouchableOpacity>
-                            <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' >
-                                <ButtonIcon color="$black" as={CloseCircleIcon} />
-                            </Button>
-                        </Box>
-                    )}
-                    keyExtractor={(item) => item.sub_title}
-                    windowSize={10}
-                    contentContainerStyle={styles.listContent}
-                /> */}
                 <Text style={[defaultStyles.TypographyBodySmall, styles.txtCenter]}>OR</Text>
                 <Button style={styles.submitButton} onPress={getAISubTasksResult}>
                     <ButtonIcon as={AI4} style={styles.buttonIcon}/>
@@ -443,6 +432,17 @@ const AddTaskScreen = ({ navigation }) => {
                         </ModalCloseButton>
                         <VStack space={4} style={styles.modalBody}>
                             <TaskPriorityModalScreen />
+                        </VStack>
+                    </ModalContent>
+                </Modal>
+                <Modal isOpen={modalAddSubTaskVisible} onClose={handleCloseAddSubTaskModal}>
+                    <ModalContent style={styles.modalPriorityContent}>
+                        <Heading size='lg' textAlign='center'>Sub-task Title</Heading>
+                        <ModalCloseButton style={styles.closeButton} onPress={handleCloseAddSubTaskModal}>
+                            <Icon as={CloseIcon} />
+                        </ModalCloseButton>
+                        <VStack space={4} style={styles.modalBody}>
+                            <AddSubTaskScreen/>
                         </VStack>
                     </ModalContent>
                 </Modal>

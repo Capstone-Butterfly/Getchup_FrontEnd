@@ -7,14 +7,14 @@ const useTaskStore = create((set, get) => ({
   setTasks: (tasks) => set({ tasks }),
   setSelectedDate: (date) => set({ selectedDate: date }),
   addDataTask: (task) => set((state) => {
-    if (!task.due_date) throw new Error('Task must have a valid due date');
+    //if (!task.due_date) throw new Error('Task must have a valid due date');
     return { tasks: [...state.tasks, task] };
   }),
   removeDataTask: (id) => set((state) => ({
     tasks: state.tasks.filter((task) => task._id !== id),
   })),
   updateDataTask: (updatedTask) => set((state) => {
-    if (!updatedTask.due_date) throw new Error('Updated task must have a valid due date');
+   // if (!updatedTask.due_date) throw new Error('Updated task must have a valid due date');
     return { tasks: state.tasks.map((task) =>
       task._id === updatedTask._id ? updatedTask : task
     )};
