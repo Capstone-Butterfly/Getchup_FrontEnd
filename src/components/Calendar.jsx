@@ -3,37 +3,28 @@ import { SafeAreaView, Text, TouchableOpacity } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
-import { fetchTasksByUserId } from '../services/tasks';
-import { useQuery } from '@tanstack/react-query';
+import dayjs from 'dayjs';
 
-const MonthlyCalendar = ({ userId }) => {
-
-
-
+const MonthlyCalendar = () => {
     const navigation = useNavigation();
-
-    const { tasks, selectedDate, setSelectedDate } = useTaskStore((state) => ({
+    const { tasks} = useTaskStore((state) => ({
         tasks: state.tasks,
-        selectedDate: state.selectedDate,
-        setSelectedDate: state.setSelectedDate,
-        setTasks: state.setTasks,
     }));
 
     const handleDateSelected = useCallback((day) => {
-        const selectedDate = new Date(day.timestamp);
-        setSelectedDate(selectedDate);
+        const date = dayjs(day.dateString).format('YYYY-MM-DD');
 
         const hasTasks = tasks.some(task => {
             const taskDate = new Date(task.estimate_start_date);
-            return taskDate.toDateString() === selectedDate.toDateString();
+            return taskDate.toDateString() === date;
         });
 
         if (hasTasks) {
-            navigation.navigate('AgendaScreen', { selectedDate: selectedDate.toISOString(), initial: false });
+            navigation.navigate('AgendaScreen', { selectedDate: date, initial: false });
         } else {
             alert('No tasks available for this date');
         }
-    }, [navigation, setSelectedDate, tasks]);
+    }, [navigation, tasks]);
 
     const markedDates = useMemo(() => {
         const marks = {};
@@ -50,7 +41,6 @@ const MonthlyCalendar = ({ userId }) => {
             <CalendarList
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
-                selected={new Date(selectedDate).toLocaleString('en-CA').split(',')[0]}
             />
         </SafeAreaView>
     );
