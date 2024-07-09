@@ -16,7 +16,7 @@ const MonthlyCalendar = () => {
 
         const hasTasks = tasks.some(task => {
             const taskDate = new Date(task.estimate_start_date);
-            return dayjs(taskDate).format('YYYY-MM-DD') === date;
+            return taskDate.toISOString().split('T')[0] === date;
         });
 
         if (hasTasks) {
