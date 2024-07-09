@@ -1,25 +1,31 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, Modal } from "react-native";
+import { StyleSheet, TextInput, Modal, } from "react-native";
+import { Picker } from '@react-native-picker/picker';
 import usecreateTaskStore from "../../store/createTaskStore";
-import { Box, Card, Text, View, Button, VStack, HStack, ButtonText } from "@gluestack-ui/themed";
+import { Box, Card, Text, View,  Button, VStack, HStack, ButtonText  } from "@gluestack-ui/themed";
 import { Image } from "@gluestack-ui/themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Picker } from '@react-native-picker/picker';
 import { config } from '../../styles/themeConfig'; // Import the theme configuration
 import { defaultStyles } from './../../styles/styles'
 
-const SubTaskScreen = ({index}) => {
 
-    const { subTasks, updateSubtask } = usecreateTaskStore((state) => ({
+const AddSubTaskScreen = () => {
+    const { subTasks, addCreateSubTask } = usecreateTaskStore((state) => ({
         subTasks: state.subTasks,
-        updateSubtask: state.updateSubtask,
+        addCreateSubTask: state.addCreateSubTask,
       }));
 
-    const selectedSubTask = subTasks[index];
+    const [subTaskDuration, setSubTaskDuration] = useState("5 minutes");
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedMinute, setSelectedMinute] = useState(
-        selectedSubTask.time ? parseInt(selectedSubTask.time) : 5
-    );
+    const [selectedMinute, setSelectedMinute] = useState(5);
+
+    const handleSubTitleChange = (event) => {
+        const newTitle = event.nativeEvent.text;
+        if (newTitle.length > 0){
+            const addedSubtask = { sub_title: newTitle, time: subTaskDuration};
+            addCreateSubTask(addedSubtask);
+        }
+    };
 
     const openModal = () => {
         setIsModalVisible(true);
@@ -31,26 +37,14 @@ const SubTaskScreen = ({index}) => {
 
     const applyMinuteSelection = () => {
         if(selectedMinute > 0){
-            const updatedSubtask = { ...selectedSubTask, time: `${selectedMinute} minutes` };
-            updateSubtask(index, updatedSubtask);
+            setSubTaskDuration(`${selectedMinute} minutes`);
             closeModal();
         }
     };
 
     const clearMinuteSelection = () => {
-        // const updatedSubtask = { ...selectedSubTask, time: "" };
-        // updateSubtask(index, updatedSubtask);
-        closeModal();
+        setSelectedMinute(0);
     };
-
-      const handleSubTitleChange = (newTitle) => {
-        const updatedSubtask = { ...selectedSubTask, sub_title: newTitle };
-        updateSubtask(index, updatedSubtask);
-    };
-
-    if (!selectedSubTask) {
-        return <Text>Subtask not found</Text>;
-    }
 
     return(
         <>
@@ -58,14 +52,13 @@ const SubTaskScreen = ({index}) => {
             <TextInput
                 style={styles.input}
                 placeholder="Add Task Title"
-                value={selectedSubTask.sub_title}
-                onChangeText={handleSubTitleChange}
+                onSubmitEditing={handleSubTitleChange}
             />
         </Card>  
         <Card style={styles.cardBody}>
             <View style={styles.detailItem}>
                 <Text style={styles.label}>Time</Text>
-                {selectedSubTask.time ? (<Text>{selectedSubTask.time}</Text>) :
+                {subTaskDuration ? (<Text>{subTaskDuration}</Text>) :
                     (<Image
                         source={require("../../../assets/tickIcon.png")}
                         style={styles.tickImage} alt="tick icon"
@@ -73,7 +66,7 @@ const SubTaskScreen = ({index}) => {
             </View>
             <View style={styles.detailItem}>
                 <Text style={styles.label}>No explicit time</Text>
-                {selectedSubTask.time ? (null) :
+                {subTaskDuration ? (null) :
                     (<Image
                         source={require("../../../assets/tickIcon.png")}
                         style={styles.tickImage} alt="tick icon"
@@ -81,47 +74,47 @@ const SubTaskScreen = ({index}) => {
             </View>
             <View style={styles.detailLastItem}>
                 <Text style={styles.label}>Minutes</Text>
-                <TouchableOpacity onPress={openModal}>
+                <TouchableOpacity onPress={openModal} >
                     <Image source={require("../../../assets/rightAngle.png")} alt="right arrow" style={styles.tickImage}/>
                     </TouchableOpacity>
             </View>
         </Card>
         <Modal
-            visible={isModalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={closeModal}
-        >
-            <VStack style={styles.modalContainer}>
-            <VStack style={styles.modalContent}>
-                <HStack style={styles.pickerContainer}>
-                    <Picker
-                    selectedValue={selectedMinute}
-                    onValueChange={(itemValue) => setSelectedMinute(itemValue)}
-                    style={styles.picker}
-                    >
-                    {Array.from({ length: 61 }, (_, i) => (
-                        <Picker.Item key={i} label={`${i}`} value={i} />
-                    ))}
-                    </Picker>
-                    <Text style={styles.modalTitle}>Minutes</Text>
-                </HStack>
-                <HStack style={styles.buttonContainer}>
-                    <Button style={styles.clearButton} onPress={clearMinuteSelection}>
-                        <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
-                    </Button>
-                    <Button style={styles.submitButton} onPress={applyMinuteSelection}>
-                        <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
-                    </Button>
-                </HStack>
-            </VStack>
-            </VStack>
-        </Modal>
+        visible={isModalVisible}
+        animationType="slide"
+        transparent={true}
+        onRequestClose={closeModal}
+      >
+        <VStack style={styles.modalContainer}>
+          <VStack style={styles.modalContent}>
+            <HStack style={styles.pickerContainer}>
+                <Picker
+                selectedValue={selectedMinute}
+                onValueChange={(itemValue) => setSelectedMinute(itemValue)}
+                style={styles.picker}
+                >
+                {Array.from({ length: 61 }, (_, i) => (
+                    <Picker.Item key={i} label={`${i}`} value={i} />
+                ))}
+                </Picker>
+                <Text style={styles.modalTitle}>Minutes</Text>
+            </HStack>
+            <HStack style={styles.buttonContainer}>
+                <Button style={styles.clearButton} onPress={clearMinuteSelection}>
+                    <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
+                </Button>
+                <Button style={styles.submitButton} onPress={applyMinuteSelection}>
+                    <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
+                </Button>
+            </HStack>
+          </VStack>
+        </VStack>
+      </Modal>
         </>    
     );
 };
 
-export default SubTaskScreen;
+export default AddSubTaskScreen;
 
 const styles = StyleSheet.create({
     cardBody:{
@@ -155,11 +148,11 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
     },
-        label: {
+    label: {
         fontSize: 16,
         fontWeight: "bold",
     },
-        tickImage: {
+    tickImage: {
         width: 15,
         height: 15,
         marginRight: 20,

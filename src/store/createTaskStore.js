@@ -28,10 +28,9 @@ const useCreateTaskStore = create((set) => ({
     setTaskReminder: (task_reminder) => set({task_reminder}),
     setMovementReminder: (movement_reminder) => set({movement_reminder}),
 
-    addCreateTask: (task) => set((state) => ({ 
-      tasks: [...state.createTask, task] })),
+    addCreateSubTask: (subtask) => set((state) => ({ 
+      subTasks: [...state.subTasks, subtask] })),
 
-    // Setters for subtasks
     addSubtask: (subtask) => set({ subTasks : subtask }),
     updateSubtask: (index, updatedSubtask) =>
       set((state) => ({
