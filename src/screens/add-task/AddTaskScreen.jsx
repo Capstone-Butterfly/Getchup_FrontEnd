@@ -33,6 +33,7 @@ import { scheduleNotification, saveNotification, fetchNotificationsByUserId } fr
 import useNotificationStore from '../../store/notificationStore';
 import dayjs from 'dayjs';
 import { defaultStyles } from '../../styles/styles';
+import { config } from '../../styles/themeConfig';
 import PlusCircleIcon from '../../../assets/icons/plus-circle.svg';
 import CalendarIcon from '../../../assets/icons/calendar.svg';
 import NotesIcon from '../../../assets/icons/notes.svg';
