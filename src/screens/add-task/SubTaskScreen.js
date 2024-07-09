@@ -101,7 +101,7 @@ const SubTaskScreen = ({index}) => {
                     style={styles.picker}
                     >
                     {Array.from({ length: 61 }, (_, i) => (
-                        <Picker.Item key={i} label={`${i}`} value={i} />
+                       <Picker.Item key={i} label={`${i}`} value={i} color={config.tokens.colors.black} style={[defaultStyles.TypographyBodyHeavy]}/>
                     ))}
                     </Picker>
                     <Text style={styles.modalTitle}>Minutes</Text>
@@ -180,6 +180,7 @@ const styles = StyleSheet.create({
         bottom: 0,
         padding: 20,
         alignItems: 'center',
+        
     },
     modalTitle: {
         fontWeight: 'bold',
@@ -190,13 +191,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        paddingBottom: 20,
-        marginLeft: 50,
+        marginTop: 60,
+        marginBottom: 40,
     },
     picker: {
         width: 100,
-        height: 150,
+        height: 50,
         justifyContent: 'center',
+        backgroundColor: config.tokens.colors.highPriority,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -226,6 +228,6 @@ const styles = StyleSheet.create({
         width: '40%'
     },
     clearButtonText: {
-        color:config.tokens.colors.black,
+        color:config.tokens.colors.lightBlack,
     },
 });

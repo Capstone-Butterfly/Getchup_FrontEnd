@@ -94,10 +94,10 @@ const AddSubTaskScreen = () => {
                 style={styles.picker}
                 >
                 {Array.from({ length: 61 }, (_, i) => (
-                    <Picker.Item key={i} label={`${i}`} value={i} />
+                    <Picker.Item key={i} label={`${i}`} value={i} color={config.tokens.colors.black} fontWeight={defaultStyles.TypographyBodyHeavy}/>
                 ))}
                 </Picker>
-                <Text style={styles.modalTitle}>Minutes</Text>
+                <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
             </HStack>
             <HStack style={styles.buttonContainer}>
                 <Button style={styles.clearButton} onPress={clearMinuteSelection}>
@@ -183,13 +183,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        paddingBottom: 20,
-        marginLeft: 50,
+        marginTop: 60,
+        marginBottom: 40,
     },
     picker: {
         width: 100,
-        height: 150,
+        height: 50,
         justifyContent: 'center',
+        backgroundColor: config.tokens.colors.highPriority,
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -219,6 +220,6 @@ const styles = StyleSheet.create({
         width: '40%'
     },
     clearButtonText: {
-        color:config.tokens.colors.black,
+        color:config.tokens.colors.lightBlack,
     },
 });
