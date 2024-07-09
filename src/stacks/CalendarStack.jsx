@@ -9,9 +9,14 @@ const CStack = createNativeStackNavigator();
 
 const CalendarStack = () => {
   return (
-    <CStack.Navigator>
+    <CStack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: 'transparent' },
+      // headerTransparent: true,
+      // headerTintColor: '#fff', 
+    }}>
       <CStack.Screen name="CalendarScreen" component={CalendarScreen} options={{ headerShown: false }} />
-      <CStack.Screen name="AgendaScreen" component={AgendaScreen} options={{ headerTitle: '' }}/>
+      <CStack.Screen name="AgendaScreen" component={AgendaScreen} options={{ headerTitle: '', headerBackTitle:'Schedule' }}/>
       <CStack.Screen name="TaskDetailScreen" component={TaskDetailScreen} options={{ headerTitle: '', headerBackTitleVisible: false }} />
       <CStack.Screen name="FocusModeScreen" component={FocusModeScreen} options={({ route }) => ({ headerTitle: route.params.task.title })} />
     </CStack.Navigator>
