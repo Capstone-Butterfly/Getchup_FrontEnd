@@ -3,7 +3,9 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { defaultStyles } from '../styles/styles';
 import { Divider } from '@gluestack-ui/themed';
 
-
+import CalendarSVG from '../../assets/icons/calendar.svg'
+import RepeatSVG from '../../assets/icons/repeat.svg'
+import TasksSVG from '../../assets/icons/tasks.svg'
 
 const TaskDetails = ({ task }) => {
     return (
@@ -11,17 +13,17 @@ const TaskDetails = ({ task }) => {
             <Text style={[styles.title, [defaultStyles.TypographyH2]]}>{task.title}</Text>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
-                <Image source={require('../../assets/Calendar.png')} style={styles.icon} />
+                <CalendarSVG style={styles.icon} />
                 <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>{new Date(task.created_datetime).toLocaleDateString()}</Text>
             </View>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
-                <Image source={require('../../assets/Repeat.png')} style={styles.icon} />
+                <RepeatSVG style={styles.icon}/>
                 <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>Does not repeat</Text>
             </View>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
-                <Image source={require('../../assets/Tasks.png')} style={styles.icon} />
+                <TasksSVG style={styles.icon}/>
                 <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>Medium priority</Text>
             </View>
         </View>

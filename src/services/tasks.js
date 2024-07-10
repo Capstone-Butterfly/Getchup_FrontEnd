@@ -78,6 +78,8 @@ const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_S
           requestBody.main_status = MAIN_STATUS;
       }
 
+      console.log("request body is: ", requestBody);
+
       const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
       return data;
   } catch (error) {
@@ -86,6 +88,37 @@ const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_S
   
   }
 };
+
+const markSubtaskAsComplete = async (taskId, subtaskEndTime, STATUS, subtaskIndex, totalSubtasks) => {
+  try {
+    console.log("Completing subtask of task with task id: ", taskId);
+
+    const isLastStep = subtaskIndex === totalSubtasks - 1;
+    const requestBody = {
+      subtask: [{
+        index: subtaskIndex,
+        end_time: subtaskEndTime,
+        status: STATUS
+      }]
+    };
+
+    if (isLastStep) {
+      console.log("is last step");
+      requestBody.end_time = subtaskEndTime;
+      requestBody.main_status = 'complete';
+    }
+
+    console.log("request body is: ", requestBody);
+
+    const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
+    return data;
+  } catch (error) {
+    console.error("Error updating subtask end time:", error);
+    handleAxiosError(error);
+  }
+};
+
+
 
 const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) => {
   try {
@@ -126,4 +159,4 @@ const handleAxiosError = (error) => {
 
 export { fetchTasks, fetchTasksByTaskId, fetchTasksByUserId, 
   addTask, getAISubTasks, updateTaskStartTime, updateTaskEndTime, 
-  pauseTask, manualCompleteTask, handleAxiosError};
+  pauseTask, manualCompleteTask, handleAxiosError, markSubtaskAsComplete};
