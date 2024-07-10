@@ -20,7 +20,6 @@ import { useMutation } from '@tanstack/react-query';
 import queryClient from '../../services/QueryClient';
 import TitleModalScreen from './TitleModelScreen';
 import ToggleSwitch from "../../components/ToggleSwitch";
-//import ToggleSwitch2 from "../../components/ToggleSwitch2";
 import NotesModalScreen from './NotesModelScreen';
 import TaskPriorityModalScreen from './TaskPriorityModelScreen'
 import DateTimeModelScreen from './DateTimeModelScreen'
@@ -58,6 +57,7 @@ const AddTaskScreen = ({ navigation }) => {
     const [warningMessage, setWarningMessage] = useState('');
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
     const [isAnyModalVisible, setIsAnyModalVisible] = useState(false);
+    //const [isSubTaskModalVisible, setIsSubTaskModalVisible] = useState(false);
 
     const { first_name, userId, profile_movement_reminder, profile_task_reminder } = profileStore((state) => ({
         first_name: state.first_name,
@@ -73,7 +73,8 @@ const AddTaskScreen = ({ navigation }) => {
 
     const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore,
         start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder,
-        setMovementReminder, task_reminder, setTaskReminder } = useCreateTaskStore((state) => ({
+        setMovementReminder, task_reminder, setTaskReminder, addCreateSubTask,
+        newSubTaskTitle, newSubTaskDuration, setNewSubTaskTitle, setNewSubTaskDuration } = useCreateTaskStore((state) => ({
             subTasks: state.subTasks,
             title: state.title,
             setTitle: state.setTitle,
@@ -91,6 +92,11 @@ const AddTaskScreen = ({ navigation }) => {
             setTaskReminder: state.setTaskReminder,
             movement_reminder: state.movement_reminder,
             setMovementReminder: state.setMovementReminder,
+            addCreateSubTask: state.addCreateSubTask,
+            newSubTaskTitle: state.newSubTaskTitle,
+            newSubTaskDuration: state.newSubTaskDuration,
+            setNewSubTaskTitle: state.setNewSubTaskTitle,
+            setNewSubTaskDuration: state.setNewSubTaskDuration,
         }));
 
     useFocusEffect(
@@ -212,6 +218,10 @@ const AddTaskScreen = ({ navigation }) => {
         removeSubtask(index);
     };
 
+    const toggleSwitch = () => {
+        setMovementReminder(!movement_reminder);
+    };
+
     const handleOpenTitleModal = () => {
         setModalTitleVisible(true);
         setIsAnyModalVisible(true);
@@ -244,8 +254,16 @@ const AddTaskScreen = ({ navigation }) => {
         setIsAnyModalVisible(true);
     }
     const handleCloseAddSubTaskModal = () => {
+        if (newSubTaskTitle.length > 0 && newSubTaskDuration.length > 0) {
+            const addedSubtask = { sub_title: newSubTaskTitle, time: newSubTaskDuration };
+            addCreateSubTask(addedSubtask);
+
+        }
+        setNewSubTaskTitle("");
+        setNewSubTaskDuration("5 minutes");
         setModalAddSubTaskVisible(false);
         setIsAnyModalVisible(false);
+        //setIsSubTaskModalVisible(false);
     }
     const handleOpenDateTimeModal = () => {
         setModalDateTimeVisible(true);
@@ -293,7 +311,7 @@ const AddTaskScreen = ({ navigation }) => {
 
     const renderContent = () => (
         <>
-            <Card style={styles.cardBody}>
+            <Card style={defaultStyles.card}>
                 <Pressable onPress={handleOpenTitleModal} style={styles.bottomLine}>                   
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
@@ -319,10 +337,10 @@ const AddTaskScreen = ({ navigation }) => {
                     </View>
                 </Pressable>
             </Card>
-            <Card style={styles.cardBody}>
-                <ToggleSwitch />
+            <Card style={defaultStyles.card}>
+                <ToggleSwitch label="Track Movement" value={movement_reminder} onToggle={toggleSwitch}/>
             </Card>
-            <Card style={styles.cardBody}>
+            <Card style={defaultStyles.card}>
                 <Pressable onPress={handleOpenAddSubTaskModal} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
@@ -442,7 +460,7 @@ const AddTaskScreen = ({ navigation }) => {
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
                         <VStack space={4} style={styles.modalBody}>
-                            <AddSubTaskScreen/>
+                            <AddSubTaskScreen />
                         </VStack>
                     </ModalContent>
                 </Modal>
@@ -519,7 +537,7 @@ const styles = StyleSheet.create({
     },
     modalPriorityContent: {
         width: '100%',
-        height: '55%',
+        height: '45%',
         margin: 0,
         padding: 0,
         borderRadius: 20,
@@ -563,7 +581,7 @@ const styles = StyleSheet.create({
     },
     cardBody:{
         borderRadius:20,
-        marginBottom:10,
+        marginBottom:20,
     },
     bottomLine: {
         borderBottomWidth: 1,
