@@ -9,21 +9,21 @@ import { config } from '../../styles/themeConfig'; // Import the theme configura
 import { defaultStyles } from './../../styles/styles'
 
 
-const AddSubTaskScreen = () => {
-    const { subTasks, addCreateSubTask } = usecreateTaskStore((state) => ({
-        subTasks: state.subTasks,
-        addCreateSubTask: state.addCreateSubTask,
+const AddSubTaskScreen = ({}) => {
+    const { setNewSubTaskTitle, setNewSubTaskDuration, newSubTaskDuration } = usecreateTaskStore((state) => ({
+        setNewSubTaskTitle: state.setNewSubTaskTitle,
+        setNewSubTaskDuration: state.setNewSubTaskDuration,
+        newSubTaskDuration: state.newSubTaskDuration,
       }));
 
-    const [subTaskDuration, setSubTaskDuration] = useState("5 minutes");
+    //const [subTaskDuration, setSubTaskDuration] = useState("5 minutes");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedMinute, setSelectedMinute] = useState(5);
+    
 
-    const handleSubTitleChange = (event) => {
-        const newTitle = event.nativeEvent.text;
-        if (newTitle.length > 0){
-            const addedSubtask = { sub_title: newTitle, time: subTaskDuration};
-            addCreateSubTask(addedSubtask);
+    const handleSubTitleChange = (newSubTitle) => {
+        if (newSubTitle.length > 0){
+            setNewSubTaskTitle(newSubTitle);
         }
     };
 
@@ -37,7 +37,7 @@ const AddSubTaskScreen = () => {
 
     const applyMinuteSelection = () => {
         if(selectedMinute > 0){
-            setSubTaskDuration(`${selectedMinute} minutes`);
+            setNewSubTaskDuration(`${selectedMinute} minutes`);
             closeModal();
         }
     };
@@ -46,32 +46,33 @@ const AddSubTaskScreen = () => {
         setSelectedMinute(0);
     };
 
+
     return(
         <>
          <Card style={styles.cardBody}>
             <TextInput
                 style={styles.input}
                 placeholder="Add Task Title"
-                onSubmitEditing={handleSubTitleChange}
+                onChangeText={handleSubTitleChange}
             />
         </Card>  
         <Card style={styles.cardBody}>
             <View style={styles.detailItem}>
                 <Text style={styles.label}>Time</Text>
-                {subTaskDuration ? (<Text>{subTaskDuration}</Text>) :
+                {newSubTaskDuration ? (<Text>{newSubTaskDuration}</Text>) :
                     (<Image
                         source={require("../../../assets/tickIcon.png")}
                         style={styles.tickImage} alt="tick icon"
                     />)}
             </View>
-            <View style={styles.detailItem}>
+            {/* <View style={styles.detailItem}>
                 <Text style={styles.label}>No explicit time</Text>
                 {subTaskDuration ? (null) :
                     (<Image
                         source={require("../../../assets/tickIcon.png")}
                         style={styles.tickImage} alt="tick icon"
                     />)}
-            </View>
+            </View> */}
             <View style={styles.detailLastItem}>
                 <Text style={styles.label}>Minutes</Text>
                 <TouchableOpacity onPress={openModal} >
@@ -80,11 +81,11 @@ const AddSubTaskScreen = () => {
             </View>
         </Card>
         <Modal
-        visible={isModalVisible}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={closeModal}
-      >
+            visible={isModalVisible}
+            animationType="slide"
+            transparent={true}
+            onRequestClose={closeModal}
+        >
         <VStack style={styles.modalContainer}>
           <VStack style={styles.modalContent}>
             <HStack style={styles.pickerContainer}>
@@ -93,8 +94,8 @@ const AddSubTaskScreen = () => {
                 onValueChange={(itemValue) => setSelectedMinute(itemValue)}
                 style={styles.picker}
                 >
-                {Array.from({ length: 61 }, (_, i) => (
-                    <Picker.Item key={i} label={`${i}`} value={i} color={config.tokens.colors.black} fontWeight={defaultStyles.TypographyBodyHeavy}/>
+                {Array.from({ length: 60 }, (_, i) => (
+                    <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} fontWeight={defaultStyles.TypographyBodyHeavy}/>
                 ))}
                 </Picker>
                 <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
