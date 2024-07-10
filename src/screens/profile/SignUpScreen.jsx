@@ -1,11 +1,16 @@
 import { EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
 import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Alert, TouchableOpacity } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
 import profileStore from '../../store/profileStore';
 import { signUpProfile } from '../../services/profile';
+import { config } from '../../styles/themeConfig'; // Import the theme configuration
+import { defaultStyles } from './../../styles/styles'
+
+// Get device dimensions
+const { width, height } = Dimensions.get('window');
 
 function SignUpScreen() {
   const { email, first_name, last_name, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword, setUserId } = profileStore((state) => state);
@@ -58,43 +63,41 @@ function SignUpScreen() {
   }, []);
 
   return (
-    <View>
-      <Text fontWeight="bold">Sign Up</Text>
-      <FormControl p="$4" borderWidth="$1" borderRadius="$lg" borderColor="$borderLight300" $dark-borderWidth="$1" $dark-borderRadius="$lg" $dark-borderColor="$borderDark800">
+    <View style={styles.container}>
+      <FormControl style={styles.formBox}>
         <VStack space="xl">
-          <Heading color="$text900" lineHeight="$md">Create New Account</Heading>
-
+          <Heading style={[styles.heading, defaultStyles.TypographyH1 ]}>Create New Account</Heading>
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">First Name</Text>
-            <Input>
+            <Text  style={defaultStyles.TypographyBodyHeavy}>First Name</Text>
+            <Input style={styles.inputContainer}>
               <InputField value={first_name} onChangeText={setFirstName} type="text" />
             </Input>
           </VStack>
 
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Last Name</Text>
-            <Input>
+            <Text  style={defaultStyles.TypographyBodyHeavy}>Last Name</Text>
+            <Input style={styles.inputContainer}>
               <InputField value={last_name} onChangeText={setLastName} type="text" />
             </Input>
           </VStack>
 
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Email</Text>
-            <Input>
+            <Text  style={defaultStyles.TypographyBodyHeavy}>Email</Text>
+            <Input style={styles.inputContainer} >
               <InputField value={email} onChangeText={setEmail} type="text" />
             </Input>
           </VStack>
 
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Phone No.</Text>
-            <Input>
+            <Text  style={defaultStyles.TypographyBodyHeavy}>Phone No.</Text>
+            <Input style={styles.inputContainer}>
               <InputField value={phone} onChangeText={setPhone} type="text" />
             </Input>
           </VStack>
 
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Password</Text>
-            <Input textAlign="center">
+            <Text  style={defaultStyles.TypographyBodyHeavy}>Password</Text>
+            <Input textAlign="center" style={styles.inputContainer}>
               <InputField value={password} onChangeText={handlePasswordChange} type={showPassword ? "text" : "password"} />
               <InputSlot pr="$3" onPress={handlePasswordState}>
                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
@@ -103,8 +106,8 @@ function SignUpScreen() {
           </VStack>
 
           <VStack space="xs">
-            <Text color="$text500" lineHeight="$xs">Confirm Password</Text>
-            <Input textAlign="center">
+            <Text  style={defaultStyles.TypographyBodyHeavy}>Confirm Password</Text>
+            <Input textAlign="center" style={styles.inputContainer}>
               <InputField value={confirmPassword} onChangeText={handleConfirmPasswordChange} type={showConfirmPassword ? "text" : "password"} />
               <InputSlot pr="$3" onPress={handleConfirmPasswordState}>
                 <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
@@ -121,17 +124,104 @@ function SignUpScreen() {
           <Button backgroundColor='$blue' onPress={() => {
             console.log('Sign Up button pressed');
             handleSignUp();
-          }} disabled={!isMatched}>
-            <ButtonText>Create Account</ButtonText>
+          }} disabled={!isMatched} style={styles.submitButton}>
+            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Create Account</ButtonText>
           </Button>
 
           <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <LinkText>Already have an account? Sign in</LinkText>
+            <LinkText style={[styles.callToNavigate , defaultStyles.TypographyLink]}>Already have an account?</LinkText>
           </TouchableOpacity>
         </VStack>
       </FormControl>
+      <View style={styles.circlesContainer}>
+        <View style={[styles.circle, styles.circleYellow]} />
+        <View style={[styles.circle, styles.circleRed]} />
+        <View style={[styles.circle, styles.circleBlue]} />
+      </View>
     </View>
   );
 }
+
+// Define styles at the bottom of the component file
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: config.tokens.colors.background,
+    position: 'relative',
+    flex: 1,
+    justifyContent: 'center', // Center vertically
+    alignItems: 'center', // Center horizontally
+  },
+  formBox: {
+    backgroundColor: 'white',
+    borderRadius: config.tokens.borderRadius.md,
+    padding: config.tokens.spacing.md,
+    borderColor: 'transparent',
+    width: width * 0.9, // Set width to 80% of screen width
+    maxWidth: 400, // Optional: set a maximum width
+    minWidth: 300, // Optional: set a minimum width
+    shadowColor: '#000006', // Shadow color
+    shadowOffset: { width: 0, height: 2 }, // Offset of the shadow
+    shadowOpacity: 0.06, // Opacity of the shadow
+    shadowRadius: 5, // Blur radius
+    elevation: 5, // This adds shadow for Android
+    zIndex: 10,
+  },
+  heading: {
+    textAlign: 'center',
+  },
+  inputContainer: {
+    borderRadius: config.tokens.borderRadius.sm,
+    borderColor: '#00000080',
+    borderWidth: 0.5,
+  },
+  submitButton: {
+    backgroundColor: config.tokens.colors.primaryDark,
+    borderRadius: config.tokens.borderRadius.sm,
+    marginHorizontal: 'auto',
+    
+  },
+  submitButtonText:{
+
+  },
+  textInfo: {
+    color: config.tokens.colors.textInfo,
+    paddingBottom: config.tokens.spacing.sm,
+    textAlign: 'center',
+  },
+  callToNavigate: {
+    color: config.tokens.colors.primaryDark,
+    textAlign: 'center',
+    zIndex:2
+  },
+  
+  circlesContainer: {
+    position: 'absolute',
+    bottom: -180,
+    width: width,
+    height: height * 0.2,
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    alignItems: 'flex-end',
+  },
+  circle: {
+    width: 300,
+    height: 300,
+    borderRadius: config.tokens.borderRadius.xl,
+  },
+  circleYellow: {
+    backgroundColor: config.tokens.colors.mediumPriority,
+    zIndex: 0,
+  },
+  circleRed: {
+    backgroundColor: config.tokens.colors.highPriority,
+    zIndex: 1,
+  },
+  circleBlue: {
+    backgroundColor: config.tokens.colors.blue,
+    zIndex: 0,
+  },
+});
+
 
 export default SignUpScreen;

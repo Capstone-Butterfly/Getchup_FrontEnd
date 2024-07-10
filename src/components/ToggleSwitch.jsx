@@ -1,54 +1,97 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Switch, HStack, Box } from "@gluestack-ui/themed";
-import useCreateTaskStore from "../store/createTaskStore";
-import { config } from '../styles/themeConfig'; // Import the theme configuration
-import { defaultStyles } from '../styles/styles'
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, Animated } from 'react-native';
+import { HStack } from '@gluestack-ui/themed';
 
-const ToggleSwitch = () => {
-  const { movement_reminder, setMovementReminder } = useCreateTaskStore((state) => ({
-    movement_reminder: state.movement_reminder,
-    setMovementReminder: state.setMovementReminder,
-  }));
+const CustomSwitch = ({ label, value, onToggle }) => {
+  const [animatedValue] = useState(new Animated.Value(value ? 1 : 0));
 
-  const toggleSwitch = () => {
-    setMovementReminder(!movement_reminder);
-  };
+  useEffect(() => {
+    Animated.timing(animatedValue, {
+      toValue: value ? 1 : 0,
+      duration: 300,
+      useNativeDriver: false,
+    }).start();
+  }, [value]);
+
+  const thumbTranslate = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: [2, 26], // Positions for thumb
+  });
+
+  const trackBackgroundColor = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#ffffff', '#2ecc71'],
+  });
+
+  const thumbBorderColor = animatedValue.interpolate({
+    inputRange: [0, 1],
+    outputRange: ['#4A4A4A', '#2ecc71'],
+  });
 
   return (
-    <View style={styles.container}>
-      <HStack style={styles.hstack}>
-          <Text style={[defaultStyles.TypographyBodyHeavy, styles.text]}>Track Movement</Text>
-          <Switch
-            size="sm"
-            isDisabled={false}
-            value={movement_reminder}
-            onToggle={toggleSwitch}
-            trackColor={{ false: config.tokens.colors.neutral, true: config.tokens.colors.primaryDark }}
-          />
-      </HStack>
-    </View>
+    <HStack style={styles.switchContainer}>
+      <Text style={styles.switchLabel}>{label}</Text>
+      <TouchableOpacity onPress={onToggle} style={styles.switchWrapper}>
+        <Animated.View
+          style={[
+            styles.track,
+            {
+              backgroundColor: trackBackgroundColor,
+            },
+          ]}
+        />
+        <Animated.View
+          style={[
+            styles.thumb,
+            {
+              transform: [{ translateX: thumbTranslate }],
+              borderColor: thumbBorderColor,
+            },
+          ]}
+        />
+      </TouchableOpacity>
+    </HStack>
   );
 };
 
-export default ToggleSwitch;
-
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    padding: 20,
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
-  hstack: {
-      alignItems: "center",
-      display: "flex",
-      justifyContent: "space-between",
-      width: "100%",
-      
+  switchLabel: {
+    fontSize: 16,
+    color: '#000',
   },
-  switch: {
-      flexGrow: 0,
+  switchWrapper: {
+    width: 50,
+    height: 30,
+    borderRadius: 15,
+    justifyContent: 'center',
+    padding: 2,
+    position: 'relative',
   },
-  text: {
-      flexGrow: 1,
+  track: {
+    position: 'absolute',
+    top: 2,
+    bottom: 2,
+    left: 2,
+    right: 2,
+    borderRadius: 15,
+  },
+  thumb: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: '#ffffff',
+    position: 'absolute',
+    top: 2,
+    borderWidth: 2,
   },
 });
+
+export default CustomSwitch;

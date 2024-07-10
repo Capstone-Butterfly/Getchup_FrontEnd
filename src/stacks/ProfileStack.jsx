@@ -19,11 +19,8 @@ const ProfileStack = () => {
     return (
         <>
             {is_login ? (
-                <Stack.Navigator initialRouteName={survey_done ? "ProfileHome" : "SurveyQuestionScreen"}>
-                    <Stack.Screen name="ProfileHome" component={ProfileHomeScreen} options={{ headerShown: false }} />
+                <Stack.Navigator initialRouteName={survey_done ? "EditProfile" : "SurveyQuestionScreen"}>
                     <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="UserSettings" component={UserSettingsScreen} options={{ headerShown: false }} />
-                    <Stack.Screen name="ConfirmLogout" component={ConfirmLogoutScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="SurveyQuestionScreen" component={SurveyQuestionScreen} options={{ headerShown: false }} />
                     <Stack.Screen name="ADHDCatScreen" component={ADHDCatScreen} options={{ headerShown: false }} />
                 </Stack.Navigator>
