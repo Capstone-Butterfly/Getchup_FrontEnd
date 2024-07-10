@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
 import { config } from "./themeConfig";
+
 const defaultStyles = StyleSheet.create({
     ButtonDefault: {
-        backgroundColor: "#006655",
+        backgroundColor: config.tokens.colors.primaryDark,
         borderRadius: 10,
         height: 48,
         width: "100%",
@@ -66,6 +67,21 @@ const defaultStyles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 22,
         textDecorationLine: "underline",
+    },
+    card: {
+        backgroundColor: config.tokens.colors.white,
+        padding: 20,
+        marginVertical: 12,
+        borderRadius: 20,
+        // elevation: 3,
+        width: '100%',
+    },
+    
+    buttonVariant3: {
+        borderRadius: 10,
+        backgroundColor: config.tokens.colors.white,
+        borderColor: config.tokens.colors.primaryDark,
+        borderWidth: 2
     },
 });
 
