@@ -30,13 +30,11 @@ const ProgressScreen = ({ navigation }) => {
   
     return (
       <SafeAreaView style={styles.container}>
-        <ProgressChart name={first_name} userId={userId}/>
-        <ProgressChartDetail userId={userId}/>
-        {/* <FlatList
+        <FlatList
           data={components}
           renderItem={({ item }) => item.component}
           keyExtractor={(item) => item.key}
-        /> */}
+        />
       </SafeAreaView>
     );
   };
