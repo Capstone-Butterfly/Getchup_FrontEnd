@@ -71,14 +71,14 @@ const SubTaskScreen = ({index}) => {
                         style={styles.tickImage} alt="tick icon"
                     />)}
             </View>
-            <View style={styles.detailItem}>
+            {/* <View style={styles.detailItem}>
                 <Text style={styles.label}>No explicit time</Text>
                 {selectedSubTask.time ? (null) :
                     (<Image
                         source={require("../../../assets/tickIcon.png")}
                         style={styles.tickImage} alt="tick icon"
                     />)}
-            </View>
+            </View> */}
             <View style={styles.detailLastItem}>
                 <Text style={styles.label}>Minutes</Text>
                 <TouchableOpacity onPress={openModal}>
@@ -128,6 +128,8 @@ const styles = StyleSheet.create({
         width:'80%',
         borderRadius:20,
         marginBottom:20,
+        borderWidth: 1,
+        borderColor: 'black',
     },
     detailItem: {
         flexDirection: 'row',

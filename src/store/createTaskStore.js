@@ -14,6 +14,8 @@ const useCreateTaskStore = create((set) => ({
     subTasks: [],
     task_reminder: false,
     movement_reminder: false,
+    newSubTaskTitle: "",
+    newSubTaskDuration: "5 minutes",
   
     // Setters
     setTitle: (title) => set({ title }),
@@ -27,6 +29,8 @@ const useCreateTaskStore = create((set) => ({
     setUserEstimateDuration: (time) => set({ user_estimate_duration : time }),
     setTaskReminder: (task_reminder) => set({task_reminder}),
     setMovementReminder: (movement_reminder) => set({movement_reminder}),
+    setNewSubTaskTitle: (newSubTaskTitle) => set({newSubTaskTitle}),
+    setNewSubTaskDuration: (newSubTaskDuration) => set({newSubTaskDuration}),
 
     addCreateSubTask: (subtask) => set((state) => ({ 
       subTasks: [...state.subTasks, subtask] })),
