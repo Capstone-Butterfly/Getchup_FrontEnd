@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-between',
         paddingBottom: 0,
-        paddingTop: 20,
+        paddingTop: 40,
     }, 
     headerCard: {
         paddingTop:20,

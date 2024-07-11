@@ -506,7 +506,7 @@ const styles = StyleSheet.create({
     overlay: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingVertical:20,
+        //paddingVertical:20,
     },
     content: {
         //flex: 1,
