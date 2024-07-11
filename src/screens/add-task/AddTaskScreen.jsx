@@ -9,6 +9,7 @@ import {
     ButtonIcon,
     CloseCircleIcon,
     ImageBackground,
+    ModalBackdrop,
 } from "@gluestack-ui/themed";
 import { useFocusEffect } from '@react-navigation/native'; 
 import useCreateTaskStore from '../../store/createTaskStore';
@@ -32,6 +33,7 @@ import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
 import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
 import useNotificationStore from '../../store/notificationStore';
 import dayjs from 'dayjs';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { defaultStyles } from '../../styles/styles';
 import { config } from '../../styles/themeConfig';
 import PlusCircleIcon from '../../../assets/icons/plus-circle.svg';
@@ -71,6 +73,8 @@ const AddTaskScreen = ({ navigation }) => {
         addDataTask: state.addDataTask,
         setSelectedDate: state.setSelectedDate,
     }));
+
+    const [isAIPressed, setIsAIPressed] = useState(false);
 
     const { subTasks, title, addSubtask, removeSubtask, notes, task_urgency, clearCreateTaskStore,
         start_date, end_date, start_time, end_time, user_estimate_duration, movement_reminder,
@@ -309,6 +313,14 @@ const AddTaskScreen = ({ navigation }) => {
         setIsAnyModalVisible(false);
     };
 
+    const handlePressIn = () => {
+        setIsAIPressed(true);
+    };
+
+    const handlePressOut = () => {
+        setIsAIPressed(false);
+        getAISubTasksResult();
+    };
 
     const renderContent = () => (
         <>
@@ -376,10 +388,30 @@ const AddTaskScreen = ({ navigation }) => {
                     contentContainerStyle={styles.listContent}
                 />
                 <Text style={[defaultStyles.TypographyBodySmall, styles.txtCenter]}>OR</Text>
-                <Button style={styles.submitButton} onPress={getAISubTasksResult}>
+                <Button
+                    style={[
+                        styles.submitButton,
+                        isAIPressed && styles.submitButtonPressed
+                    ]}
+                    onPressIn={handlePressIn}
+                    onPressOut={handlePressOut}
+                >
+                    <ButtonIcon as={AI4} style={[styles.buttonIcon, isAIPressed && styles.buttonIconPressed]} />
+                    <ButtonText
+                        style={[
+                            styles.submitButtonText,
+                            defaultStyles.TypographyBodyHeavy,
+                            isAIPressed && styles.submitButtonTextPressed
+                        ]}
+                        disabled={subTasks.length > 0}
+                    >
+                        Add Subtask by AI
+                    </ButtonText>
+                </Button>
+                {/* <Button style={styles.submitButton} onPress={getAISubTasksResult}>
                     <ButtonIcon as={AI4} style={styles.buttonIcon}/>
                     <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]} disabled={subTasks.length > 0}>Add Subtask by AI</ButtonText>
-                </Button>
+                </Button> */}
             </Card>
         </>
     );
@@ -406,6 +438,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Box>
                 
                 <Modal isOpen={modalTitleVisible} onClose={handleCloseTitleModal}>
+                    <ModalBackdrop/>
                     <ModalContent style={styles.modalContent}>
                         <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Add Task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseTitleModal}>
@@ -417,6 +450,7 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalDateTimeVisible} onClose={handleCloseDateTimeModal}>
+                    <ModalBackdrop/>
                     <ModalContent style={styles.modalContent}>
                         <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Date and Time</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseDateTimeModal}>
@@ -433,6 +467,7 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalNoteVisible} onClose={handleCloseNoteModal}>
+                    <ModalBackdrop/>
                     <ModalContent style={styles.modalNoteContent}>
                         <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Notes</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseNoteModal}>
@@ -444,6 +479,7 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalPriorityVisible} onClose={handleClosePriorityModal}>
+                    <ModalBackdrop/>
                     <ModalContent style={styles.modalPriorityContent}>
                         <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Task Priority</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleClosePriorityModal}>
@@ -455,6 +491,7 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalAddSubTaskVisible} onClose={handleCloseAddSubTaskModal}>
+                    <ModalBackdrop />
                     <ModalContent style={styles.modalPriorityContent}>
                         <Heading size='lg' textAlign='center'>Sub-task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseAddSubTaskModal}>
@@ -466,6 +503,7 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalSubTaskVisible} onClose={handleCloseSubTaskModal}>
+                    <ModalBackdrop/>
                     <ModalContent style={styles.modalPriorityContent}>
                         <Heading size='lg' textAlign='center'>Sub-task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseSubTaskModal}>
@@ -628,8 +666,21 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         width: '100%',
     },
+    submitButtonPressed: {
+        backgroundColor: config.tokens.colors.neutralLight,
+    },
     submitButtonText: {
         color: config.tokens.colors.white,
+    },
+    submitButtonTextPressed: {
+        color: config.tokens.colors.neutral,
+    },
+    buttonIcon: {
+        marginRight: 10,
+        color: config.tokens.colors.white,
+    },
+    buttonIconPressed: {
+        color: config.tokens.colors.neutral,
     },
     leftItem: {
         alignItems: 'flex-start',

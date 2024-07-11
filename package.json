@@ -46,6 +46,7 @@
         "react-native-calendars": "^1.1305.0",
         "react-native-gesture-handler": "~2.16.1",
         "react-native-gifted-charts": "^1.4.14",
+        "react-native-keyboard-aware-scroll-view": "^0.9.5",
         "react-native-linear-gradient": "^2.8.3",
         "react-native-modal-datetime-picker": "^17.1.0",
         "react-native-pager-view": "6.3.0",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet, TouchableWithoutFeedback  } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet  } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
@@ -7,6 +7,7 @@ import DateDisplayFormat from '../utils/DateDisplayFormat';
 import useProgressDateRangeStore from '../store/progressDateRangeStore';
 import { defaultStyles } from '../styles/styles';
 import { config } from '../styles/themeConfig';
+import { Modal, ModalBackdrop, ModalContent, ModalHeader } from '@gluestack-ui/themed';
 
 dayjs.extend(isoWeek);
 
@@ -89,7 +90,28 @@ const ProgressCalendar = ({chartStartDate, chartEndDate}) => {
           {DateDisplayFormat(chartSelectedStartDate, chartSelectedEndDate)}
         </Text>
       </TouchableOpacity>
-      <Modal visible={modalVisible} transparent={true}>
+      <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
+        <ModalBackdrop/>
+        <ModalContent>
+          <View style={styles.calendarContainer}>
+            <Calendar
+              onDayPress={onDayPress}
+              markedDates={selectedDates}
+              markingType={'custom'}
+              theme={{
+                arrowColor: config.tokens.colors.black,
+                textMonthFontWeight: 'bold',
+                textDayFontWeight: 'normal',
+                textDayHeaderFontWeight: 'normal',
+                todayTextColor: config.tokens.colors.primaryDark,
+                selectedDayBackgroundColor: config.tokens.colors.primary,
+                selectedDayTextColor: config.tokens.colors.black,
+              }}
+            />              
+          </View> 
+      </ModalContent>
+    </Modal>
+      {/* <Modal visible={modalVisible} transparent={true}>
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.modalContainer}>
             <View style={styles.calendarContainer}>
@@ -110,7 +132,7 @@ const ProgressCalendar = ({chartStartDate, chartEndDate}) => {
             </View>
           </View>
         </TouchableWithoutFeedback>
-      </Modal>
+      </Modal> */}
     </View>
   );
 };

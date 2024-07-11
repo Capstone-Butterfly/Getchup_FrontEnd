@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, Modal } from "react-native";
+import { StyleSheet, TextInput, Modal, Platform} from "react-native";
 import usecreateTaskStore from "../../store/createTaskStore";
-import { Box, Card, Text, View, Button, VStack, HStack, ButtonText } from "@gluestack-ui/themed";
+import { Box, Card, Text, View, Button, VStack, HStack, ButtonText} from "@gluestack-ui/themed";
 import { Image } from "@gluestack-ui/themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from '@react-native-picker/picker';
 import { config } from '../../styles/themeConfig'; // Import the theme configuration
 import { defaultStyles } from './../../styles/styles'
+import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+
 
 const SubTaskScreen = ({index}) => {
 
@@ -56,7 +59,7 @@ const SubTaskScreen = ({index}) => {
         <>
          <Card style={styles.cardBody}>
             <TextInput
-                style={styles.input}
+                style={[defaultStyles.TypographyBody, styles.input ]}
                 placeholder="Add Task Title"
                 value={selectedSubTask.sub_title}
                 onChangeText={handleSubTitleChange}
@@ -64,8 +67,8 @@ const SubTaskScreen = ({index}) => {
         </Card>  
         <Card style={styles.cardBody}>
             <View style={styles.detailItem}>
-                <Text style={styles.label}>Time</Text>
-                {selectedSubTask.time ? (<Text>{selectedSubTask.time}</Text>) :
+                <Text style={[defaultStyles.TypographyBodyHeavy]}>Time</Text>
+                {selectedSubTask.time ? (<Text style={[defaultStyles.TypographyBody]}>{selectedSubTask.time}</Text>) :
                     (<Image
                         source={require("../../../assets/tickIcon.png")}
                         style={styles.tickImage} alt="tick icon"
@@ -80,9 +83,9 @@ const SubTaskScreen = ({index}) => {
                     />)}
             </View> */}
             <View style={styles.detailLastItem}>
-                <Text style={styles.label}>Minutes</Text>
+                <Text style={[defaultStyles.TypographyBody]}>Minutes</Text>
                 <TouchableOpacity onPress={openModal}>
-                    <Image source={require("../../../assets/rightAngle.png")} alt="right arrow" style={styles.tickImage}/>
+                    <ChevronRightIcon/>
                     </TouchableOpacity>
             </View>
         </Card>
@@ -101,16 +104,16 @@ const SubTaskScreen = ({index}) => {
                     style={styles.picker}
                     >
                     {Array.from({ length: 61 }, (_, i) => (
-                       <Picker.Item key={i} label={`${i}`} value={i} color={config.tokens.colors.black} style={[defaultStyles.TypographyBodyHeavy]}/>
+                    <Picker.Item key={i} label={`${i}`} value={i} color={config.tokens.colors.black} style={[defaultStyles.TypographyBodyHeavy]}/>
                     ))}
                     </Picker>
-                    <Text style={styles.modalTitle}>Minutes</Text>
+                    <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
                 </HStack>
                 <HStack style={styles.buttonContainer}>
                     <Button style={styles.clearButton} onPress={clearMinuteSelection}>
                         <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
                     </Button>
-                    <Button style={styles.submitButton} onPress={applyMinuteSelection}>
+                    <Button style={[defaultStyles.TypographyBodyHeavy, styles.submitButton]} onPress={applyMinuteSelection}>
                         <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
                     </Button>
                 </HStack>
@@ -128,8 +131,6 @@ const styles = StyleSheet.create({
         width:'80%',
         borderRadius:20,
         marginBottom:20,
-        borderWidth: 1,
-        borderColor: 'black',
     },
     detailItem: {
         flexDirection: 'row',
@@ -150,16 +151,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     input: {
-        fontSize: 16,
         height: 40,
-        borderBottomColor: "gray",
+        borderBottomColor: config.tokens.colors.neutralLight,
         borderBottomWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
-    },
-        label: {
-        fontSize: 16,
-        fontWeight: "bold",
     },
         tickImage: {
         width: 15,
@@ -173,7 +169,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '100%',
-        height: '35%',
+        height: '38%',
         margin: 0,
         padding: 0,
         borderRadius: 20,
@@ -184,8 +180,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         
     },
+    scrollViewContent: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     modalTitle: {
-        fontWeight: 'bold',
         marginLeft: 10,
     },
     pickerContainer: {
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        marginTop: 60,
+        marginTop: 70,
         marginBottom: 40,
     },
     picker: {
@@ -201,12 +201,13 @@ const styles = StyleSheet.create({
         height: 50,
         justifyContent: 'center',
         backgroundColor: config.tokens.colors.highPriority,
+        borderRadius: 10,
     },
     buttonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         width: '100%',
-        marginTop: 20,
+        marginTop: 30,
     },
     submitButton: {
         backgroundColor: config.tokens.colors.primaryDark,
