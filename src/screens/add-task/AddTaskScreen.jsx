@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import AddTaskHeader from '../../components/AddTaskHeader';
 import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
 import {
-    Box, Button, ButtonText, Card, Center, CloseIcon, FlatList,
+    Box, Button, ButtonText, Card, Center, FlatList,
     HStack, Heading, Icon, Text, Modal,
     ModalCloseButton, ModalContent, VStack,
     View,
@@ -41,6 +41,7 @@ import TasksIcon from '../../../assets/icons/tasks.svg';
 import Ai4Icon from '../../../assets/icons/ai4.svg';
 import AI4 from '../../../assets/icons/ai4.svg';
 import AI6 from '../../../assets/icons/ai6.svg';
+import CloseIcon from '../../../assets/icons/x.svg';
 const image = require('../../../assets/background/background.png');
 
 const { width, height } = Dimensions.get('window');
@@ -406,9 +407,9 @@ const AddTaskScreen = ({ navigation }) => {
                 
                 <Modal isOpen={modalTitleVisible} onClose={handleCloseTitleModal}>
                     <ModalContent style={styles.modalContent}>
-                        <Heading size='lg' textAlign='center'>Add Task Title</Heading>
+                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Add Task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseTitleModal}>
-                            <Icon as={CloseIcon} />
+                            <Icon as={CloseIcon} style={styles.closeIcon}/>
                         </ModalCloseButton>
                         <VStack space={4} style={styles.modalBody}>
                             <TitleModalScreen/>
@@ -417,7 +418,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Modal>
                 <Modal isOpen={modalDateTimeVisible} onClose={handleCloseDateTimeModal}>
                     <ModalContent style={styles.modalContent}>
-                        <Heading size='lg' textAlign='center'>Date and Time</Heading>
+                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Date and Time</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseDateTimeModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -433,7 +434,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Modal>
                 <Modal isOpen={modalNoteVisible} onClose={handleCloseNoteModal}>
                     <ModalContent style={styles.modalNoteContent}>
-                        <Heading size='lg' textAlign='center'>Notes</Heading>
+                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Notes</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseNoteModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -444,7 +445,7 @@ const AddTaskScreen = ({ navigation }) => {
                 </Modal>
                 <Modal isOpen={modalPriorityVisible} onClose={handleClosePriorityModal}>
                     <ModalContent style={styles.modalPriorityContent}>
-                        <Heading size='lg' textAlign='center'>Task Priority</Heading>
+                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Task Priority</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleClosePriorityModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -520,18 +521,20 @@ const styles = StyleSheet.create({
         height: '90%',
         margin: 0,
         padding: 0,
+        paddingTop: 15,
         borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
     },
     modalNoteContent: {
         width: '100%',
-        height: '25%',
+        height: 288,
         margin: 0,
         padding: 0,
+        paddingTop: 15,
         borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
     },
@@ -540,20 +543,25 @@ const styles = StyleSheet.create({
         height: '45%',
         margin: 0,
         padding: 0,
+        paddingTop: 15,
         borderRadius: 20,
-        backgroundColor: 'white',
+        backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
     },
     closeButton: {
         position: 'absolute',
         left: 10,
+        top: 10,
+    },
+    closeIcon: {
+        fontSize: 34,
     },
     modalBody: {
         flex: 1,
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 50,
+        paddingTop: 10,
     },
     listContent: {
         paddingBottom: 20,

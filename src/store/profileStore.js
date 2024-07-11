@@ -9,7 +9,7 @@ const profileStore = create((set) => ({
     password: '',
     userId: '',
     token: '',
-    profile_img: 'https://images.rawpixel.com/image_png_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIyLTA4L2pvYjEwMzQtZWxlbWVudC0wNi0zOTcucG5n.png',
+    profile_img: 'https://s3-alpha-sig.figma.com/img/62a0/a6a0/8592ca584b0351d615004dc4d9cfca77?Expires=1721606400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=SG0poJUVFT0BVy2cf9El4-vcvumc6M~5HKaG9VgtybaR2FAtR-arGhedOCWizPv5ZJ7hQAu5FjVuAWf4cTi2Ca2GN2xD74JtoUwJ3sCJIRubyA8DkVNUxfZW~ux7bmdrZFLpfZV0qwB-7w6eqSVukswLrnp4nlCAwx-JHt~EAA9~-0At7I59rof00OzqlC9xn9JGq~KjokYaUcqHOtICgvMLn38iR04gnSjGvmndFyycuk~arjhVgzFEk9oCTbzCNolYtMMA1GYmGD2~9ZHELItWV-Bq1xtJY9ie1G-zt4qq2xNl-N0prehbAobjfoGnPE5b-n-FcKEbr3~UYObe6w__',
     notification: false,
     movement_reminder: false,
     task_reminder: false,

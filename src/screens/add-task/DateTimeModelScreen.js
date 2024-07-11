@@ -9,7 +9,7 @@ const DateTimeModelScreen = () => {
   
   return (
     <SafeAreaView>
-      <Text style={styles.title}>Date and Time</Text>
+      {/* <Text style={styles.title}>Date and Time</Text> */}
       <AddTaskDateContainer />
       <AddTaskTimeContainer />
       <ToggleSwitchTaskReminder />
@@ -21,8 +21,8 @@ export default DateTimeModelScreen;
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: "bold",
-    fontSize: 24,
-    textAlign: "center",
+    // fontWeight: "bold",
+    // fontSize: 24,
+    // textAlign: "center",
   },
 });

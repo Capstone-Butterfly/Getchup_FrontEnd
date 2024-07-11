@@ -23,11 +23,11 @@ const Stack = createStackNavigator();
 
 const AppNavigator = () => (
     <Stack.Navigator initialRouteName="SignIn">
-        <Stack.Screen name="SignIn" component={SignInScreen} />
-        <Stack.Screen name="SignUp" component={SignUpScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="SurveyQuestionScreen" component={SurveyQuestionScreen} />
-        <Stack.Screen name="ADHDCatScreen" component={ADHDCatScreen} />
+        <Stack.Screen name="SignIn" component={SignInScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="SignUp" component={SignUpScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="SurveyQuestionScreen" component={SurveyQuestionScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="ADHDCatScreen" component={ADHDCatScreen} options={{ headerShown: false }}/>
     </Stack.Navigator>
 );
 

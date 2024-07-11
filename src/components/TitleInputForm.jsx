@@ -1,35 +1,43 @@
 import React from "react";
-import { View, TextInput, StyleSheet } from "react-native";
-import usecreateTaskStore from '../store/createTaskStore';
+import { TextInput, StyleSheet } from "react-native";
+import usecreateTaskStore from "../store/createTaskStore";
+import { defaultStyles } from "../styles/styles";
+import { config } from "../styles/themeConfig";
+import {
+  Card,
+  View,
+} from "@gluestack-ui/themed";
 
 const TitleInputForm = () => {
-
-    const { title, setTitle } = usecreateTaskStore((state) => ({
-        title: state.title,
-        setTitle: state.setTitle,
-    }));
+  const { title, setTitle } = usecreateTaskStore((state) => ({
+    title: state.title,
+    setTitle: state.setTitle,
+  }));
 
   return (
-    <View >
-      <TextInput
-        style={styles.input}
-        placeholder="Add Task Title"
-        value={title}
-        onChangeText={setTitle}
-      />
-    </View>
+    <Card style={defaultStyles.card}>
+      <View style={styles.container}> 
+        <TextInput
+          style={[defaultStyles.TypographyH2, styles.input]}
+          placeholder="Add Task Title"
+          placeholderTextColor={config.tokens.colors.lighterBlack}
+          value={title}
+          onChangeText={setTitle}
+        />
+      </View>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    margin: 10,
+    margin: 5,
   },
   input: {
     height: 40,
-    borderBottomColor: "gray",
+    width: 295,
+    borderBottomColor: config.tokens.colors.lighterBlack,
     borderBottomWidth: 1,
-    borderRadius: 5,
     paddingHorizontal: 10,
   },
 });

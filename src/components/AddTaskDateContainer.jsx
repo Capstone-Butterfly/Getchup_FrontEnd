@@ -70,6 +70,7 @@ const DateModelScreen = () => {
 
   return (
     <SafeAreaView>
+      <View>
       <VStack space="lg" reversed={false}>
         <HStack space={2} alignItems="center" justifyContent="space-between">
           <Box>
@@ -140,6 +141,7 @@ const DateModelScreen = () => {
           </HStack>
         </TouchableOpacity>
       </VStack>
+      </View>
 
       <Modal isOpen={showStartDateModal} onClose={toggleStartDateModal}>
         <ModalContent style={styles.modalContent}>
