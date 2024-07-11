@@ -10,11 +10,10 @@ const NotesInputForm = () => {
     notes: state.notes,
     setNotes: state.setNotes,
   }));
-  
 
   return (
-    <Card styles={defaultStyles.card}>
-      <View styles={defaultStyles.card}>
+    <Card style={[defaultStyles.card, styles.card]}>
+      <View style={styles.container}>
         <TextInput
           style={[defaultStyles.TypographyH2, styles.input]}
           placeholder="Add notes"
@@ -34,12 +33,14 @@ const styles = StyleSheet.create({
   container: {
     margin: 5,
   },
+  card: {
+    borderRadius: 20, 
+  },
   input: {
     width: 295,
     height: 40,
     borderBottomColor: config.tokens.colors.lighterBlack,
     borderBottomWidth: 1,
-    borderRadius: 5,
     paddingHorizontal: 10,
   },
 });
