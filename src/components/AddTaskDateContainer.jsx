@@ -55,16 +55,10 @@ const DateModelScreen = () => {
     setShowEndDateModal(false);
   };
 
-  // const { isAnyModalVisible, setIsAnyModalVisible } =
-  //   useDateTimeModelVisibleStore((state) => ({
-  //     isAnyModalVisible: state.isAnyModalVisible,
-  //     setIsAnyModalVisible: state.setIsAnyModalVisible,
-  //   }));
-
-  // const toggleStartDateModal = () => {
-  //   setShowStartDateModal(!showStartDateModal);
-  //   // setIsAnyModalVisible(!showStartDateModal || showEndDateModal);
-  // };
+  const toggleStartDateModal = () => {
+    setShowStartDateModal(!showStartDateModal);
+    // setIsAnyModalVisible(!showStartDateModal || showEndDateModal);
+  };
 
   const toggleEndDateModal = () => {
     setShowEndDateModal(!showEndDateModal);
@@ -74,6 +68,7 @@ const DateModelScreen = () => {
   const onDayPress = (day) => {
     if (showStartDateModal) {
       setStartDate(day.dateString);
+      setEndDate(day.dateString);
       setDateLabel(day.dateString);
       toggleStartDateModal();
     } else if (showEndDateModal) {

@@ -63,6 +63,13 @@ const TimeModelScreen = () => {
         hour12: false,
       })
     );
+    setEndTime(
+      selectedDate.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      })
+    );
     setTimeLabel(
       selectedDate.toLocaleTimeString([], {
         hour: "2-digit",
@@ -224,12 +231,12 @@ const TimeModelScreen = () => {
             style={{ borderTopWidth: 1, borderColor: "lightgrey" }}
           >
             <Text
-              style={{
+              style={[{
                 color: "green",
                 padding: 14,
                 textAlign: "center",
                 fontSize: 20,
-              }}
+              }, defaultStyles.TypographyBodyHeavy]}
             >
               Confirm
             </Text>
@@ -245,7 +252,7 @@ const TimeModelScreen = () => {
             }}
           >
             <Text
-              style={{ color: "#545F71", textAlign: "center", fontSize: 20 }}
+              style={[{ color: "#545F71", textAlign: "center" }, defaultStyles.TypographyBodyHeavy]}
             >
               Cancel
             </Text>
@@ -265,12 +272,12 @@ const TimeModelScreen = () => {
             style={{ borderTopWidth: 1, borderColor: "lightgrey" }}
           >
             <Text
-              style={{
+              style={[{
                 color: "green",
                 padding: 14,
                 textAlign: "center",
                 fontSize: 20,
-              }}
+              }, defaultStyles.TypographyBodyHeavy]}
             >
               Confirm
             </Text>
@@ -286,7 +293,7 @@ const TimeModelScreen = () => {
             }}
           >
             <Text
-              style={{ color: "#545F71", textAlign: "center", fontSize: 20 }}
+              style={[{ color: "#545F71", textAlign: "center", fontSize: 20 }, defaultStyles.TypographyBodyHeavy]}
             >
               Cancel
             </Text>
