@@ -1,6 +1,6 @@
 import React, {useEffect} from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
-import { Card, Text, View, VStack, HStack } from "@gluestack-ui/themed";
+import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import { getTodayChartDetails, getWeeklyChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
 import { useQuery } from "@tanstack/react-query";
@@ -8,6 +8,8 @@ import ProgressCalendar from "./ProgressCalendar";
 import ProgressDateRangeTab from "./ProgressDateRangeTab";
 import useProgressDateRangeStore from "../store/progressDateRangeStore";
 import dayjs from "dayjs";
+import { defaultStyles } from '../styles/styles';
+import { config } from '../styles/themeConfig';
 
 const WeeklyProgressChartDetail = ({userId}) => {
 
@@ -92,11 +94,11 @@ const WeeklyProgressChartDetail = ({userId}) => {
         <View style={styles.titleRow}>
           <View style={styles.titleItem}>
             <View style={styles.completedIndicator} />
-            <Text>{tData.totalCompletedTasks} Completed</Text>
+            <Text style={defaultStyles.TypographyBody}>{tData.totalCompletedTasks} Completed</Text>
           </View>
           <View style={styles.titleItem}>
             <View style={styles.incompleteIndicator} />
-            <Text>{tData.totalIncompleteTasks} On Going</Text>
+            <Text style={defaultStyles.TypographyBody}>{tData.totalIncompleteTasks} On Going</Text>
           </View>
         </View>
       </View>
@@ -106,37 +108,39 @@ const WeeklyProgressChartDetail = ({userId}) => {
   const stackData = transformData(weeklyData);
   
   return (
-    <View>
+    <View style={styles.container}>
         {renderTitle(todayData)}
-        <BarChart
-          width={240}
-          noOfSections={7}
-          barWidth={15}
-          //barBorderRadius={30}
-          yAxisThickness={0}
-          rulesType="solid"
-          stackData={stackData}
-        />
-        <VStack space={4}>
-          <HStack space={4} style={styles.hstack}>
-            <Text style={styles.textLabel}>Perfect Days</Text>
-            <Text style={styles.textValue}>
+        <Box style={styles.barchartContainer}>
+          <BarChart
+            width={260}
+            noOfSections={7}
+            barWidth={20}
+            barBorderRadius={6}
+            yAxisThickness={0}
+            rulesType="solid"
+            stackData={stackData}
+          />
+        </Box>
+        <VStack style={styles.vStack}>
+          <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Perfect Days</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>
               {weeklyData.perfectDaysCount === 0 
                 ? '0 day' 
                 : `${weeklyData.perfectDaysCount} ${weeklyData.perfectDaysCount === 1 ? 'day' : 'days'}`}
             </Text> 
           </HStack>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={styles.textLabel}>Most Productive Time</Text>
-            <Text style={styles.textValue}>{todayData.mostProductiveTime}</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Most Productive Time</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.mostProductiveTime}</Text>
           </HStack>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={styles.textLabel}>Least Productive Time</Text>
-            <Text style={styles.textValue}>{todayData.leastProductiveTime}</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Least Productive Time</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.leastProductiveTime}</Text>
           </HStack>
           <HStack space={4} style={styles.hstack}>
-            <Text style={styles.textLabel}>Overall Rate</Text>
-            <Text style={styles.textValue}>{todayData.completionPercentage}%</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Overall Rate</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.completionPercentage}%</Text>
           </HStack>
         </VStack>
       
@@ -147,42 +151,38 @@ const WeeklyProgressChartDetail = ({userId}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
-  cardBody: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
-    padding: 25,
-    margin: 20,
-    borderRadius: 20,
-    marginBottom: 20,
+  vStack: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: 30,
+    paddingLeft: 20,
+  },
+  barchartContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignContent: 'center',
+    paddingTop: 10,
+    paddingLeft: 10,
   },
   hstack: {
-    paddingVertical: 10,
+    paddingVertical: 20,
   },
   hstackWithBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: config.tokens.colors.neutralLight,
   },
   textLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
     width: "70%",
   },
-  textValue: {
-    fontSize: 16,
-    width: "50%",
-  },
   titleContainer: {
-    marginVertical: 30,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   titleRow: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginTop: 24,
   },
   titleItem: {
     flexDirection: "row",
@@ -192,14 +192,14 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     borderRadius: 10,
-    backgroundColor: "#94B6EF",
+    backgroundColor: config.tokens.colors.blue,
     marginRight: 8,
   },
   incompleteIndicator: {
-    height: 12,
-    width: 12,
-    borderRadius: 6,
-    backgroundColor: "#F1938E",
+    height: 20,
+    width: 20,
+    borderRadius: 10,
+    backgroundColor: config.tokens.colors.highPriority,
     marginRight: 8,
   },
 });
