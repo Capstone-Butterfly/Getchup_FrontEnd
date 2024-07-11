@@ -74,7 +74,7 @@ const defaultStyles = StyleSheet.create({
         marginVertical: 12,
         borderRadius: 20,
         // elevation: 3,
-        width: '100%',
+        // width: '100%',
     },
     
     buttonVariant3: {
