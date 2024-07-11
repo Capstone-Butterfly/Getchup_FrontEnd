@@ -4,7 +4,7 @@ import TitleInputForm from "../../components/TitleInputForm";
 import TaskLibraryContainer from "../../components/TaskLibraryContainer";
 
 const TitleModelScreen = () => {
-  const data = [{ key: 'TaskLibraryContainer' }]; // Dummy data to render TaskLibraryContainer
+  const data = [{ key: 'TaskLibraryContainer' }];
 
   return (
     <SafeAreaView style={styles.container}>
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
   flatListContent: {
     flexGrow: 1,
-    paddingBottom: 20, // Optional: Add some bottom padding if needed
+    paddingBottom: 20,
   },
 });
 

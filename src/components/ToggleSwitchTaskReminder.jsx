@@ -1,14 +1,13 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import { Switch, HStack } from "@gluestack-ui/themed";
-import profileStore from "../store/profileStore";
+import { Text, StyleSheet } from "react-native";
+import { Switch } from "@petros-g/react-native-switch";
 import useCreateTaskStore from "../store/createTaskStore";
+import { HStack } from "@gluestack-ui/themed";
+import { config } from "../styles/themeConfig";
+import { defaultStyles } from "../styles/styles";
+import { Card, View } from "@gluestack-ui/themed";
 
 const ToggleSwitchTaskReminder = () => {
-  // const { task_reminder, setTaskReminder } = profileStore((state) => ({
-  //   task_reminder: state.task_reminder,
-  //   setTaskReminder: state.setTaskReminder,
-  // }));
   const { task_reminder, setTaskReminder } = useCreateTaskStore();
 
   const toggleSwitch = () => {
@@ -16,17 +15,30 @@ const ToggleSwitchTaskReminder = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <HStack alignItems="center" spacing="2">
-        <Text>Notify Me</Text>
+    <Card style={[defaultStyles.card]}>
+    <View style={[styles.container]}>
+      <HStack style={styles.hstack}>
+        <Text style={[defaultStyles.TypographyBodyHeavy, styles.text]}>
+          Notify Me
+        </Text>
         <Switch
-          size="sm"
-          isDisabled={false}
+          disabled={false}
           value={task_reminder}
-          onToggle={toggleSwitch}
+          onValueChange={toggleSwitch}
+          enableDrag={false}
+          trackWidth={32}
+          trackHeight={16}
+          circleSize={8}
+          circleOffset={-3}
+          circleActiveColor="white"
+          trackActiveColor={config.tokens.colors.primaryDark}
+          trackInactiveColor={config.tokens.colors.neutral}
+          animationDuration={200}
+          style={styles.switch}
         />
       </HStack>
     </View>
+    </Card>
   );
 };
 
@@ -34,8 +46,20 @@ export default ToggleSwitchTaskReminder;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 25,
-    flexDirection: "row",
-    justifyContent: "space-around",
+    margin: 5,
+    width: 295,
+  },
+  hstack: {
+    alignItems: "center",
+    display: "flex",
+    justifyContent: "space-between",
+    width: "100%",
+  },
+  switch: {
+    flexGrow: 0,
+  },
+  text: {
+    flexGrow: 1,
+    color: config.tokens.colors.lightBlack
   },
 });

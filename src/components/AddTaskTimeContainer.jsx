@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
 import {
   Text,
-  View,
   StyleSheet,
   Image,
   TouchableOpacity,
   Platform,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  VStack,
-  HStack,
-  Box
-} from "@gluestack-ui/themed";
+import { VStack, HStack, Box } from "@gluestack-ui/themed";
 // import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import useAddTaskDateModelStore from "../store/addTaskDateModelStore";
 import usecreateTaskStore from "../store/createTaskStore";
+import { defaultStyles } from "../styles/styles";
+import { config } from "../styles/themeConfig";
+import { Card, View } from "@gluestack-ui/themed";
+import TickIcon from "../../assets/icons/tickImageGreen.svg";
+import RightAngle from "../../assets/icons/rightAngle.svg";
 
 const TimeModelScreen = () => {
   const { timeLabel, setTimeLabel } = useAddTaskDateModelStore((state) => ({
@@ -125,73 +125,93 @@ const TimeModelScreen = () => {
 
     console.log("start_time:", start_time);
     console.log("end_time:", end_time);
-
   }, [start_time, end_time, timeLabel]);
 
   return (
-    <SafeAreaView>
-      <VStack space="lg" reversed={false}>
-        <HStack space={2} alignItems="center" justifyContent="space-between">
-          <Box>
-            <Text style={styles.label}>Time</Text>
-          </Box>
-          <Box>
-            <Text style={styles.time}>{timeLabel}</Text>
-          </Box>
-        </HStack>
-        <TouchableOpacity
-          onPress={() => {
-            const defaultStartTime = new Date();
-            defaultStartTime.setHours(6, 0, 0);
+    // <SafeAreaView>
+    <Card style={defaultStyles.card}>
+      <View style={styles.container}>
+        <VStack space="lg" reversed={false}>
+          <View style={styles.border}>
+            <HStack
+              space={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Box>
+                <Text style={[defaultStyles.TypographyBodyHeavy, styles.label]}>
+                  Time
+                </Text>
+              </Box>
+              <Box>
+                <Text style={[defaultStyles.TypographyBody, styles.time]}>
+                  {timeLabel}
+                </Text>
+              </Box>
+            </HStack>
+          </View>
+          <TouchableOpacity
+            style={styles.border}
+            onPress={() => {
+              const defaultStartTime = new Date();
+              defaultStartTime.setHours(6, 0, 0);
 
-            setStartTime(
-              defaultStartTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })
-            );
-            setEndTime(
-              defaultStartTime.toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: false,
-              })
-            );
-            setTimeLabel("Anytime");
-          }}
-        >
-          <HStack space={2} alignItems="center" justifyContent="space-between">
-            <Text>Anytime</Text>
-            {timeLabel === "Anytime" && (
-              <Image
-                source={require("../../assets/tickIcon.png")}
-                style={styles.tickImage}
-              />
-            )}
-          </HStack>
-        </TouchableOpacity>
+              setStartTime(
+                defaultStartTime.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              );
+              setEndTime(
+                defaultStartTime.toLocaleTimeString([], {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              );
+              setTimeLabel("Anytime");
+            }}
+          >
+            <HStack
+              space={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text style={[defaultStyles.TypographyBody, styles.text]}>
+                Anytime
+              </Text>
+              {timeLabel === "Anytime" && <TickIcon style={styles.tickImage} />}
+            </HStack>
+          </TouchableOpacity>
 
-        <TouchableOpacity onPress={toggleTimePicker}>
-          <HStack space={2} alignItems="center" justifyContent="space-between">
-            <Text>Start Time</Text>
-            <Image
-              source={require("../../assets/rightAngle.png")}
-              style={styles.tickImage}
-            />
-          </HStack>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={toggleEndTimePicker}>
-          <HStack space={2} alignItems="center" justifyContent="space-between">
-            <Text>End Time</Text>
-            <Image
-              source={require("../../assets/rightAngle.png")}
-              style={styles.tickImage}
-            />
-          </HStack>
-        </TouchableOpacity>
-      </VStack>
-     
+          <TouchableOpacity style={styles.border} onPress={toggleTimePicker}>
+            <HStack
+              space={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text style={[defaultStyles.TypographyBody, styles.text]}>
+                Start Time
+              </Text>
+              <RightAngle style={styles.tickImage} />
+            </HStack>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={toggleEndTimePicker}>
+            <HStack
+              space={2}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Text style={[defaultStyles.TypographyBody, styles.text]}>
+                End Time
+              </Text>
+              <RightAngle style={styles.tickImage} />
+            </HStack>
+          </TouchableOpacity>
+        </VStack>
+      </View>
+
       <DateTimePickerModal
         isVisible={isTimePickerVisible}
         mode="time"
@@ -273,24 +293,36 @@ const TimeModelScreen = () => {
           </TouchableOpacity>
         )}
       />
-    </SafeAreaView>
+    </Card>
+    // </SafeAreaView>
   );
 };
 
 export default TimeModelScreen;
 
 const styles = StyleSheet.create({
+  container: {
+    margin: 5,
+    // width: 295,
+  },
   title: {
     fontWeight: "bold",
     fontSize: 24,
     textAlign: "center",
   },
   label: {
-    fontSize: 16,
-    fontWeight: "bold",
+    color: config.tokens.colors.lightBlack,
   },
   time: {
-    fontSize: 16,
+    color: config.tokens.colors.lighterBlack,
+  },
+  text: {
+    color: config.tokens.colors.lightBlack,
+  },
+  border: {
+    paddingBottom: 13,
+    borderBottomColor: config.tokens.colors.neutralLight,
+    borderBottomWidth: 1,
   },
   tickImage: {
     width: 15,
