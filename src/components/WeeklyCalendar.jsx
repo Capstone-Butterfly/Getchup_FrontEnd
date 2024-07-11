@@ -3,6 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
 import { Box, Card, Divider, FlatList } from '@gluestack-ui/themed';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks';
 import { useQuery } from '@tanstack/react-query';
@@ -11,6 +12,7 @@ import { formatDateToString } from '../services/weeklyCalendar';
 import NoTasksCard from './NoTasksCard';
 import TasksCompletedCard from './TasksCompletedCard';
 import useNotificationStore from '../store/notificationStore';
+import { config } from '../styles/themeConfig';
 
 const WeeklyCalendar = ({ userId, navigation }) => {
     const { tasks, setTasks, selectedDate, setSelectedDate, addDataTask, updateDataTask } = useTaskStore((state) => ({
@@ -56,8 +58,10 @@ const WeeklyCalendar = ({ userId, navigation }) => {
         return [];
     }, [tasks, selectedDate]);
 
+    const tasksCompleted = filteredTasks.every(task => task.main_status === "complete");
+
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <CalendarStrip
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 calendarColor={'white'}
@@ -78,6 +82,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 selectedDate={selectedDate}
                 style={styles.calendarStrip}
                 shouldAllowFontScaling = {true}
+                dayComponentHeight={56}
             />
             {isLoading ? (
                 <Text>Loading...</Text>
@@ -87,6 +92,11 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 <Box style={[styles.tasksContainer]}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
                     <NoTasksCard navigation={navigation}/>
+                </Box>
+            ) : tasksCompleted ? (
+                <Box style={styles.tasksContainer}>
+                    <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
+                    <TasksCompletedCard />
                 </Box>
             ) : (
                 <Box style={styles.tasksContainer}>
@@ -105,7 +115,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                     />
                 </Box>
             )}
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -115,14 +125,14 @@ const styles = StyleSheet.create({
     // CALENDAR STRIP
     calendarStrip: {
         borderRadius: 20,
-        height: 110,
+        height: 126,
         // marginBottom: 24,
         // marginHorizontal: 20,
         padding: 20,
         margin:20
     },
     calendarHeaderStyle: {
-        marginBottom: 8,
+        marginBottom: 12,
         paddingLeft: 10,
         textAlign: 'left',
         width: '100%',
@@ -130,7 +140,7 @@ const styles = StyleSheet.create({
     dateNameStyle: {
         fontWeight: 'normal',
         // marginTop: 4,
-        // marginBottom: 4,
+        marginBottom: 8,
         textTransform: 'capitalize',
     },
     dateNumberStyle: {
@@ -151,7 +161,7 @@ const styles = StyleSheet.create({
         // duration: 200,
         // borderRadius: 10,
         // borderWidth: 1,
-        highlightColor: '#94b6ef',
+        highlightColor: config.tokens.colors.highPriority,
 
     },
     highlightDateNumberStyle: {

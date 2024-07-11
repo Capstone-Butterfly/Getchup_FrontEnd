@@ -49,14 +49,16 @@ const HomeScreen = ({ navigation }) => {
     }, []);
 
     const data = [
-        { key: 'header', component: <Header userId={userId}/> },
-        { key: 'greeting', component: <Greeting name={first_name} /> },
+        // { key: 'header', component: <Header userId={userId}/> },
+        // { key: 'greeting', component: <Greeting name={first_name} /> },
         { key: 'calendar', component: <WeeklyCalendar userId={userId} navigation={navigation} /> },
     ];
 
     return (
         <SafeAreaView style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+            <Header userId={userId}/>
+            <Greeting name={first_name} />
                 <FlatList
                     data={data}
                     renderItem={({ item }) => item.component}

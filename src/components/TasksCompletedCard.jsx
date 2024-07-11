@@ -3,9 +3,6 @@ import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Text, Heading, Image, ButtonText, Box } from "@gluestack-ui/themed";
 import { defaultStyles } from '../styles/styles';
-import { useNavigation } from '@react-navigation/native';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import CompleteImg from '../../assets/illustrations/complete.svg'
 
 const TasksCompletedCard = ({navigation}) => {

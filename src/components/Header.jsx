@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton } from "@gluestack-ui/themed";
@@ -7,17 +7,35 @@ import useNotificationStore from '../store/notificationStore';
 import NotificationsList from './NotificationList';
 import { defaultStyles } from '../styles/styles';
 import NotificationIcon from '../../assets/icons/notification.svg';
+import NotificationUnreadIcon from '../../assets/icons/notification-badges.svg';
 import { config } from '../styles/themeConfig';
+import { getUnreadNotificationsByUserId } from '../services/notificationService';
 
 const Header = ({ userId }) => {
-    const { isOpen, openPopover, closePopover } = useNotificationStore();
+    const { isOpen, openPopover, closePopover, notifications, setNotifications } = useNotificationStore();
+
+    useEffect(() => {
+        const fetchNotifications = async () => {
+            try {
+                const fetchedNotifications = await getUnreadNotificationsByUserId(userId);
+                setNotifications(fetchedNotifications);
+            } catch (error) {
+                console.error("Error fetching notifications: ", error);
+            }
+        };
+
+        fetchNotifications();
+    }, [userId, setNotifications]);
+
+    const unreadNotifications = notifications.filter(notification => !notification.read).length;
+    const NotificationIconComponent = unreadNotifications > 0 ? NotificationUnreadIcon : NotificationIcon
 
     return (
         <SafeAreaView style={styles.container}>
             <HStack style={styles.hstack}>
                 <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
                 <Pressable onPress={openPopover}>
-                    <Icon as={NotificationIcon} title="open" style={styles.icon} />
+                    <Icon as={NotificationIconComponent} title="open" style={styles.icon} />
                 </Pressable>
 
                 <Modal isOpen={isOpen} onClose={closePopover} style={styles.modal}>
@@ -48,6 +66,7 @@ const styles = StyleSheet.create({
         left: 0,
         top: 0,
         width: '100%',
+        zIndex: 1000,
     },
     headerTitle: {
         color: config.tokens.colors.neutralDark,

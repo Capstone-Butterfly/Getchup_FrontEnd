@@ -72,6 +72,16 @@ const fetchNotificationsByUserId = async (userId) => {
     return data;
 };
 
+const getUnreadNotificationsByUserId = async (userId) => {
+    try {
+        const notifications = await fetchNotificationsByUserId(userId);
+        return notifications.filter(notification => !notification.read);
+    } catch (error) {
+        console.error('Error fetching unread notifications:', error);
+        throw error;
+    }
+};
+
 const saveNotification = async (newNotification) => {
     try {
         const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
@@ -202,6 +212,7 @@ export {
     cancelNotification,
     saveNotification,
     getUnreadNotificationsFromTray,
+    getUnreadNotificationsByUserId,
     formatNotificationDate,
     fetchNotificationsByUserId,
     formatDateToString,
