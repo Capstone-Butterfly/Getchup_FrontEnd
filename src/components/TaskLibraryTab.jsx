@@ -9,8 +9,16 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import usecreateTaskStore from "../store/createTaskStore";
 import profileStore from "../store/profileStore";
+import { defaultStyles } from "../styles/styles";
+import { config } from "../styles/themeConfig";
+import TasksIcon from "../../assets/icons/task-library-icon.svg";
+import TasksIconWhite from "../../assets/icons/task-library-icon-white.svg";
 
-const CommonTasks = ({ fetchedCommonTask }) => {
+const CommonTasks = ({
+  fetchedCommonTask,
+  pressedItemId,
+  setPressedItemId,
+}) => {
   const { title, subTasks, setTitle, addSubtask } = usecreateTaskStore(
     (state) => ({
       title: state.title,
@@ -27,30 +35,65 @@ const CommonTasks = ({ fetchedCommonTask }) => {
           data={fetchedCommonTask}
           renderItem={({ item }) => (
             <View key={item._id}>
-              <Text style={styles.categoryHeading}>{item._id}</Text>
+              <Text
+                style={[
+                  styles.categoryHeading,
+                  defaultStyles.TypographyBodySmallHeavy,
+                ]}
+              >
+                {item._id}
+              </Text>
               {item.tasks.map((task) => (
                 <TouchableOpacity
                   key={task._id}
                   onPress={() => {
                     setTitle(task.title);
                     addSubtask(task.subtask);
+                    setPressedItemId(task._id);
                   }}
                 >
-                  <Text key={task._id} style={styles.taskTitle}>
-                    {task.title}
-                  </Text>
+                  <View
+                    style={[
+                      styles.tabContentBackground,
+                      styles.detailItem,
+                      pressedItemId === task._id &&
+                        styles.pressedItemBackground,
+                    ]}
+                  >
+                    {task._id !== pressedItemId ? (
+                      <TasksIcon style={styles.icon} />
+                    ) : (
+                      <TasksIconWhite style={styles.icon} />
+                    )}
+
+                    <Text
+                      key={task._id}
+                      style={[
+                        styles.taskTitle,
+                        defaultStyles.TypographyBodyHeavy,
+                        pressedItemId === task._id && styles.pressedItemText,
+                      ]}
+                    >
+                      {task.title}
+                    </Text>
+                  </View>
                 </TouchableOpacity>
               ))}
             </View>
           )}
           keyExtractor={(item) => item._id}
+          contentContainerStyle={{ paddingBottom: 40 }} 
         />
       </View>
     </View>
   );
 };
 
-const CreatedTasks = ({ fetchedRepeatedTask }) => {
+const CreatedTasks = ({
+  fetchedRepeatedTask,
+  pressedItemId,
+  setPressedItemId,
+}) => {
   const { title, subTasks, setTitle, addSubtask } = usecreateTaskStore(
     (state) => ({
       title: state.title,
@@ -61,7 +104,7 @@ const CreatedTasks = ({ fetchedRepeatedTask }) => {
   );
 
   return (
-    <View style={styles.tabContent}>
+    <View style={[styles.tabContent, {paddingTop : 10}]}>
       <FlatList
         data={fetchedRepeatedTask}
         renderItem={({ item }) => (
@@ -71,28 +114,52 @@ const CreatedTasks = ({ fetchedRepeatedTask }) => {
               onPress={() => {
                 setTitle(item.title);
                 addSubtask(item.subtask);
+                setPressedItemId(item._id);
               }}
             >
-              <Text key={item._id} style={styles.taskTitle}>
-                {item.title}
-              </Text>
+              <View
+                style={[
+                  styles.tabContentBackground,
+                  styles.detailItem,
+                  pressedItemId === item._id && styles.pressedItemBackground,
+                ]}
+              >
+                {item._id !== pressedItemId ? (
+                  <TasksIcon style={styles.icon} />
+                ) : (
+                  <TasksIconWhite style={styles.icon} />
+                )}
+                <Text
+                  key={item._id}
+                  style={[
+                    styles.taskTitle,
+                    defaultStyles.TypographyBodyHeavy,
+                    pressedItemId === item._id && styles.pressedItemText,
+                  ]}
+                >
+                  {item.title}
+                </Text>
+              </View>
             </TouchableOpacity>
           </View>
         )}
         keyExtractor={(item) => item._id}
+        contentContainerStyle={{ paddingBottom: 40 }} 
       />
     </View>
   );
 };
 
 const TaskLibraryTab = () => {
+  const [pressedItemId, setPressedItemId] = useState(null);
+
   const { activeTab, setActiveTab } = useAddTaskTitleStore((state) => ({
     activeTab: state.activeTab,
     setActiveTab: state.setActiveTab,
   }));
 
-  const { userId} = profileStore((state) => ({
-    userId: state.userId
+  const { userId } = profileStore((state) => ({
+    userId: state.userId,
   }));
 
   const {
@@ -103,13 +170,11 @@ const TaskLibraryTab = () => {
     queryKey: ["commonTasks"],
     queryFn: () => fetchCommonTasks(),
   });
-  // console.log("fetchedCommonTask" + fetchedCommonTask);
 
   const { data: fetchedRepeatedTask } = useQuery({
     queryKey: ["repeatedTasks"],
     queryFn: () => fetchRepeatedTasks(userId),
   });
-  console.log("repeatedTasks" + fetchedRepeatedTask);
 
   return (
     <View>
@@ -123,8 +188,12 @@ const TaskLibraryTab = () => {
         >
           <Text
             style={[
+              defaultStyles.TypographyBody,
               styles.tabText,
-              activeTab === "CommonTasks" && styles.activeTabText,
+              activeTab === "CommonTasks" && [
+                styles.activeTabText,
+                defaultStyles.TypographyBodyHeavy,
+              ],
             ]}
           >
             Common tasks
@@ -139,8 +208,12 @@ const TaskLibraryTab = () => {
         >
           <Text
             style={[
+              defaultStyles.TypographyBody,
               styles.tabText,
-              activeTab === "CreatedTasks" && styles.activeTabText,
+              activeTab === "CreatedTasks" && [
+                styles.activeTabText,
+                defaultStyles.TypographyBodyHeavy,
+              ],
             ]}
           >
             Created by you
@@ -151,13 +224,16 @@ const TaskLibraryTab = () => {
         {activeTab === "CommonTasks" && (
           <CommonTasks
             fetchedCommonTask={fetchedCommonTask}
-            // activeTab={activeTab}
-            // setTltle={setTltle}
-            // addSubtask={addSubtask}
+            pressedItemId={pressedItemId}
+            setPressedItemId={setPressedItemId}
           />
         )}
         {activeTab === "CreatedTasks" && (
-          <CreatedTasks fetchedRepeatedTask={fetchedRepeatedTask} />
+          <CreatedTasks
+            fetchedRepeatedTask={fetchedRepeatedTask}
+            pressedItemId={pressedItemId}
+            setPressedItemId={setPressedItemId}
+          />
         )}
       </View>
     </View>
@@ -170,31 +246,54 @@ const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: "row",
     justifyContent: "space-around",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
   },
   tabButton: {
     padding: 15,
     alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: config.tokens.colors.neutralDark,
+  },
+  tabText: {
+    color: config.tokens.colors.neutralDark,
   },
   activeTabButton: {
     borderBottomWidth: 2,
-    borderBottomColor: "#545F71",
+    borderBottomColor: config.tokens.colors.primaryDark,
   },
   activeTabText: {
-    fontWeight: "bold",
+    // fontWeight: "bold",
+    color: config.tokens.colors.primaryDark,
   },
   contentContainer: {
-    padding: 20,
+    padding: 5,
+  },
+  tabContentBackground: {
+    borderRadius: 10,
+    backgroundColor: config.tokens.colors.neutralLight,
+    marginTop: 8,
   },
   categoryHeading: {
     fontSize: 14,
-    fontWeight: "bold",
     marginTop: 10,
+    color: config.tokens.colors.neutralDark,
   },
   taskTitle: {
     fontSize: 16,
-    marginLeft: 10,
+    marginLeft: 0,
     marginTop: 5,
+    padding: 13,
+
+    borderRadius: 10,
+  },
+  detailItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingLeft: 15,
+  },
+  pressedItemBackground: {
+    backgroundColor: config.tokens.colors.neutralDark,
+  },
+  pressedItemText: {
+    color: "white",
   },
 });
