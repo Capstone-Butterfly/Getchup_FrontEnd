@@ -1,10 +1,11 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList, StyleSheet } from "react-native";
-import { Text } from "@gluestack-ui/themed"
+import { ImageBackground, Text } from "@gluestack-ui/themed"
 import profileStore from "../../store/profileStore";
 import useProgressDateRangeStore from "../../store/progressDateRangeStore";
 import ProgressChart from "../../components/ProgressChart";
 import ProgressChartDetail from "../../components/ProgressChartDetails";
+const image = require('../../../assets/background/background.png');
 
 const ProgressScreen = ({ navigation }) => {
   const {first_name, userId} = profileStore((state) => ({
@@ -30,11 +31,14 @@ const ProgressScreen = ({ navigation }) => {
   
     return (
       <SafeAreaView style={styles.container}>
-        <FlatList
-          data={components}
-          renderItem={({ item }) => item.component}
-          keyExtractor={(item) => item.key}
-        />
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>  
+          <FlatList
+            data={components}
+            renderItem={({ item }) => item.component}
+            keyExtractor={(item) => item.key}
+            contentContainerStyle={styles.listContainer}
+          />
+        </ImageBackground>
       </SafeAreaView>
     );
   };
@@ -42,6 +46,12 @@ const ProgressScreen = ({ navigation }) => {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+    },
+    image: {
+        flex: 1,
+    },
+    listContainer: {
+        flexGrow: 1,
     },
   });
 
