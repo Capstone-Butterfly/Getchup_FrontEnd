@@ -8,6 +8,7 @@ import useProgressDateRangeStore from '../store/progressDateRangeStore';
 import { defaultStyles } from '../styles/styles';
 import { config } from '../styles/themeConfig';
 import { ActivityIndicator, StyleSheet } from 'react-native';
+import Girl from '../../assets/icons/girl.svg'
 
 
 const ProgressChart = ({name, userId}) => {
@@ -22,8 +23,8 @@ const ProgressChart = ({name, userId}) => {
     const { data: progressCart, isLoading, error, refetch } = useQuery({
         queryKey: ['ProgressChart', userId, chartSelectedStartDate, chartSelectedEndDate], 
         queryFn: () => getTodayChartDetails(userId, chartSelectedStartDate, chartSelectedEndDate),
-        // refetchOnMount: true,
-        // refetchOnReconnect: true,
+        refetchOnMount: true,
+        refetchOnReconnect: true,
     });
 
     if (isLoading) {
@@ -42,7 +43,8 @@ const ProgressChart = ({name, userId}) => {
              <Box style={styles.headerCard}>
                 <Card style={styles.card}>
                     <VStack style={styles.imageCard}>
-                        <Image source={require('../../assets/girl.png')} style={styles.icon} alt='girl'/>
+                        <Girl style={styles.icon} />
+                        {/* <Image source={require('../../assets/girl.png')} style={styles.icon} alt='girl'/> */}
                         <Text style={defaultStyles.TypographyH2}>{name}</Text>
                     </VStack>
                     <VStack style={styles.bodyCard}>
