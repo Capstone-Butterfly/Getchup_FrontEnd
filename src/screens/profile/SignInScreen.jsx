@@ -6,7 +6,7 @@ import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSl
 import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
 import { signInProfile, userDataProfile } from '../../services/profile';
-import { config } from '../../styles/themeConfig'; // Import the theme configuration
+import { config } from '../../styles/themeConfig'; 
 import { defaultStyles } from './../../styles/styles'
 
 // Get device dimensions
@@ -54,16 +54,7 @@ function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <FormControl
-        p="$4"
-        borderWidth="$1"
-        borderRadius="$lg"
-        borderColor="$borderLight300"
-        $dark-borderWidth="$1"
-        $dark-borderRadius="$lg"
-        $dark-borderColor="$borderDark800"
-        style={styles.formBox}
-      >
+      <FormControl style={styles.formBox}>
         <VStack space="xl">
           <Heading style={[styles.heading, defaultStyles.TypographyH1 ]}>Sign In</Heading>
           <VStack space="xs">
@@ -84,7 +75,7 @@ function SignInScreen() {
                 onChangeText={setPassword}
                 type={showPassword ? "text" : "password"}
               />
-              <InputSlot pr="$3" onPress={handlePasswordVisibility}>
+              <InputSlot  onPress={handlePasswordVisibility}>
                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
               </InputSlot>
             </Input>
@@ -93,11 +84,11 @@ function SignInScreen() {
           <Button style={styles.submitButton} onPress={handleLogin} isLoading={isLoading}>
             <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Sign In</ButtonText>
           </Button>
-         <Text style={styles.textInfo}>
+         <Text style={[styles.textInfo , defaultStyles.TypographyBodyHeavy]}>
          Do not have an Account yet?
          </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <LinkText style={styles.callToNavigate}>Create an account!</LinkText>
+            <LinkText style={[styles.callToNavigate , defaultStyles.TypographyLink]}>Create an account!</LinkText>
           </TouchableOpacity>
         </VStack>
       </FormControl>
@@ -114,9 +105,25 @@ function SignInScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: config.tokens.spacing.lg,
     backgroundColor: config.tokens.colors.background,
     position: 'relative',
+    flex: 1,
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+  formBox: {
+    backgroundColor: 'white',
+    borderRadius: config.tokens.borderRadius.md,
+    padding: config.tokens.spacing.md,
+    borderColor: 'transparent',
+    width: width * 0.9, 
+    maxWidth: 400, 
+    minWidth: 300, 
+    shadowColor: '#000006',
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.06, 
+    shadowRadius: 5, 
+    elevation: 5, 
   },
   heading: {
     textAlign: 'center',
@@ -129,31 +136,22 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: config.tokens.colors.primaryDark,
     borderRadius: config.tokens.borderRadius.sm,
-    fontSize: 20,
-    alignSelf: 'flex-start',
-    marginVertical: config.tokens.spacing.md,
     marginHorizontal: 'auto',
+    
   },
-  submitButtonText: {
-color:config.tokens.colors.white,
+  submitButtonText:{
+
   },
   textInfo: {
     color: config.tokens.colors.textInfo,
-    fontWeight: '1000',
-    fontSize: 18,
     paddingBottom: config.tokens.spacing.sm,
     textAlign: 'center',
   },
   callToNavigate: {
-    color: config.tokens.colors.secondary,
+    color: config.tokens.colors.primaryDark,
     textAlign: 'center',
   },
-  formBox: {
-    backgroundColor: 'white',
-    borderRadius: config.tokens.borderRadius.md,
-    padding: config.tokens.spacing.md,
-    borderColor: config.tokens.colors.borderColor,
-  },
+  
   circlesContainer: {
     position: 'absolute',
     bottom: -180,
