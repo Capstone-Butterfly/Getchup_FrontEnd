@@ -80,8 +80,8 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
         onValueChange={toggleSwitch}
         value={isPlaying}
       />
-      <Text>{isPlaying ? 'Playing' : 'Paused'}</Text>
-      <Text>Current Track: {currentTrack + 1}</Text>
+      {/* <Text>{isPlaying ? 'Playing' : 'Paused'}</Text>
+      <Text>Current Track: {currentTrack + 1}</Text> */}
     </View>
   );
 });
