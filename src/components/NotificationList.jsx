@@ -7,30 +7,32 @@ import { useQuery } from '@tanstack/react-query';
 import NotificationCard from './NotificationCard';
 
 const NotificationsList = ({ userId, navigation }) => {
-    const { notifications, setNotifications } = useNotificationStore((state) => ({
-        notifications: state.notifications,
-        setNotifications: state.setNotifications
-    }));
+    // const { notifications, setNotifications } = useNotificationStore((state) => ({
+    //     notifications: state.notifications,
+    //     setNotifications: state.setNotifications
+    // }));
 
-    const { data: fetchedNotification, isLoading, error, refetch } = useQuery({
-        queryKey: ['notifications', userId],
-        queryFn: () => fetchNotificationsByUserId(userId),
-        refetchOnMount: true,
-        refetchOnReconnect: true,
-    });
+    // const { data: fetchedNotification, isLoading, error, refetch } = useQuery({
+    //     queryKey: ['notifications', userId],
+    //     queryFn: () => fetchNotificationsByUserId(userId),
+    //     refetchOnMount: true,
+    //     refetchOnReconnect: true,
+    // });
 
-    useEffect(() => {
-        if (fetchedNotification) {
-            setNotifications(fetchedNotification);
-        }
-    }, [fetchedNotification]);
+    // useEffect(() => {
+    //     if (fetchedNotification) {
+    //         setNotifications(fetchedNotification);
+    //     }
+    // }, [fetchedNotification]);
+
+    const {notifications} = useNotificationStore()
 
     return (
         <FlatList
             data={notifications}
             renderItem={({ item }) => (
                 <>
-                    <NotificationCard notification={item} navigation={navigation} />
+                    <NotificationCard notification={item} navigation={navigation} userId={userId} />
                     <Divider />
                 </>
             )}

@@ -1,6 +1,6 @@
 import { GestureHandlerRootView } from 'react-native-gesture-handler'; // THIS HAS TO BE AT LINE NUMBER 1
 import React from 'react';
-import { GluestackUIProvider, StatusBar } from '@gluestack-ui/themed';
+import { GluestackUIProvider, SafeAreaView, StatusBar } from '@gluestack-ui/themed';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -39,11 +39,15 @@ const App = () => {
         Archivo_600SemiBold,
         WorkSans_700Bold,
         WorkSans_600SemiBold
-      });
+    });
 
-      if (!fontsLoaded) {
-        return <Text>Loading...</Text>;
-      }
+    if (!fontsLoaded) {
+        return (
+            <SafeAreaView>
+                <Text>Loading...</Text>
+            </SafeAreaView>
+        )
+    }
 
 
     return (
@@ -78,7 +82,7 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         justifyContent: 'center',
-      },
+    },
 });
 
 export default App;

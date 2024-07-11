@@ -140,8 +140,13 @@ const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) 
 };
 
 const manualCompleteTask = async (taskId) => {
-  const { data } = await axios.patch( `${base_url}/tasks/manualcomplete/${taskId}`);
-  return data;
+  try {
+    const { data } = await axios.patch( `${base_url}/tasks/manualcomplete/${taskId}`);
+    return data;
+  } catch (error) {
+    console.log('error manually completing task:', error)
+    throw error
+  }
 };
 
 const handleAxiosError = (error) => {

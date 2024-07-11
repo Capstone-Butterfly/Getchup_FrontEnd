@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton } from "@gluestack-ui/themed";
+import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton, Text } from "@gluestack-ui/themed";
 import { CloseIcon } from '@gluestack-ui/themed';
 import useNotificationStore from '../store/notificationStore';
 import NotificationsList from './NotificationList';
@@ -9,33 +9,63 @@ import { defaultStyles } from '../styles/styles';
 import NotificationIcon from '../../assets/icons/notification.svg';
 import NotificationUnreadIcon from '../../assets/icons/notification-badges.svg';
 import { config } from '../styles/themeConfig';
-import { getUnreadNotificationsByUserId } from '../services/notificationService';
+import { getSortedNotificationsByUserId } from '../services/notificationService';
+import { useQuery } from '@tanstack/react-query';
 
 const Header = ({ userId }) => {
-    const { isOpen, openPopover, closePopover, notifications, setNotifications } = useNotificationStore();
+    const { isOpen, openPopover, closePopover } = useNotificationStore();
+
+    const { notifications, setNotifications } = useNotificationStore((state) => ({
+        notifications: state.notifications,
+        setNotifications: state.setNotifications
+    }));
+
+    const { data: fetchedNotification, isLoading, error, refetch } = useQuery({
+        queryKey: ['notifications', userId],
+        queryFn: () => getSortedNotificationsByUserId(userId),
+        refetchOnMount: true,
+        refetchOnReconnect: true,
+    });
 
     useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const fetchedNotifications = await getUnreadNotificationsByUserId(userId);
-                setNotifications(fetchedNotifications);
-            } catch (error) {
-                console.error("Error fetching notifications: ", error);
-            }
-        };
-
-        fetchNotifications();
-    }, [userId, setNotifications]);
-
+        if (fetchedNotification) {
+            setNotifications(fetchedNotification);
+        }
+    }, [fetchedNotification, setNotifications]);
+    
     const unreadNotifications = notifications.filter(notification => !notification.read).length;
     const NotificationIconComponent = unreadNotifications > 0 ? NotificationUnreadIcon : NotificationIcon
+    // useEffect(() => {
+    //     const fetchNotifications = async () => {
+    //         try {
+    //             const fetchedNotifications = await getSortedNotificationsByUserId(userId);
+    //             setNotifications(fetchedNotifications);
+    //         } catch (error) {
+    //             console.error("Error fetching notifications: ", error);
+    //         }
+    //     };
+
+    //     fetchNotifications();
+    // }, [userId, setNotifications]);
+
+
+    // if (isLoading) {
+    //     return (
+    //         <SafeAreaView>
+    //             <Text>Loading...</Text>
+    //         </SafeAreaView>
+    //     );
+    // }
 
     return (
+
         <SafeAreaView style={styles.container}>
             <HStack style={styles.hstack}>
                 <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
                 <Pressable onPress={openPopover}>
-                    <Icon as={NotificationIconComponent} title="open" style={styles.icon} />
+                    {isLoading ? null : (
+                        <Icon as={NotificationIconComponent} title="open" style={styles.icon} />
+                    )}
                 </Pressable>
 
                 <Modal isOpen={isOpen} onClose={closePopover} style={styles.modal}>

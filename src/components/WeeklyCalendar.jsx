@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         // duration: 200,
         // borderRadius: 10,
         // borderWidth: 1,
-        highlightColor: config.tokens.colors.highPriority,
+        highlightColor: config.tokens.colors.primary,
 
     },
     highlightDateNumberStyle: {
