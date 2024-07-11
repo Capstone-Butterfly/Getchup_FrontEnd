@@ -8,7 +8,7 @@ import Clock from '../../assets/icons/clock.svg'
 import Circle from '../../assets/icons/solid-circle.svg'
 import useTaskStore from '../store/taskStore.js'
 import useNotificationStore from '../store/notificationStore.js';
-import { manualCompleteTask } from '../services/tasks.js';
+import { manualCompleteTask, fetchTasksByTaskId } from '../services/tasks.js';
 import { markNotificationAsRead } from '../services/notificationService';
 
 
@@ -41,9 +41,16 @@ const NotificationCard = ({ navigation, notification, userId }) => {
     };
 
     const handleNotificationClick = async () => {
-        await markNotificationAsRead(notification._id);
-        refetchNotifications(userId);
-        navigation.navigate('TaskDetails', { taskId: notification.task_id });
+        try {
+            await manualCompleteTask(notification.task_id);
+            await markNotificationAsRead(notification._id);
+            refetchNotifications(userId);
+            const task = await fetchTasksByTaskId(notification.task_id)
+            // navigation.navigate('TaskDetailScreen', task );
+            console.log('navigate to task details screen')
+        } catch (error) {
+            console.log("error handling the click on the notification card:", error)
+        }
     };
 
     const cardStyle = notification.read ? styles.read : styles.unread;

@@ -12,7 +12,7 @@ import { config } from '../styles/themeConfig';
 import { getSortedNotificationsByUserId } from '../services/notificationService';
 import { useQuery } from '@tanstack/react-query';
 
-const Header = ({ userId }) => {
+const Header = ({ userId, navigation }) => {
     const { isOpen, openPopover, closePopover } = useNotificationStore();
 
     const { notifications, setNotifications } = useNotificationStore((state) => ({
@@ -77,7 +77,7 @@ const Header = ({ userId }) => {
                             </ModalCloseButton>
                         </ModalHeader>
                         <ModalBody style={styles.modalBody}>
-                            <NotificationsList userId={userId} />
+                            <NotificationsList userId={userId} navigation={navigation} />
                         </ModalBody>
                     </ModalContent>
                 </Modal>
