@@ -72,10 +72,10 @@ const fetchNotificationsByUserId = async (userId) => {
     return data;
 };
 
-const getUnreadNotificationsByUserId = async (userId) => {
+const getSortedNotificationsByUserId = async (userId) => {
     try {
-        const notifications = await fetchNotificationsByUserId(userId);
-        return notifications.filter(notification => !notification.read);
+        const notifications = await fetchNotificationsByUserId(userId);        
+        return notifications.sort((a, b) => new Date(b.sent_at) - new Date(a.sent_at));
     } catch (error) {
         console.error('Error fetching unread notifications:', error);
         throw error;
@@ -194,8 +194,13 @@ const formatDateToString = (date) => {
 };
 
 const markNotificationAsRead = async (notificationId) => {
-    const { data } = await axios.patch( `${base_url}/notifications/${notificationId}`);
-    return data;
+    try {
+        const { data } = await axios.patch( `${base_url}/notifications/${notificationId}`, {read: true});
+        return data;
+    } catch (error) {
+        console.log('error marking notification as read', error)
+        throw error
+    }
   };
 
 const convertToSeconds = (timestamp) => {
@@ -212,7 +217,7 @@ export {
     cancelNotification,
     saveNotification,
     getUnreadNotificationsFromTray,
-    getUnreadNotificationsByUserId,
+    getSortedNotificationsByUserId,
     formatNotificationDate,
     fetchNotificationsByUserId,
     formatDateToString,

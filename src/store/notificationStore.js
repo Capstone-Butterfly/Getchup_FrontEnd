@@ -1,6 +1,7 @@
 
 import { create } from 'zustand';
 import { getUnreadNotifications } from '../services/notificationService';
+import { getSortedNotificationsByUserId } from '../services/notificationService';
 
 const useNotificationStore = create(set => ({
 
@@ -21,6 +22,11 @@ const useNotificationStore = create(set => ({
 		const notifications = await getUnreadNotificationsFromTray();
 		set({ notifications });
 	},
+
+	refetchNotifications: async (userId) => {
+        const notifications = await getSortedNotificationsByUserId(userId);
+        set({ notifications });
+    },
 
 	//notification popover in the header:
 	isOpen: false,
