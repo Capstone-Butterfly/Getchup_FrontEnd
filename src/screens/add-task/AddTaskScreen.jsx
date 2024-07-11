@@ -540,7 +540,7 @@ const styles = StyleSheet.create({
     },
     modalPriorityContent: {
         width: '100%',
-        height: '45%',
+        // height: '45%',
         margin: 0,
         padding: 0,
         paddingTop: 15,
