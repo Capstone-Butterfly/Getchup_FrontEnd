@@ -529,7 +529,7 @@ const styles = StyleSheet.create({
     },
     modalNoteContent: {
         width: '100%',
-        height: '25%',
+        height: 288,
         margin: 0,
         padding: 0,
         paddingTop: 15,
