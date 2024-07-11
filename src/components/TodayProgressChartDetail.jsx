@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
-import { Card, Text, View, VStack, HStack } from "@gluestack-ui/themed";
+import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import { getTodayChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
 import { useQuery } from "@tanstack/react-query";
-import DateFormatter from '../utils/DateFormatter';
+import DateFormatter from "../utils/DateFormatter";
+import { defaultStyles } from "../styles/styles";
+import { config } from "../styles/themeConfig";
 
 const transformData = (data) => {
   const timePeriods = ["morning", "afternoon", "evening", "night"];
@@ -13,10 +15,15 @@ const transformData = (data) => {
     const incompleteCount = data.groupedTask[period]?.incompleteCount || 0;
     return {
       stacks: [
-        { value: incompleteCount, color: "#F1938E", marginBottom: 2 },
-        { value: completeCount, color: "#94B6EF" },
+        {
+          value: incompleteCount,
+          color: config.tokens.colors.highPriority,
+          marginBottom: 0,
+        },
+        { value: completeCount, color: config.tokens.colors.blue },
       ],
       label: period.charAt(0).toUpperCase() + period.slice(1),
+      labelTextStyle: { fontSize: 12 },
     };
   });
   return stackData;
@@ -28,23 +35,29 @@ const renderTitle = (data) => {
       <View style={styles.titleRow}>
         <View style={styles.titleItem}>
           <View style={styles.completedIndicator} />
-          <Text>{data.totalCompletedTasks} Completed</Text>
+          <Text style={defaultStyles.TypographyLabelSmall}>
+            {data.totalCompletedTasks} Completed
+          </Text>
         </View>
         <View style={styles.titleItem}>
           <View style={styles.incompleteIndicator} />
-          <Text>{data.totalIncompleteTasks} On Going</Text>
+          <Text style={defaultStyles.TypographyLabelSmall}>
+            {data.totalIncompleteTasks} On Going
+          </Text>
         </View>
       </View>
     </View>
   );
 };
 
-const TodayProgressChartDetail = ({userId}) => {
-  const todayDate = DateFormatter(new Date()).toLocaleString('en-CA').split(',')[0];
+const TodayProgressChartDetail = ({ userId }) => {
+  const todayDate = DateFormatter(new Date())
+    .toLocaleString("en-CA")
+    .split(",")[0];
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['todayProgressChart', userId, todayDate, todayDate], 
-      queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
+    queryKey: ["todayProgressChart", userId, todayDate, todayDate],
+    queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
     refetchOnMount: true,
     refetchOnReconnect: true,
   });
@@ -60,29 +73,48 @@ const TodayProgressChartDetail = ({userId}) => {
   const stackData = transformData(data);
   return (
     <View>
-        {renderTitle(data)}
+      {renderTitle(data)}
+      <Box style={styles.barchartContainer}>
         <BarChart
-          width={240}
+          width={230}
           noOfSections={5}
+          barWidth={15}
           yAxisThickness={0}
+          barBorderRadius={6}
+          spacing={35}
           rulesType="solid"
           stackData={stackData}
         />
-      
-        <VStack space={4}>
-          <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={styles.textLabel}>Most Productive Time</Text>
-            <Text style={styles.textValue}>{data.mostProductiveTime}</Text>
-          </HStack>
-          <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={styles.textLabel}>Least Productive Time</Text>
-            <Text style={styles.textValue}>{data.leastProductiveTime}</Text>
-          </HStack>
-          <HStack space={4} style={styles.hstack}>
-            <Text style={styles.textLabel}>Overall Rate</Text>
-            <Text style={styles.textValue}>{data.completionPercentage}%</Text>
-          </HStack>
-        </VStack>
+      </Box>
+
+      <VStack style={styles.vStack}>
+        <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
+          <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>
+            Most Productive Time
+          </Text>
+          <Text style={defaultStyles.TypographyBodyHeavy}>
+            {data.mostProductiveTime.charAt(0).toUpperCase() +
+              data.mostProductiveTime.slice(1)}
+          </Text>
+        </HStack>
+        <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
+          <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>
+            Least Productive Time
+          </Text>
+          <Text style={defaultStyles.TypographyBodyHeavy}>
+            {data.leastProductiveTime.charAt(0).toUpperCase() +
+              data.leastProductiveTime.slice(1)}
+          </Text>
+        </HStack>
+        <HStack space={4} style={styles.hstack}>
+          <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>
+            Overall Rate
+          </Text>
+          <Text style={defaultStyles.TypographyBodyHeavy}>
+            {data.completionPercentage}%
+          </Text>
+        </HStack>
+      </VStack>
     </View>
   );
 };
@@ -102,30 +134,33 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 20,
   },
+  vStack: {
+    display: "flex",
+    justifyContent: "space-between",
+    paddingTop: 30,
+    paddingLeft: 20,
+  },
   hstack: {
-    paddingVertical: 10,
+    paddingVertical: 20,
   },
   hstackWithBorder: {
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: config.tokens.colors.neutralLight,
   },
   textLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
     width: "70%",
   },
   textValue: {
-    fontSize: 16,
     width: "50%",
   },
   titleContainer: {
-    marginVertical: 30,
+    paddingTop: 20,
+    paddingBottom: 20,
   },
   titleRow: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-evenly",
-    marginTop: 24,
   },
   titleItem: {
     flexDirection: "row",
@@ -135,15 +170,22 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
     borderRadius: 10,
-    backgroundColor: "#94B6EF",
+    backgroundColor: config.tokens.colors.blue,
     marginRight: 8,
   },
   incompleteIndicator: {
     height: 20,
     width: 20,
     borderRadius: 10,
-    backgroundColor: "#F1938E",
+    backgroundColor: config.tokens.colors.highPriority,
     marginRight: 8,
+  },
+  barchartContainer: {
+    display: "flex",
+    justifyContent: "center",
+    alignContent: "center",
+    paddingTop: 10,
+    paddingLeft: 10,
   },
 });
 

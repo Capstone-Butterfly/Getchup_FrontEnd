@@ -78,7 +78,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
       const incompleteCount = wData.sortedTasksByDay[period.full]?.incompleteCount || 0;
       return {
         stacks: [
-          { value: incompleteCount, color: "#F1938E", marginBottom: 2 },
+          { value: incompleteCount, color: "#F1938E", marginBottom: 0 },
           { value: completeCount, color: "#94B6EF" }
         ],
         label: period.short
@@ -94,11 +94,11 @@ const WeeklyProgressChartDetail = ({userId}) => {
         <View style={styles.titleRow}>
           <View style={styles.titleItem}>
             <View style={styles.completedIndicator} />
-            <Text style={defaultStyles.TypographyBody}>{tData.totalCompletedTasks} Completed</Text>
+            <Text style={defaultStyles.TypographyLabelSmall}>{tData.totalCompletedTasks} Completed</Text>
           </View>
           <View style={styles.titleItem}>
             <View style={styles.incompleteIndicator} />
-            <Text style={defaultStyles.TypographyBody}>{tData.totalIncompleteTasks} On Going</Text>
+            <Text style={defaultStyles.TypographyLabelSmall}>{tData.totalIncompleteTasks} On Going</Text>
           </View>
         </View>
       </View>
@@ -114,7 +114,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
           <BarChart
             width={260}
             noOfSections={7}
-            barWidth={20}
+            barWidth={15}
             barBorderRadius={6}
             yAxisThickness={0}
             rulesType="solid"
@@ -123,23 +123,23 @@ const WeeklyProgressChartDetail = ({userId}) => {
         </Box>
         <VStack style={styles.vStack}>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Perfect Days</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>Perfect Days</Text>
             <Text style={defaultStyles.TypographyBodyHeavy}>
               {weeklyData.perfectDaysCount === 0 
                 ? '0 day' 
-                : `${weeklyData.perfectDaysCount} ${weeklyData.perfectDaysCount === 1 ? 'day' : 'days'}`}
+                : `${weeklyData.perfectDaysCount} ${weeklyData.perfectDaysCount === 1 ? 'Day' : 'Days'}`}
             </Text> 
           </HStack>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Most Productive Time</Text>
-            <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.mostProductiveTime}</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>Most Productive Time</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.mostProductiveTime ? todayData.mostProductiveTime.charAt(0).toUpperCase() + todayData.mostProductiveTime.slice(1) : ''}</Text>
           </HStack>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
-            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Least Productive Time</Text>
-            <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.leastProductiveTime}</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>Least Productive Time</Text>
+            <Text style={defaultStyles.TypographyBodyHeavy}> {todayData.leastProductiveTime ? todayData.leastProductiveTime.charAt(0).toUpperCase() + todayData.leastProductiveTime.slice(1) : ''}</Text>
           </HStack>
           <HStack space={4} style={styles.hstack}>
-            <Text style={[styles.textLabel, defaultStyles.TypographyBody]}>Overall Rate</Text>
+            <Text style={[styles.textLabel, defaultStyles.TypographyBodySmall]}>Overall Rate</Text>
             <Text style={defaultStyles.TypographyBodyHeavy}>{todayData.completionPercentage}%</Text>
           </HStack>
         </VStack>
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
-    paddingTop: 10,
+    paddingTop: 5,
     paddingLeft: 10,
   },
   hstack: {
