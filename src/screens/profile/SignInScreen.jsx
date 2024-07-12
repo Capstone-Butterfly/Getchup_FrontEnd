@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Center, EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
-import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
+import { Center, EyeIcon, EyeOffIcon, Image, LinkText } from '@gluestack-ui/themed';
+import { FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, ButtonText } from '@gluestack-ui/themed';
 import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
 import { signInProfile, userDataProfile } from '../../services/profile';
@@ -54,6 +54,12 @@ function SignInScreen() {
 
   return (
     <View style={styles.container}>
+    <View style={styles.logoDiv}>
+
+    <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} />
+    <Text style={styles.logoText}>Getchup!</Text>
+
+    </View>
       <FormControl style={styles.formBox}>
         <VStack space="xl">
           <Heading style={[styles.heading, defaultStyles.TypographyH1 ]}>Sign In</Heading>
@@ -75,18 +81,27 @@ function SignInScreen() {
                 onChangeText={setPassword}
                 type={showPassword ? "text" : "password"}
               />
-              <InputSlot  onPress={handlePasswordVisibility}>
+              <InputSlot onPress={handlePasswordVisibility}>
                 <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
               </InputSlot>
             </Input>
           </VStack>
           
-          <Button style={styles.submitButton} onPress={handleLogin} isLoading={isLoading}>
-            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Sign In</ButtonText>
-          </Button>
-         <Text style={[styles.textInfo , defaultStyles.TypographyBodyHeavy]}>
-         Do not have an Account yet?
-         </Text>
+          <Pressable
+            style={({ pressed }) => [
+              styles.submitButton,
+              pressed && styles.submitButtonPressed
+            ]}
+            onPress={handleLogin}
+          >
+            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>
+              {isLoading ? 'Signing In...' : 'Sign In'}
+            </ButtonText>
+          </Pressable>
+
+          <Text style={[styles.textInfo , defaultStyles.TypographyBodyHeavy]}>
+            Do not have an Account yet?
+          </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
             <LinkText style={[styles.callToNavigate , defaultStyles.TypographyLink]}>Create an account!</LinkText>
           </TouchableOpacity>
@@ -111,6 +126,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     alignItems: 'center', 
   },
+  logoDiv:{
+marginBottom:20
+  },
+  logoText:{
+textAlign:'center',
+fontWeight:'bold',
+fontSize:40
+
+  },
+  logo:{
+marginHorizontal:'auto',
+marginVertical:0,
+  },
+
   formBox: {
     backgroundColor: 'white',
     borderRadius: config.tokens.borderRadius.md,
@@ -137,10 +166,15 @@ const styles = StyleSheet.create({
     backgroundColor: config.tokens.colors.primaryDark,
     borderRadius: config.tokens.borderRadius.sm,
     marginHorizontal: 'auto',
-    
+    paddingVertical: 10,
+    paddingHorizontal: 20, 
+    alignItems: 'center',
   },
-  submitButtonText:{
-
+  submitButtonPressed: {
+    backgroundColor: config.tokens.colors.neutral,
+  },
+  submitButtonText: {
+    color: 'white',
   },
   textInfo: {
     color: config.tokens.colors.textInfo,
@@ -151,7 +185,6 @@ const styles = StyleSheet.create({
     color: config.tokens.colors.primaryDark,
     textAlign: 'center',
   },
-  
   circlesContainer: {
     position: 'absolute',
     bottom: -180,

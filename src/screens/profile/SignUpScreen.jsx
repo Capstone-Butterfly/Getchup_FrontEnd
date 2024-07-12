@@ -1,7 +1,7 @@
-import { EyeIcon, EyeOffIcon, LinkText } from '@gluestack-ui/themed';
-import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, Button } from '@gluestack-ui/themed';
+import { EyeIcon, EyeOffIcon, Image, LinkText } from '@gluestack-ui/themed';
+import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack } from '@gluestack-ui/themed';
 import React, { useState, useEffect } from 'react';
-import { View, Text, Alert, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Alert, TouchableOpacity, StyleSheet, Dimensions, Pressable, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useMutation } from '@tanstack/react-query';
 import profileStore from '../../store/profileStore';
@@ -39,7 +39,7 @@ function SignUpScreen() {
     setIsMatched(value === password);
   };
 
-  const { mutate: handleSignUp, mutationFn } = useMutation(
+  const { mutate: handleSignUp } = useMutation(
     {
       mutationFn: async () => {
         const data = await signUpProfile(first_name, last_name, email, password, phone);
@@ -63,94 +63,126 @@ function SignUpScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <FormControl style={styles.formBox}>
-        <VStack space="xl">
-          <Heading style={[styles.heading, defaultStyles.TypographyH1 ]}>Create New Account</Heading>
-          <VStack space="xs">
-            <Text  style={defaultStyles.TypographyBodyHeavy}>First Name</Text>
-            <Input style={styles.inputContainer}>
-              <InputField value={first_name} onChangeText={setFirstName} type="text" />
-            </Input>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <View style={styles.logoDiv}>
+          <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} />
+          <Text style={styles.logoText}>Getchup!</Text>
+        </View>
+        <FormControl style={styles.formBox}>
+          <VStack space="xl">
+            <Heading style={[styles.heading, defaultStyles.TypographyH1]}>Create New Account</Heading>
+            <VStack space="xs">
+              <Text style={defaultStyles.TypographyBodyHeavy}>First Name</Text>
+              <Input style={styles.inputContainer}>
+                <InputField value={first_name} onChangeText={setFirstName} type="text" />
+              </Input>
+            </VStack>
+
+            <VStack space="xs">
+              <Text style={defaultStyles.TypographyBodyHeavy}>Last Name</Text>
+              <Input style={styles.inputContainer}>
+                <InputField value={last_name} onChangeText={setLastName} type="text" />
+              </Input>
+            </VStack>
+
+            <VStack space="xs">
+              <Text style={defaultStyles.TypographyBodyHeavy}>Email</Text>
+              <Input style={styles.inputContainer} >
+                <InputField value={email} onChangeText={setEmail} type="text" />
+              </Input>
+            </VStack>
+
+            <VStack space="xs">
+              <Text style={defaultStyles.TypographyBodyHeavy}>Phone No.</Text>
+              <Input style={styles.inputContainer}>
+                <InputField value={phone} onChangeText={setPhone} type="text" />
+              </Input>
+            </VStack>
+
+            <VStack space="xs">
+              <Text style={defaultStyles.TypographyBodyHeavy}>Password</Text>
+              <Input textAlign="center" style={styles.inputContainer}>
+                <InputField value={password} onChangeText={handlePasswordChange} type={showPassword ? "text" : "password"} />
+                <InputSlot pr="$3" onPress={handlePasswordState}>
+                  <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
+                </InputSlot>
+              </Input>
+            </VStack>
+
+            <VStack space="xs">
+              <Text style={defaultStyles.TypographyBodyHeavy}>Confirm Password</Text>
+              <Input textAlign="center" style={styles.inputContainer}>
+                <InputField value={confirmPassword} onChangeText={handleConfirmPasswordChange} type={showConfirmPassword ? "text" : "password"} />
+                <InputSlot pr="$3" onPress={handleConfirmPasswordState}>
+                  <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
+                </InputSlot>
+              </Input>
+            </VStack>
+
+            {!isMatched && (
+              <Text style={{ color: 'red'}}>
+                Passwords do not match. Please enter matching passwords.
+              </Text>
+            )}
+
+            <Pressable
+              style={({ pressed }) => [
+                styles.submitButton,
+                pressed && styles.submitButtonPressed
+              ]}
+              onPress={handleSignUp}
+              disabled={!isMatched}
+            >
+              <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>
+                Create Account
+              </ButtonText>
+            </Pressable>
+
+            <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+              <LinkText style={[styles.callToNavigate, defaultStyles.TypographyLink]}>Already have an account?</LinkText>
+            </TouchableOpacity>
           </VStack>
-
-          <VStack space="xs">
-            <Text  style={defaultStyles.TypographyBodyHeavy}>Last Name</Text>
-            <Input style={styles.inputContainer}>
-              <InputField value={last_name} onChangeText={setLastName} type="text" />
-            </Input>
-          </VStack>
-
-          <VStack space="xs">
-            <Text  style={defaultStyles.TypographyBodyHeavy}>Email</Text>
-            <Input style={styles.inputContainer} >
-              <InputField value={email} onChangeText={setEmail} type="text" />
-            </Input>
-          </VStack>
-
-          <VStack space="xs">
-            <Text  style={defaultStyles.TypographyBodyHeavy}>Phone No.</Text>
-            <Input style={styles.inputContainer}>
-              <InputField value={phone} onChangeText={setPhone} type="text" />
-            </Input>
-          </VStack>
-
-          <VStack space="xs">
-            <Text  style={defaultStyles.TypographyBodyHeavy}>Password</Text>
-            <Input textAlign="center" style={styles.inputContainer}>
-              <InputField value={password} onChangeText={handlePasswordChange} type={showPassword ? "text" : "password"} />
-              <InputSlot pr="$3" onPress={handlePasswordState}>
-                <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
-              </InputSlot>
-            </Input>
-          </VStack>
-
-          <VStack space="xs">
-            <Text  style={defaultStyles.TypographyBodyHeavy}>Confirm Password</Text>
-            <Input textAlign="center" style={styles.inputContainer}>
-              <InputField value={confirmPassword} onChangeText={handleConfirmPasswordChange} type={showConfirmPassword ? "text" : "password"} />
-              <InputSlot pr="$3" onPress={handleConfirmPasswordState}>
-                <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
-              </InputSlot>
-            </Input>
-          </VStack>
-
-          {!isMatched && (
-            <Text style={{ color: 'red'}}>
-              Passwords do not match. Please enter matching passwords.
-            </Text>
-          )}
-
-          <Button backgroundColor='$blue' onPress={() => {
-            console.log('Sign Up button pressed');
-            handleSignUp();
-          }} disabled={!isMatched} style={styles.submitButton}>
-            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Create Account</ButtonText>
-          </Button>
-
-          <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-            <LinkText style={[styles.callToNavigate , defaultStyles.TypographyLink]}>Already have an account?</LinkText>
-          </TouchableOpacity>
-        </VStack>
-      </FormControl>
-      <View style={styles.circlesContainer}>
-        <View style={[styles.circle, styles.circleYellow]} />
-        <View style={[styles.circle, styles.circleRed]} />
-        <View style={[styles.circle, styles.circleBlue]} />
+        </FormControl>
+        <View style={styles.circlesContainer}>
+          <View style={[styles.circle, styles.circleYellow]} />
+          <View style={[styles.circle, styles.circleRed]} />
+          <View style={[styles.circle, styles.circleBlue]} />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 // Define styles at the bottom of the component file
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
     flex: 1,
     backgroundColor: config.tokens.colors.background,
     position: 'relative',
-    flex: 1,
     justifyContent: 'center', 
     alignItems: 'center', 
+    paddingBottom: 40, 
+  },
+  logoDiv: {
+    marginBottom: 20,
+    alignItems: 'center',
+    paddingTop:50
+  },
+  logoText: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 40,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
   },
   formBox: {
     backgroundColor: 'white',
@@ -179,10 +211,15 @@ const styles = StyleSheet.create({
     backgroundColor: config.tokens.colors.primaryDark,
     borderRadius: config.tokens.borderRadius.sm,
     marginHorizontal: 'auto',
-    
+    paddingVertical: 10,
+    paddingHorizontal: 20, 
+    alignItems: 'center',
   },
-  submitButtonText:{
-
+  submitButtonPressed: {
+    backgroundColor: config.tokens.colors.neutral,
+  },
+  submitButtonText: {
+    color: 'white',
   },
   textInfo: {
     color: config.tokens.colors.textInfo,
@@ -192,9 +229,8 @@ const styles = StyleSheet.create({
   callToNavigate: {
     color: config.tokens.colors.primaryDark,
     textAlign: 'center',
-    zIndex:2
+    zIndex: 2,
   },
-  
   circlesContainer: {
     position: 'absolute',
     bottom: -180,
@@ -222,6 +258,5 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
 });
-
 
 export default SignUpScreen;

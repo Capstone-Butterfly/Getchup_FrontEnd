@@ -1,6 +1,6 @@
-import { ButtonText, FormControl, Heading, VStack, Button } from '@gluestack-ui/themed';
+import { ButtonText, FormControl, Heading, VStack } from '@gluestack-ui/themed';
 import React from 'react';
-import { View, Text, Alert, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Alert, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
@@ -67,7 +67,6 @@ function SurveyQuestionScreen() {
           user_type: data.user_type,
         };
         await updateUserProfile(userId, userInfo);
-
         
         navigation.navigate('ADHDCatScreen');
       },
@@ -81,26 +80,26 @@ function SurveyQuestionScreen() {
 
   return (
     <View style={styles.container}>
-    
       <FormControl style={styles.formBox}>
         <VStack space="xl">
           <Heading style={[defaultStyles.TypographyH1]}>
             {questions[current_question].heading}
           </Heading>
           <View style={styles.progressBarContainer}>
-        <View style={[styles.progressBar, { width: progressBarWidth }]} />
-      </View>
+            <View style={[styles.progressBar, { width: progressBarWidth }]} />
+          </View>
           <Text style={defaultStyles.TypographyH2}>{questions[current_question].question}</Text>
           {questions[current_question].options.map((option) => (
-            <Button
+            <Pressable
               key={option}
-              backgroundColor="$blue"
+              style={({ pressed }) => [
+                styles.surveyButton,
+                pressed && styles.surveyButtonPressed
+              ]}
               onPress={() => handleOptionPress(option)}
-              style={styles.surveyBut}
             >
-              
-              <ButtonText style={styles.surveyButTest}>{option}</ButtonText>
-            </Button>
+              <ButtonText style={styles.surveyButtonText}>{option}</ButtonText>
+            </Pressable>
           ))}
         </VStack>
       </FormControl>
@@ -139,15 +138,21 @@ const styles = StyleSheet.create({
     maxWidth: 400, 
     minWidth: 300, 
   },
-  surveyBut:{
+  surveyButton: {
     backgroundColor: config.tokens.colors.white,
     borderRadius: config.tokens.borderRadius.md,
-    borderColor:config.tokens.colors.primaryDark,
-    borderWidth:1,
+    borderColor: config.tokens.colors.primaryDark,
+    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 20, 
+    alignItems: 'center',
+    marginVertical: 5, 
   },
-  surveyButTest:{
-    color:config.tokens.colors.black,
-
+  surveyButtonPressed: {
+    backgroundColor: config.tokens.colors.neutral,
+  },
+  surveyButtonText: {
+    color: config.tokens.colors.black,
   }
 });
 
