@@ -1,6 +1,7 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
-import { View, Text, Switch, StyleSheet } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import { Audio } from 'expo-av';
+import ToggleSwitch from '../../components/ToggleSwitch';
 
 const tracks = [
   'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/acousticbreeze.mp3',
@@ -18,6 +19,11 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
       if (sound) {
         await sound.pauseAsync();
         setIsPlaying(false);
+      }
+    },
+    unloadMusic: async () => {
+      if (sound) {
+        await sound.unloadAsync();
       }
     },
   }));
@@ -52,14 +58,14 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
     }
   };
 
-  const toggleSwitch = async (value) => {
+  const toggleSwitch = async () => {
     if (sound) {
-      if (value) {
+      if (!isPlaying) {
         await sound.playAsync();
       } else {
         await sound.pauseAsync();
       }
-      setIsPlaying(value);
+      setIsPlaying(!isPlaying);
     }
   };
 
@@ -73,15 +79,11 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
 
   return (
     <View style={styles.container}>
-      <Switch
-        trackColor={{ false: '#767577', true: '#81b0ff' }}
-        thumbColor={isPlaying ? '#f5dd4b' : '#f4f3f4'}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
+      <ToggleSwitch
         value={isPlaying}
+        onToggle={toggleSwitch}
       />
-      <Text>{isPlaying ? 'Playing' : 'Paused'}</Text>
-      <Text>Current Track: {currentTrack + 1}</Text>
+      
     </View>
   );
 });

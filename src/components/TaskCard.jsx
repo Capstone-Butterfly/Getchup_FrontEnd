@@ -2,9 +2,9 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 import { defaultStyles } from '../styles/styles';
-import { CheckIcon, Checkbox, CheckboxIcon, CheckboxIndicator, HStack, VStack } from '@gluestack-ui/themed';
-import CheckboxEmpty from '../../assets/icons/checkbox-empty.svg'
-import CheckboxChecked from '../../assets/icons/checkbox-checked.svg'
+import CheckboxEmpty from '../../assets/icons/checkbox-empty.svg';
+import CheckboxChecked from '../../assets/icons/checkbox-checked.svg';
+import { HStack, VStack } from '@gluestack-ui/themed';
 import { config } from '../styles/themeConfig';
 
 const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false }) => {
@@ -14,8 +14,6 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
         }
         return ConvertTimeStamp.convertMillisecondsToTimeString(time);
     };
-
-    let urgency = task.task_urgency;
 
     const getCardStyle = (urgency) => {
         let borderColor;
@@ -37,7 +35,7 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
 
     return (
         <TouchableOpacity
-            style={getCardStyle(urgency)}
+            style={getCardStyle(task.task_urgency)}
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <HStack style={styles.task}>
@@ -46,8 +44,9 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                         <TouchableOpacity>
                             <CheckboxChecked style={styles.checkbox} />
                         </TouchableOpacity>
-                        <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>{task.title}</Text>
-
+                        <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>
+                            {task.title}
+                        </Text>
                     </>
                 ) : (
                     <>
@@ -55,12 +54,15 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                             <CheckboxEmpty style={styles.checkbox} />
                         </TouchableOpacity>
                         <VStack style={styles.taskInfo}>
-                            <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>{task.title}</Text>
-                            <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>{task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks</Text>
+                            <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>
+                                {task.title}
+                            </Text>
+                            <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>
+                                {task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks
+                            </Text>
                         </VStack>
                     </>
                 )}
-
                 <VStack style={styles.taskTimeContainer}>
                     {showStartTime && (
                         <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>
@@ -87,50 +89,40 @@ const styles = StyleSheet.create({
         paddingVertical: 5,
         marginVertical: 12,
         borderRadius: 8,
-        // elevation: 3,
         width: '100%',
-    },
-    cardTitle: {
-        fontWeight: 'bold'
     },
     checkbox: {
-        // borderRadius: 50,
         marginRight: 11,
-        flexShrink: 0,
-        alignSelf: 'left',
-    },
-    icon: {
-        width: 24,
-        height: 24,
     },
     strikethrough: {
-        color: config.tokens.colors.neutral,
+        textDecorationLine: 'line-through',
+        textDecorationStyle: 'solid',
     },
     subtask: {
-        width: '100%',
-        display: 'block',
-        flexShrink: 1,
+        color: config.tokens.colors.muted,
     },
     task: {
+        alignItems: 'center',
         display: 'flex',
-        width: '100%',
+        flexDirection: 'row',
     },
     taskInfo: {
-        flexShrink: 1,
-        flexGrow: 1,
-    },
-    taskTimeContainer: {
-        flexShrink: 0,
-        alignItems: 'flex-end',
-        justifyContent: 'center',
+        flex: 1,
+        marginLeft: 10,
     },
     taskTime: {
-        flexShrink: 0,
+        fontSize: 12,
+        lineHeight: 14,
+        marginBottom: 2,
+    },
+    taskTimeContainer: {
+        alignItems: 'flex-end',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
     },
     taskTitle: {
-        marginBottom: 8,
-        display: 'block',
-        width: '100%',
+        fontSize: 16,
+        lineHeight: 20,
     },
-
 });

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, ButtonText, ImageBackground, SafeAreaView } from '@gluestack-ui/themed';
+import { Button, ButtonText, ImageBackground, SafeAreaView, ScrollView } from '@gluestack-ui/themed';
 import TaskDetails from '../../components/TaskDetails';
 import Subtasks from '../../components/Subtasks';
 import { manualCompleteTask, markSubtaskAsComplete } from '../../services/tasks';
+import useTaskStore from '../../store/taskStore'; // Import your Zustand store hook
 import { config } from '../../styles/themeConfig';
 import { defaultStyles } from '../../styles/styles';
 
@@ -12,6 +13,7 @@ const image = require('../../../assets/background/background.png');
 const TaskDetailScreen = ({ route, navigation }) => {
     const { task } = route.params;
     const [subtaskList, setSubtaskList] = useState(task.subtask);
+    const updateDataTask = useTaskStore(state => state.updateDataTask); // Accessing updateDataTask from Zustand store
 
     useEffect(() => {
         setSubtaskList(task.subtask);
@@ -39,6 +41,12 @@ const TaskDetailScreen = ({ route, navigation }) => {
                 )
             ));
 
+            updateDataTask({
+                ...task,
+                status: 'complete',
+                subtasks: updatedSubtasks
+            });
+
             console.log("Task and subtasks marked as completed");
         } catch (error) {
             console.error("Error marking task and subtasks as completed:", error);
@@ -48,22 +56,22 @@ const TaskDetailScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <ImageBackground source={image} resizeMode="cover" style={styles.imageBackground}>
-                <View style={styles.container}>
-                    <TaskDetails task={task} />
-                    <Subtasks subtasks={subtaskList} taskId={task._id} />
-                    <Button style={[styles.focusButton, defaultStyles.ButtonDefault]} onPress={() => navigation.navigate('FocusModeScreen', { task })}>
-                        <ButtonText style={[styles.defaultButtonText, defaultStyles.TypographyBodyHeavy]}>Start Focus Mode</ButtonText>
-                    </Button>
-                    <Button style={[styles.completeButton, defaultStyles.buttonVariant3]} onPress={handleMarkAsCompleted}>
-                        <ButtonText style={[styles.buttonText, defaultStyles.TypographyBodyHeavy]}>Mark as Completed</ButtonText>
-                    </Button>
-                </View>
+                <ScrollView>
+                    <View style={styles.container}>
+                        <TaskDetails task={task} />
+                        <Subtasks subtasks={subtaskList} taskId={task._id} />
+                        <Button style={[styles.focusButton, defaultStyles.ButtonDefault]} onPress={() => navigation.navigate('FocusModeScreen', { task })}>
+                            <ButtonText style={[styles.defaultButtonText, defaultStyles.TypographyBodyHeavy]}>Start Focus Mode</ButtonText>
+                        </Button>
+                        <Button style={[styles.completeButton, defaultStyles.buttonVariant3]} onPress={handleMarkAsCompleted}>
+                            <ButtonText style={[styles.buttonText, defaultStyles.TypographyBodyHeavy]}>Mark as Completed</ButtonText>
+                        </Button>
+                    </View>
+                </ScrollView>
             </ImageBackground>
         </SafeAreaView>
     );
 };
-
-
 
 const styles = StyleSheet.create({
     safeArea: {
@@ -94,10 +102,9 @@ const styles = StyleSheet.create({
     },
     defaultButtonText: {
         color: config.tokens.colors.white,
-       
     },
     buttonText: {
-       color: config.tokens.colors.primaryDark,
+        color: config.tokens.colors.primaryDark,
     },
 });
 
