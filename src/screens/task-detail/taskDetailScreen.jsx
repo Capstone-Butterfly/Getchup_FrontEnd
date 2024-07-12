@@ -7,6 +7,8 @@ import { manualCompleteTask, markSubtaskAsComplete } from '../../services/tasks'
 import useTaskStore from '../../store/taskStore'; // Import your Zustand store hook
 import { config } from '../../styles/themeConfig';
 import { defaultStyles } from '../../styles/styles';
+import { useMutation } from '@tanstack/react-query';
+import queryClient from '../../services/QueryClient';
 
 const image = require('../../../assets/background/background.png');
 
@@ -19,10 +21,19 @@ const TaskDetailScreen = ({ route, navigation }) => {
         setSubtaskList(task.subtask);
     }, [task.subtask]);
 
+    const updateTaskStatusMutation = useMutation({
+        mutationFn: async (task) => await manualCompleteTask(task._id),
+        onSuccess: async () => {
+            queryClient.invalidateQueries(['tasks']); // Invalidate task queries
+            console.log("uodate task: ", task);
+            updateDataTask(task); 
+        },
+    });
+
     const handleMarkAsCompleted = async () => {
         try {
-            await manualCompleteTask(task._id);
-
+            console.log("calling the mutation now: ");
+            await updateTaskStatusMutation.mutateAsync(task);
             const updatedSubtasks = subtaskList.map((subtask) => ({
                 ...subtask,
                 status: 'complete',

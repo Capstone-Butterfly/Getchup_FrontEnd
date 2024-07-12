@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, ButtonText, HStack, Image } from '@gluestack-ui/themed';
-import { updateTaskStartTime, updateTaskEndTime, pauseTask } from '../../services/tasks';
+import { updateTaskStartTime, updateTaskEndTime, pauseTask, manualCompleteTask } from '../../services/tasks';
 import MusicPlayer from './MusicPlayer';
 import { defaultStyles } from '../../styles/styles';
 import { config } from '../../styles/themeConfig';
@@ -10,6 +10,8 @@ import BetweenStepSVG from '../../../assets/illustrations/2-between-step.svg';
 import LastStepSVG from '../../../assets/illustrations/3-last-step.svg';
 import CompleteSVG from '../../../assets/illustrations/complete.svg';
 import useTaskStore from '../../store/taskStore';
+import queryClient from '../../services/QueryClient';
+import { useMutation } from '@tanstack/react-query';
 
 const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtasks, task, setCurrentStep, navigation, navigateToNextStep, musicPlayerRef }) => {
     const [isTaskStarted, setIsTaskStarted] = useState(false);
@@ -17,14 +19,31 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
     const [isAlertShown, setIsAlertShown] = useState(false);
     const [showCompletionScreen, setShowCompletionScreen] = useState(false);
+    const updateDataTask = useTaskStore(state => state.updateDataTask); 
 
     const { isTaskInProgress, setIsTaskInProgress } = useTaskStore();
 
-    const handleBackToHome = () => {
+    const updateTaskStatusMutation = useMutation({
+        mutationFn: async (task) => await manualCompleteTask(task._id),
+        onSuccess: async () => {
+            queryClient.invalidateQueries(['tasks']); 
+            console.log("uodate task: ", task);
+            updateDataTask(task); 
+            
+        },
+    });
+
+    const handleBackToHome = async () => {
+        try{
         if (musicPlayerRef.current) {
             musicPlayerRef.current.stopMusic(); 
         }
         navigation.navigate('HomeScreen'); 
+        console.log("calling the mutation now: ");
+            await updateTaskStatusMutation.mutateAsync(task);}
+            catch (error) {
+                console.error("Error marking task and subtasks as completed:", error);
+            }
     };
 
     const extractMinutes = (timeString) => {
