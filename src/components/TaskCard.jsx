@@ -60,7 +60,7 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                         </Text>
                     )}
                     {showEndTime && (
-                        <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>
+                        <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime, styles.endTime]}>
                             {formatEstimateTime(task.estimate_end_time)}
                         </Text>
                     )}
@@ -108,6 +108,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         lineHeight: 14,
         marginBottom: 2,
+    },
+    endTime: {
+        color: config.tokens.colors.neutralDark
     },
     taskTimeContainer: {
         alignItems: 'flex-end',
