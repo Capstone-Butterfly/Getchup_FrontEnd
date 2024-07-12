@@ -7,6 +7,15 @@ import CalendarSVG from '../../assets/icons/calendar.svg'
 import RepeatSVG from '../../assets/icons/repeat.svg'
 import TasksSVG from '../../assets/icons/tasks.svg'
 
+const formatDate = (dateString) => {
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+};  
+
+const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const TaskDetails = ({ task }) => {
     return (
         <View style={defaultStyles.card}>
@@ -14,17 +23,17 @@ const TaskDetails = ({ task }) => {
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
                 <CalendarSVG style={styles.icon} />
-                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>{new Date(task.created_datetime).toLocaleDateString()}</Text>
+                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}> {formatDate(task.created_datetime)}</Text>
             </View>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
                 <RepeatSVG style={styles.icon}/>
-                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>Does not repeat</Text>
+                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>{task.is_repeated ?'Repeats': 'Does not repeat' }</Text>
             </View>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
                 <TasksSVG style={styles.icon}/>
-                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>Medium priority</Text>
+                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}>{capitalizeFirstLetter(task.task_urgency)}</Text>
             </View>
         </View>
     );

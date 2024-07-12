@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { config } from '../styles/themeConfig';
 
 const CustomProgressBar = ({ steps, currentStep, onStepPress }) => {
     const renderSegments = () => {
@@ -25,18 +26,18 @@ const styles = StyleSheet.create({
     progressBarContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginHorizontal: 16,
-        marginVertical: 8,
+        marginHorizontal: 10,
+        marginVertical: 16,
     },
     progressSegment: {
         flex: 1,
-        height: 4,
-        backgroundColor: '#E0E0E0',
+        height: 8,
+        backgroundColor: config.tokens.colors.white,
         marginHorizontal: 2,
-        borderRadius: 2,
+        borderRadius: 4,
     },
     activeSegment: {
-        backgroundColor: '#4CAF50',
+        backgroundColor: config.tokens.colors.primary,
     },
 });
 
