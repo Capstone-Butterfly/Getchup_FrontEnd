@@ -1,4 +1,3 @@
-// FocusModeScreen.js
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView, ScrollView } from '@gluestack-ui/themed';
@@ -61,8 +60,8 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         const unsubscribe = navigation.addListener('blur', () => {
-            setIsMovementEnabled(false); // Reset movement toggle
-            setIsTaskInProgress(false); // Reset task in progress toggle
+            setIsMovementEnabled(false); 
+            setIsTaskInProgress(false); 
         });
 
         return unsubscribe;
