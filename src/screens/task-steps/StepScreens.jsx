@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, ButtonText, HStack } from '@gluestack-ui/themed';
+import { Button, ButtonText, HStack, Image } from '@gluestack-ui/themed';
 import { updateTaskStartTime, updateTaskEndTime, pauseTask } from '../../services/tasks';
 import MusicPlayer from './MusicPlayer';
 import { defaultStyles } from '../../styles/styles';
@@ -149,10 +149,10 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                 </View>
             ) : (
                 <View style={[styles.stepInfo, defaultStyles.card]}>
-                    <Text style={styles.boldText}>{task.title} completed!</Text>
-                    <CompleteSVG style={styles.icon}/>
-                    <Button onPress={handleBackToHome}>
-                        <ButtonText>Back to Home</ButtonText>
+                    <Text style={[styles.boldText, defaultStyles.TypographyH2]}>{task.title} completed!</Text>
+                    <Image source={require('../../../assets/illustrations/congrats.gif')} style={styles.image} alt="" />
+                    <Button onPress={handleBackToHome} style={defaultStyles.buttonVariant3}>
+                        <ButtonText style={{color: config.tokens.colors.primaryDark}}>Back to Home</ButtonText>
                     </Button>
                 </View>
             )}
@@ -167,7 +167,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 20
     },
     boldText: {
-        color: config.tokens.colors.neutralDark
+        textAlign:'center',
+        color: config.tokens.colors.black,
+        marginBottom: 24
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -197,6 +199,13 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginVertical: 24,
     },
+    image: {
+        width: 200,
+        height: 150,
+        marginBottom: 16,
+        alignSelf:'center'
+    },
+    
 });
 
 export default StepScreen;
