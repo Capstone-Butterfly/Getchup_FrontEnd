@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import DateFormatter from "../utils/DateFormatter";
 import { defaultStyles } from "../styles/styles";
 import { config } from "../styles/themeConfig";
+import useProgressDateRangeStore from '../store/progressDateRangeStore';
+import dayjs from 'dayjs';
 
 const transformData = (data) => {
   const timePeriods = ["morning", "afternoon", "evening", "night"];
@@ -51,13 +53,22 @@ const renderTitle = (data) => {
 };
 
 const TodayProgressChartDetail = ({ userId }) => {
-  const todayDate = DateFormatter(new Date())
-    .toLocaleString("en-CA")
-    .split(",")[0];
+
+  const { activeDateRangeTab, setActiveDateRangeTab, 
+    chartSelectedStartDate, setchartSelectedStartDate,
+    chartSelectedEndDate, setchartSelectedEndDate } = useProgressDateRangeStore((state) => ({
+      activeDateRangeTab : state.activeDateRangeTab,
+      setActiveDateRangeTab : state.setActiveDateRangeTab,
+      chartSelectedStartDate : state.chartSelectedStartDate,
+      setchartSelectedStartDate : state.setchartSelectedStartDate,
+      chartSelectedEndDate : state.chartSelectedEndDate,
+      setchartSelectedEndDate : state.setchartSelectedEndDate,
+  }));
+
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["todayProgressChart", userId, todayDate, todayDate],
-    queryFn: () => getTodayChartDetails(userId, todayDate, todayDate),
+    queryKey: ["todayProgressChart", userId, chartSelectedStartDate, chartSelectedStartDate],
+    queryFn: () => getTodayChartDetails(userId, chartSelectedStartDate, chartSelectedStartDate),
     refetchOnMount: true,
     refetchOnReconnect: true,
   });
