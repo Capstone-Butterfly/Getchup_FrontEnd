@@ -9,7 +9,9 @@ const TasksCompletedCard = ({navigation}) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <CompleteImg style={styles.image}/>
+
+            <Image source={require('../../assets/illustrations/congrats.gif')} style={styles.image} alt="" />
+            {/* <CompleteImg style={styles.image}/> */}
             <Box style={styles.textContainer}>
                 <Heading style={[defaultStyles.TypographyH2, styles.heading]}>All tasks completed</Heading>
                 <Text style={[defaultStyles.TypographyBody, styles.text]}>Enjoy the rest of the day</Text>
