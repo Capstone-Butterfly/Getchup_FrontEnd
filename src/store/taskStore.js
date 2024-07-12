@@ -25,10 +25,10 @@ const useTaskStore = create((set, get) => ({
     const formattedDate = DateFormatter(date);
     return tasks.filter((task) => DateFormatter(task.due_date) === formattedDate);
   },
-  // isTaskInProgress: false,
-  //   isTaskCompleted: false,
-  //   setIsTaskInProgress: (status) => set({ isTaskInProgress: status }),
-  //   setIsTaskCompleted: (status) => set({ isTaskCompleted: status }),
+  isTaskInProgress: false,
+    isTaskCompleted: false,
+    setIsTaskInProgress: (status) => set({ isTaskInProgress: status }),
+    setIsTaskCompleted: (status) => set({ isTaskCompleted: status }),
 }));
 
 export default useTaskStore;
