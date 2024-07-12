@@ -61,7 +61,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
     const tasksCompleted = filteredTasks.every(task => task.main_status === "complete");
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <CalendarStrip
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 calendarColor={'white'}
@@ -115,7 +115,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                     />
                 </Box>
             )}
-        </SafeAreaView>
+        </View>
     );
 };
 
@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
         // marginBottom: 24,
         // marginHorizontal: 20,
         padding: 20,
-        margin:20
+        margin:20,
+        marginTop:0,
     },
     calendarHeaderStyle: {
         marginBottom: 12,

@@ -55,7 +55,7 @@ const HomeScreen = ({ navigation }) => {
     ];
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>
             <Header userId={userId} navigation={navigation}/>
             <Greeting name={first_name} />
@@ -66,7 +66,7 @@ const HomeScreen = ({ navigation }) => {
                     contentContainerStyle={styles.listContainer}
                 />
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     );
 };
 
