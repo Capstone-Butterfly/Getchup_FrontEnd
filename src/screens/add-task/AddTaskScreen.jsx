@@ -346,7 +346,7 @@ const AddTaskScreen = ({ navigation }) => {
                 <Pressable onPress={handleOpenPriorityModal}>
                     <View style={styles.detailItem}>
                         <TasksIcon style={styles.icon}/>
-                        <Text style={[defaultStyles.TypographyBody]}>{task_urgency? task_urgency : "Task priority"}</Text>
+                        <Text style={[defaultStyles.TypographyBody]}>{task_urgency? task_urgency.charAt(0).toUpperCase() + task_urgency.slice(1) : "Task priority"}</Text>
                     </View>
                 </Pressable>
             </Card>

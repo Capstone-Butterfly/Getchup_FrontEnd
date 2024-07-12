@@ -19,14 +19,14 @@ const DateTimeModelScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
     <FlatList
       data={components}
       renderItem={renderItem}
       keyExtractor={(item) => item.key}
       contentContainerStyle={styles.contentContainer}
     />
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -34,10 +34,10 @@ export default DateTimeModelScreen;
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    // flex: 1,
   },
   contentContainer: {
-    flexGrow: 1,
+    // flexGrow: 1,
     paddingBottom: 20,
   },
 });

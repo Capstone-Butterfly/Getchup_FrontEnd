@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, Image, TouchableOpacity,TouchableWithoutFeedback, Modal } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   VStack,
   HStack,
   Box,
+  Modal,
   ModalContent,
   ModalCloseButton,
   Icon,
+  ModalBackdrop,
 } from "@gluestack-ui/themed";
 import { Calendar } from "react-native-calendars";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
@@ -19,7 +27,7 @@ import { config } from "../styles/themeConfig";
 import { Card, View } from "@gluestack-ui/themed";
 import TickIcon from "../../assets/icons/tickImageGreen.svg";
 import RightAngle from "../../assets/icons/rightAngle.svg";
-import CloseIcon from '../../assets/icons/x.svg';
+import CloseIcon from "../../assets/icons/x.svg";
 
 const DateModelScreen = () => {
   const { dateLabel, setDateLabel } = useAddTaskDateModelStore((state) => ({
@@ -43,13 +51,13 @@ const DateModelScreen = () => {
     setShowStartDateModal(true);
   };
 
-  const closeModal = () => {
-    setShowStartDateModal(false);
-  };
+  // const closeModal = () => {
+  //   setShowStartDateModal(false);
+  // };
 
-  const openEndModal = () => {
-    setShowEndDateModal(true);
-  };
+  // const openEndModal = () => {
+  //   setShowEndDateModal(true);
+  // };
 
   const closeEndModal = () => {
     setShowEndDateModal(false);
@@ -57,12 +65,10 @@ const DateModelScreen = () => {
 
   const toggleStartDateModal = () => {
     setShowStartDateModal(!showStartDateModal);
-    // setIsAnyModalVisible(!showStartDateModal || showEndDateModal);
   };
 
   const toggleEndDateModal = () => {
     setShowEndDateModal(!showEndDateModal);
-    // setIsAnyModalVisible(showStartDateModal || !showEndDateModal);
   };
 
   const onDayPress = (day) => {
@@ -92,7 +98,7 @@ const DateModelScreen = () => {
   }, [start_date, end_date]);
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       {/* {isAnyModalVisible && <View style={styles.dimmingOverlay} />} */}
       <Card style={defaultStyles.card}>
         <View style={styles.container}>
@@ -167,7 +173,7 @@ const DateModelScreen = () => {
                 )}
               </HStack>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.border} onPress={openModal}>
+            <TouchableOpacity style={styles.border} onPress={toggleStartDateModal}>
               <HStack
                 space={2}
                 alignItems="center"
@@ -179,7 +185,7 @@ const DateModelScreen = () => {
                 <RightAngle style={styles.tickImage} />
               </HStack>
             </TouchableOpacity>
-            <TouchableOpacity onPress={openEndModal}>
+            <TouchableOpacity onPress={toggleEndDateModal}>
               <HStack
                 space={2}
                 alignItems="center"
@@ -195,65 +201,80 @@ const DateModelScreen = () => {
         </View>
       </Card>
 
-      <Modal
-        visible={showStartDateModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <ModalCloseButton style={styles.closeButton} onPress={closeModal}>
-              <Icon as={CloseIcon} />
-            </ModalCloseButton>
-            <Calendar
+      <Modal isOpen={showStartDateModal} onClose={toggleStartDateModal}>
+        <ModalBackdrop />
+        <ModalContent style={styles.modalContent}>
+          <VStack space={4} style={styles.modalBody}>
+          <Calendar
               current={start_date || undefined}
               onDayPress={onDayPress}
               markedDates={{
                 [start_date]: {
                   selected: true,
-                  selectedColor: config.tokens.colors.primary,
-                  // selectedDayTextColor: "black",
-                  arrowColor: "green",
-                  todayTextColor: "green",
+                  customStyles: {
+                    container: {
+                      backgroundColor: config.tokens.colors.highPriority,
+                      borderRadius: 15,
+                    },
+                    text: {
+                      color: config.tokens.colors.black,
+                      fontWeight: "bold",
+                    },
+                  },
                 },
               }}
+              markingType={"custom"}
+              theme={{
+                arrowColor: config.tokens.colors.black,
+                textMonthFontWeight: defaultStyles.TypographyH3,
+                textDayFontWeight: "normal",
+                textDayHeaderFontWeight: "normal",
+                todayTextColor: config.tokens.colors.highPriority,
+                selectedDayBackgroundColor: config.tokens.colors.primary,
+                selectedDayTextColor: config.tokens.colors.black,
+              }}
             />
-          </View>
-        </View>
+          </VStack>
+        </ModalContent>
       </Modal>
 
-      <Modal
-        visible={showEndDateModal}
-        animationType="slide"
-        transparent={true}
-        onRequestClose={closeEndModal}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <ModalCloseButton
-              style={styles.closeButton}
-              onPress={closeEndModal}
-            >
-              <Icon as={CloseIcon} />
-            </ModalCloseButton>
-            <Calendar
-              current={start_date || undefined}
+      <Modal isOpen={showEndDateModal} onClose={toggleEndDateModal}>
+        <ModalBackdrop />
+        <ModalContent style={styles.modalContent}>
+          <VStack space={4} style={styles.modalBody}>
+          <Calendar
+              current={end_date || undefined}
               onDayPress={onDayPress}
               markedDates={{
-                [start_date]: {
+                [end_date]: {
                   selected: true,
-                  selectedColor: config.tokens.colors.primary,
-                  // selectedDayTextColor: "black",
-                  arrowColor: "green",
-                  todayTextColor: "green",
+                  customStyles: {
+                    container: {
+                      backgroundColor: config.tokens.colors.highPriority,
+                      borderRadius: 15,
+                    },
+                    text: {
+                      color: config.tokens.colors.black,
+                      fontWeight: "bold",
+                    },
+                  },
                 },
               }}
+              markingType={"custom"}
+              theme={{
+                arrowColor: config.tokens.colors.black,
+                textMonthFontWeight: defaultStyles.TypographyH3,
+                textDayFontWeight: "normal",
+                textDayHeaderFontWeight: "normal",
+                todayTextColor: config.tokens.colors.highPriority,
+                selectedDayBackgroundColor: config.tokens.colors.primary,
+                selectedDayTextColor: config.tokens.colors.black,
+              }}
             />
-          </View>
-        </View>
+          </VStack>
+        </ModalContent>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -261,7 +282,7 @@ export default DateModelScreen;
 
 const styles = StyleSheet.create({
   safeArea: {
-    flex: 1,
+    // flex: 1,
     position: "relative",
   },
   container: {
@@ -296,7 +317,6 @@ const styles = StyleSheet.create({
     width: "100%",
     margin: 0,
     padding: 0,
-    paddingTop: 25,
     borderRadius: 10,
     backgroundColor: "white",
     position: "absolute",
@@ -312,7 +332,7 @@ const styles = StyleSheet.create({
     left: 10,
   },
   modalBody: {
-    paddingTop: 30,
+    // paddingTop: 30,
   },
   dimmingOverlay: {
     position: "absolute",

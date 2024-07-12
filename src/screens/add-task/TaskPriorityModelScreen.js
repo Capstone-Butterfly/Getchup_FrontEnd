@@ -17,7 +17,7 @@ const TaskPriorityModelScreen = () => {
   }));
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <View style={styles.safeArea}>
       <Card style={defaultStyles.card}>
         <View style={styles.container}>
           <TouchableOpacity
@@ -70,7 +70,7 @@ const TaskPriorityModelScreen = () => {
           </TouchableOpacity>
         </View>
       </Card>
-    </SafeAreaView>
+    </View>
   );
 };
 
