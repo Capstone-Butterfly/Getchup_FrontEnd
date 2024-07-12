@@ -226,7 +226,7 @@ const DateModelScreen = () => {
               markingType={"custom"}
               theme={{
                 arrowColor: config.tokens.colors.black,
-                textMonthFontWeight: defaultStyles.TypographyH3,
+                textMonthFontWeight: "bold",
                 textDayFontWeight: "normal",
                 textDayHeaderFontWeight: "normal",
                 todayTextColor: config.tokens.colors.highPriority,
@@ -263,7 +263,7 @@ const DateModelScreen = () => {
               markingType={"custom"}
               theme={{
                 arrowColor: config.tokens.colors.black,
-                textMonthFontWeight: defaultStyles.TypographyH3,
+                textMonthFontWeight: "bold",
                 textDayFontWeight: "normal",
                 textDayHeaderFontWeight: "normal",
                 todayTextColor: config.tokens.colors.highPriority,

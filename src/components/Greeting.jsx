@@ -20,13 +20,13 @@ const Greeting = ({ name }) => {
                 message = `Good morning, ${name}!\nRise up, start fresh!`;
                 Image = DayImg;
             } else if (currentHour >= 12 && currentHour < 17) {
-                message = `Good afternoon, ${name}!\nKeep going, you're halfway to your goal!`;
+                message = `Good afternoon, ${name}!\nHalfway to your goal!`;
                 Image = DayImg;
             } else if (currentHour >= 17 && currentHour < 21) {
                 message = `Good evening, ${name}!\nRelax and recharge`;
                 Image = NightImg;
             } else {
-                message = `Good night, ${name}!\nRest well, for tomorrow brings new chances`;
+                message = `Good night, ${name}!\nRest well, sleep tight`;
                 Image = NightImg;
             }
 
