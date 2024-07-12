@@ -1,5 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import { FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet } from "react-native";
 import { ImageBackground, Text } from "@gluestack-ui/themed"
 import profileStore from "../../store/profileStore";
 import useProgressDateRangeStore from "../../store/progressDateRangeStore";
@@ -30,7 +30,7 @@ const ProgressScreen = ({ navigation }) => {
     ];
   
     return (
-      <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>  
           <FlatList
             data={components}
@@ -39,7 +39,7 @@ const ProgressScreen = ({ navigation }) => {
             contentContainerStyle={styles.listContainer}
           />
         </ImageBackground>
-      </SafeAreaView>
+      </View>
     );
   };
   
