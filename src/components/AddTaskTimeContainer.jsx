@@ -228,11 +228,12 @@ const TimeModelScreen = () => {
         customConfirmButtonIOS={(props) => (
           <TouchableOpacity
             onPress={props.onPress}
-            style={{ borderTopWidth: 1, borderColor: "lightgrey" }}
+            style={{ borderTopWidth: 1, borderColor: config.tokens.colors.neutralLight, }}
           >
             <Text
               style={[{
-                color: "green",
+                color: config.tokens.colors.primaryDark,
+                // backgroundColor: config.tokens.colors.primaryDark,
                 padding: 14,
                 textAlign: "center",
                 fontSize: 20,
@@ -246,19 +247,20 @@ const TimeModelScreen = () => {
           <TouchableOpacity
             onPress={props.onPress}
             style={{
-              backgroundColor: "#E6E6E6",
+              backgroundColor: config.tokens.colors.neutralLight,
               padding: 12,
               borderRadius: 10,
             }}
           >
             <Text
-              style={[{ color: "#545F71", textAlign: "center" }, defaultStyles.TypographyBodyHeavy]}
+              style={[{ color: config.tokens.colors.lightBlack, textAlign: "center" }, defaultStyles.TypographyBodyHeavy]}
             >
               Cancel
             </Text>
           </TouchableOpacity>
         )}
       />
+
 
       <DateTimePickerModal
         isVisible={isEndTimePickerVisible}
