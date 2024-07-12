@@ -419,7 +419,7 @@ const AddTaskScreen = ({ navigation }) => {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
             <ImageBackground source={image} resizeMode="cover" style={styles.image}>  
                 <AddTaskHeader handleCancel={handleCancel} handleSaveTask={handleSaveTask} />
                 {isAnyModalVisible && <View style={styles.dimmingOverlay} />}
@@ -523,7 +523,7 @@ const AddTaskScreen = ({ navigation }) => {
                     </KeyboardAvoidingView>
                 </Modal>
             </ImageBackground>
-        </SafeAreaView>
+        </View>
     );
 };
 
