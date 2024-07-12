@@ -11,21 +11,25 @@ import useNotificationStore from '../store/notificationStore.js';
 import { manualCompleteTask, fetchTasksByTaskId } from '../services/tasks.js';
 import { markNotificationAsRead } from '../services/notificationService';
 
-
 const NotificationCard = ({ navigation, notification, userId }) => {
 
     const { fetchTasks } = useTaskStore();
-    const { notifications, refetchNotifications, setNotifications } = useNotificationStore();
+    const { notifications, setNotifications, closePopover } = useNotificationStore();
+    const { tasks, setTasks } = useTaskStore();
 
     const handleMarkAsDone = async () => {
         try {
             await manualCompleteTask(notification.task_id);
             await markNotificationAsRead(notification._id);
-            refetchNotifications(userId);
             const updatedNotifications = notifications.map((notif) =>
                 notif._id === notification._id ? { ...notif, read: true } : notif
             );
             setNotifications(updatedNotifications);
+
+            const updatedTasks = tasks.map((task) =>
+                task._id === notification.task_id ? { ...task, main_status: "complete" } : task
+            );
+            setTasks(updatedTasks);
         } catch (error) {
             console.log("error marking task as done:", error)
         }
@@ -34,7 +38,10 @@ const NotificationCard = ({ navigation, notification, userId }) => {
     const handleMarkAsRead = async () => {
         try {
             await markNotificationAsRead(notification._id);
-            refetchNotifications(userId);
+            const updatedNotifications = notifications.map((notif) =>
+                notif._id === notification._id ? { ...notif, read: true } : notif
+            );
+            setNotifications(updatedNotifications);
         } catch (error) {
             console.log("error marking notification as read:", error)
         }
@@ -44,10 +51,14 @@ const NotificationCard = ({ navigation, notification, userId }) => {
         try {
             await manualCompleteTask(notification.task_id);
             await markNotificationAsRead(notification._id);
-            refetchNotifications(userId);
+            const updatedNotifications = notifications.map((notif) =>
+                notif._id === notification._id ? { ...notif, read: true } : notif
+            );
+            setNotifications(updatedNotifications);
             const task = await fetchTasksByTaskId(notification.task_id)
-            // navigation.navigate('TaskDetailScreen', task );
-            console.log('navigate to task details screen')
+            navigation.navigate('TaskDetailScreen', { task })
+            console.log('navigating to task details screen')
+            closePopover()
         } catch (error) {
             console.log("error handling the click on the notification card:", error)
         }

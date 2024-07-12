@@ -7,23 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import NotificationCard from './NotificationCard';
 
 const NotificationsList = ({ userId, navigation }) => {
-    // const { notifications, setNotifications } = useNotificationStore((state) => ({
-    //     notifications: state.notifications,
-    //     setNotifications: state.setNotifications
-    // }));
-
-    // const { data: fetchedNotification, isLoading, error, refetch } = useQuery({
-    //     queryKey: ['notifications', userId],
-    //     queryFn: () => fetchNotificationsByUserId(userId),
-    //     refetchOnMount: true,
-    //     refetchOnReconnect: true,
-    // });
-
-    // useEffect(() => {
-    //     if (fetchedNotification) {
-    //         setNotifications(fetchedNotification);
-    //     }
-    // }, [fetchedNotification]);
 
     const {notifications} = useNotificationStore()
 
@@ -52,6 +35,6 @@ const styles = StyleSheet.create({
         width: "100%",
     },
     flatlistContent: {
-        paddingHorizontal: 0, // Ensure no horizontal padding
+        paddingHorizontal: 0,
     },
 });

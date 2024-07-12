@@ -23,6 +23,9 @@ const Header = ({ userId, navigation }) => {
     const { data: fetchedNotification, isLoading, error, refetch } = useQuery({
         queryKey: ['notifications', userId],
         queryFn: () => getSortedNotificationsByUserId(userId),
+        onSuccess: (data) => {
+            setNotifications(data)
+        },
         refetchOnMount: true,
         refetchOnReconnect: true,
     });
@@ -35,27 +38,6 @@ const Header = ({ userId, navigation }) => {
     
     const unreadNotifications = notifications.filter(notification => !notification.read).length;
     const NotificationIconComponent = unreadNotifications > 0 ? NotificationUnreadIcon : NotificationIcon
-    // useEffect(() => {
-    //     const fetchNotifications = async () => {
-    //         try {
-    //             const fetchedNotifications = await getSortedNotificationsByUserId(userId);
-    //             setNotifications(fetchedNotifications);
-    //         } catch (error) {
-    //             console.error("Error fetching notifications: ", error);
-    //         }
-    //     };
-
-    //     fetchNotifications();
-    // }, [userId, setNotifications]);
-
-
-    // if (isLoading) {
-    //     return (
-    //         <SafeAreaView>
-    //             <Text>Loading...</Text>
-    //         </SafeAreaView>
-    //     );
-    // }
 
     return (
 
