@@ -17,7 +17,7 @@ const CalendarScreen = ({ navigation }) => {
             <Heading style={[styles.heading, defaultStyles.TypographyH1]}>
             Calendar
           </Heading>
-          <View><Text>Today, Jun 19</Text></View>
+          <View><Text>Today, July 12</Text></View>
           </View>
             </View>
             <MonthlyCalendar navigation={navigation}/>
