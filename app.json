@@ -12,7 +12,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.butterfly.capstone.getchup"
     },
     "android": {
       "adaptiveIcon": {
@@ -38,6 +39,12 @@
       "eas": {
         "projectId": "e23fa3aa-b866-4f4c-af5a-4f94791d1a90"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/e23fa3aa-b866-4f4c-af5a-4f94791d1a90"
     }
   }
 }

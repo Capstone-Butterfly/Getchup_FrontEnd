@@ -1,10 +1,13 @@
 import React, { useState, useEffect} from 'react';
-import { View, Text, Modal, TouchableOpacity, StyleSheet  } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet  } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import DateDisplayFormat from '../utils/DateDisplayFormat';
 import useProgressDateRangeStore from '../store/progressDateRangeStore';
+import { defaultStyles } from '../styles/styles';
+import { config } from '../styles/themeConfig';
+import { Modal, ModalBackdrop, ModalContent, ModalHeader } from '@gluestack-ui/themed';
 
 dayjs.extend(isoWeek);
 
@@ -26,7 +29,21 @@ const ProgressCalendar = ({chartStartDate, chartEndDate}) => {
     }, [chartStartDate, setchartSelectedStartDate, chartEndDate, setchartSelectedEndDate]);
 
     const today = dayjs().format('YYYY-MM-DD');
-    const [selectedDates, setSelectedDates] = useState({});
+    const [selectedDates, setSelectedDates] = useState({
+      [today]: {
+          selected: true,
+          customStyles: {
+              container: {
+                  backgroundColor: config.tokens.colors.primary,
+                  borderRadius: 15
+              },
+              text: {
+                  color: config.tokens.colors.black,
+                  fontWeight: 'bold'
+              }
+          }
+      }
+  });
     const [modalVisible, setModalVisible] = useState(false);
 
     const onDayPress = (day) => {
@@ -41,20 +58,22 @@ const ProgressCalendar = ({chartStartDate, chartEndDate}) => {
       if (activeDateRangeTab === 'Day') {
         startDate = date.format('YYYY-MM-DD');
         endDate = date.format('YYYY-MM-DD');
-        dates[startDate] = { selected: true, marked: true, selectedColor: 'blue' };
+        dates[startDate] = { selected: true, customStyles: { container: { backgroundColor: config.tokens.colors.primary , borderRadius: 15 }, text: { color: config.tokens.colors.black , fontWeight: 'bold'} } };
       } else if (activeDateRangeTab === 'Weekly') {
         startDate = referenceDate.startOf('week').format('YYYY-MM-DD');
         endDate = referenceDate.endOf('week').format('YYYY-MM-DD');
         for (let i = 0; i < 7; i++) {
           const currentDay = dayjs(startDate).add(i, 'day').format('YYYY-MM-DD');
-          dates[currentDay] = { selected: true, marked: true, selectedColor: 'blue' };
+          //dates[date.format('YYYY-MM-DD')] = { selected: true, customStyles: { container: { backgroundColor: config.tokens.colors.primary , borderRadius: 15 }, text: { color: config.tokens.colors.black, fontWeight: 'bold'} } };
+          dates[currentDay] = { selected: true, customStyles: { container: { backgroundColor: config.tokens.colors.primary , borderRadius: 15 }, text: { color: config.tokens.colors.black, fontWeight: 'bold'} } };
         }
       } else if (activeDateRangeTab === 'Monthly') {
         startDate = referenceDate.startOf('month').format('YYYY-MM-DD');
         endDate = referenceDate.endOf('month').format('YYYY-MM-DD');
         for (let i = 0; i < dayjs(endDate).diff(startDate, 'day') + 1; i++) {
           const currentDay = dayjs(startDate).add(i, 'day').format('YYYY-MM-DD');
-          dates[currentDay] = { selected: true, marked: true, selectedColor: 'blue' };
+          //dates[date.format('YYYY-MM-DD')] = { selected: true, customStyles: { container: { backgroundColor: config.tokens.colors.primary , borderRadius: 15 }, text: { color: config.tokens.colors.black, fontWeight: 'bold'} } };
+          dates[currentDay] = { selected: true, customStyles: { container: { backgroundColor: config.tokens.colors.primary , borderRadius: 15 }, text: { color: config.tokens.colors.black , fontWeight: 'bold'} } };
         }
       }
 
@@ -67,90 +86,69 @@ const ProgressCalendar = ({chartStartDate, chartEndDate}) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.pressable}>
-        <Text style={styles.dateText}>
+        <Text style={[defaultStyles.TypographyBodyHeavy]}>
           {DateDisplayFormat(chartSelectedStartDate, chartSelectedEndDate)}
         </Text>
       </TouchableOpacity>
-      <Modal visible={modalVisible} transparent={true}>
-        <View style={styles.modalContainer}>
+      <Modal isOpen={modalVisible} onClose={() => setModalVisible(false)}>
+        <ModalBackdrop/>
+        <ModalContent>
           <View style={styles.calendarContainer}>
             <Calendar
               onDayPress={onDayPress}
               markedDates={selectedDates}
-              markingType={'simple'}
-            />
-            <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-              <Text style={styles.closeButtonText}>Close</Text>
-            </TouchableOpacity>
+              markingType={'custom'}
+              theme={{
+                arrowColor: config.tokens.colors.black,
+                textMonthFontWeight: 'bold',
+                textDayFontWeight: 'normal',
+                textDayHeaderFontWeight: 'normal',
+                todayTextColor: config.tokens.colors.primaryDark,
+                selectedDayBackgroundColor: config.tokens.colors.primary,
+                selectedDayTextColor: config.tokens.colors.black,
+              }}
+            />              
+          </View> 
+      </ModalContent>
+    </Modal>
+      {/* <Modal visible={modalVisible} transparent={true}>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalContainer}>
+            <View style={styles.calendarContainer}>
+              <Calendar
+                onDayPress={onDayPress}
+                markedDates={selectedDates}
+                markingType={'custom'}
+                theme={{
+                  arrowColor: config.tokens.colors.black,
+                  textMonthFontWeight: 'bold',
+                  textDayFontWeight: 'normal',
+                  textDayHeaderFontWeight: 'normal',
+                  todayTextColor: config.tokens.colors.primaryDark,
+                  selectedDayBackgroundColor: config.tokens.colors.primary,
+                  selectedDayTextColor: config.tokens.colors.black,
+              }}
+              />              
+            </View>
           </View>
-        </View>
-      </Modal>
+        </TouchableWithoutFeedback>
+      </Modal> */}
     </View>
   );
-
-  //   const today = dayjs().format('YYYY-MM-DD');
-  //   const [selectedWeek, setSelectedWeek] = useState({});
-  //   const [modalVisible, setModalVisible] = useState(false);
-
-  //   const onDayPress = (day) => {
-  //       const date = dayjs(day.dateString);
-  //       const todayDate = dayjs();
-  //       const referenceDate = date.isAfter(todayDate, 'day') ? todayDate : date;
-
-  //       const startOfWeek = referenceDate.startOf('week'); // Sunday
-  //       const endOfWeek = startOfWeek.add(6, 'day'); // Saturday
-
-  //       const weekDays = {};
-
-  //       for (let i = 0; i < 7; i++) {
-  //           const currentDay = startOfWeek.add(i, 'day').format('YYYY-MM-DD');
-  //           weekDays[currentDay] = { selected: true, marked: true, selectedColor: 'blue' };
-  //       }
-  //       setSelectedWeek(weekDays);
-  //       setchartSelectedStartDate(startOfWeek.format('YYYY-MM-DD'));
-  //       setchartSelectedEndDate(endOfWeek.format('YYYY-MM-DD'));
-  //       //setSelectedDates({ start: startOfWeek.format('YYYY-MM-DD'), end: endOfWeek.format('YYYY-MM-DD') });
-  //       setModalVisible(false);
-  //   };
-
-  // return ( 
-  //   <View style={styles.container}>
-  //       <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.pressable}>
-  //           <Text style={styles.dateText}>
-  //           { DateDisplayFormat(chartSelectedStartDate, chartSelectedEndDate) }
-  //           </Text>
-  //       </TouchableOpacity>
-  //       <Modal visible={modalVisible} transparent={true}>
-  //           <View style={styles.modalContainer}>
-  //             <View style={styles.calendarContainer}>
-  //                 <Calendar
-  //                     onDayPress={onDayPress}
-  //                     markedDates={selectedWeek}
-  //                     markingType={'simple'}
-  //                 />
-  //                 <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.closeButton}>
-  //                 <Text style={styles.closeButtonText}>Close</Text>
-  //                 </TouchableOpacity>
-  //             </View>
-  //           </View>
-  //     </Modal>
-  //   </View>
-  // );
 };
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: 'space-between',
+      alignItems: 'flex-start',
+      // borderWidth: 1,
+      // borderColor: 'black'
     },
     pressable: {
-      padding: 10,
+      paddingTop: 20,
+      paddingLeft: 20,
       borderRadius: 5,
-    },
-    dateText: {
-      color: '#000',
-      fontSize: 16,
     },
     modalContainer: {
       flex: 1,
