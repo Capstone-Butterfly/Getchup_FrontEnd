@@ -42,16 +42,16 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                         {task.title}
                     </Text>
                 ) : (
-                    <View style={styles.container}>
                         <VStack style={styles.taskInfo}>
+                            <View>
                             <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>
                                 {task.title}
                             </Text>
                             <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>
                                 {task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks
                             </Text>
+                            </View>
                         </VStack>
-                    </View>
                 )}
                 <View style={styles.taskTimeContainer}>
                     {showStartTime && (
