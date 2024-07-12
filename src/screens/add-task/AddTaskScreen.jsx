@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import AddTaskHeader from '../../components/AddTaskHeader';
-import { SafeAreaView, Dimensions, StyleSheet } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Platform } from 'react-native';
 import {
     Box, Button, ButtonText, Card, Center, FlatList,
     HStack, Heading, Icon, Text, Modal,
@@ -10,6 +10,7 @@ import {
     CloseCircleIcon,
     ImageBackground,
     ModalBackdrop,
+    KeyboardAvoidingView,
 } from "@gluestack-ui/themed";
 import { useFocusEffect } from '@react-navigation/native'; 
 import useCreateTaskStore from '../../store/createTaskStore';
@@ -33,7 +34,6 @@ import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
 import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
 import useNotificationStore from '../../store/notificationStore';
 import dayjs from 'dayjs';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { defaultStyles } from '../../styles/styles';
 import { config } from '../../styles/themeConfig';
 import PlusCircleIcon from '../../../assets/icons/plus-circle.svg';
@@ -44,6 +44,7 @@ import Ai4Icon from '../../../assets/icons/ai4.svg';
 import AI4 from '../../../assets/icons/ai4.svg';
 import AI6 from '../../../assets/icons/ai6.svg';
 import CloseIcon from '../../../assets/icons/x.svg';
+import XIcon from '../../../assets/icons/x-circle.svg'
 const image = require('../../../assets/background/background.png');
 
 const { width, height } = Dimensions.get('window');
@@ -174,13 +175,13 @@ const AddTaskScreen = ({ navigation }) => {
         try {
             let notificationId = null;
             if (task_reminder) { // schedule notification
-                console.log('calling scheduleNotification')
+                //console.log('calling scheduleNotification')
                 notificationId = await scheduleNotification({
                     title,
                     start_date,
                     start_time
                 });
-                console.log('Returned notification ID:', notificationId);
+                //console.log('Returned notification ID:', notificationId);
             }
 
             const adjustedTaskUrgency = task_urgency === '' ? 'medium' : task_urgency;
@@ -377,6 +378,7 @@ const AddTaskScreen = ({ navigation }) => {
                             </Box>
                             <Box width="5%">
                                 <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' style={[styles.taskTime, styles.rightItem]}>
+                                    {/* <XIcon/> */}
                                     <ButtonIcon color="$black" as={CloseCircleIcon} />
                                 </Button>
                             </Box>   
@@ -467,9 +469,10 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalNoteVisible} onClose={handleCloseNoteModal}>
+                    <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareNoteStyle}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalNoteContent}>
-                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Notes</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1]}>Notes</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseNoteModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -477,6 +480,7 @@ const AddTaskScreen = ({ navigation }) => {
                             <NotesModalScreen />
                         </VStack>
                     </ModalContent>
+                    </KeyboardAvoidingView>
                 </Modal>
                 <Modal isOpen={modalPriorityVisible} onClose={handleClosePriorityModal}>
                     <ModalBackdrop/>
@@ -491,9 +495,10 @@ const AddTaskScreen = ({ navigation }) => {
                     </ModalContent>
                 </Modal>
                 <Modal isOpen={modalAddSubTaskVisible} onClose={handleCloseAddSubTaskModal}>
+                    <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareStyle}>
                     <ModalBackdrop />
-                    <ModalContent style={styles.modalPriorityContent}>
-                        <Heading size='lg' textAlign='center'>Sub-task Title</Heading>
+                    <ModalContent style={styles.modalSubTaskContent}>
+                        <Heading textAlign='center'>Sub-task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseAddSubTaskModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -501,11 +506,13 @@ const AddTaskScreen = ({ navigation }) => {
                             <AddSubTaskScreen />
                         </VStack>
                     </ModalContent>
+                    </KeyboardAvoidingView>
                 </Modal>
                 <Modal isOpen={modalSubTaskVisible} onClose={handleCloseSubTaskModal}>
+                    <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareStyle}>
                     <ModalBackdrop/>
-                    <ModalContent style={styles.modalPriorityContent}>
-                        <Heading size='lg' textAlign='center'>Sub-task Title</Heading>
+                    <ModalContent style={styles.modalSubTaskContent}>
+                        <Heading textAlign='center'>Sub-task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseSubTaskModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -513,6 +520,7 @@ const AddTaskScreen = ({ navigation }) => {
                             <SubTaskScreen index={selectedSubTaskIndex} />
                         </VStack>
                     </ModalContent>
+                    </KeyboardAvoidingView>
                 </Modal>
             </ImageBackground>
         </SafeAreaView>
@@ -565,15 +573,42 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
+    keyboardAwareNoteStyle: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "center",
+        height: '30%',
+        width: '100%',
+    },
     modalNoteContent: {
         width: '100%',
-        height: 288,
+        height: '30%',
         margin: 0,
         padding: 0,
         paddingTop: 15,
-        borderRadius: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         backgroundColor: config.tokens.colors.background,
-        position: 'absolute',
+        position: 'aboslute',
+        bottom: 0,
+    },
+    keyboardAwareStyle: {
+        flex: 1,
+        justifyContent: "flex-end",
+        alignItems: "center",
+        height: '40%',
+        width: '100%',
+    },
+    modalSubTaskContent: {
+        width: '100%',
+        height: '40%',
+        margin: 0,
+        padding: 0,
+        paddingTop: 15,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        backgroundColor: config.tokens.colors.background,
+        position: 'aboslute',
         bottom: 0,
     },
     modalPriorityContent: {
