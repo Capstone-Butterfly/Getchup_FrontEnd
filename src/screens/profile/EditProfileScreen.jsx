@@ -121,8 +121,6 @@ function EditProfileScreen({ navigation }) {
                 </VStack>
             <FormControl style={styles.formBox}>
               <VStack>
-             
-
                 <VStack>
                   <TouchableOpacity onPress={() => handleEdit('first_name', first_name)}>
                     <HStack style={styles.stackBox}>

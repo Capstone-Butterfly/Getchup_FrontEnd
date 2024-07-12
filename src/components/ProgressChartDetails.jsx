@@ -64,16 +64,13 @@ const ProgressChartDetail = ({userId}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 20,
   },
   cardBody: {
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "center",
-    paddingHorizontal: 20,
-    paddingVertical:20,
     borderRadius: 20,
-    marginBottom: 20,
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginLeft: 20,
+    marginRight: 20,
   },
 });
 

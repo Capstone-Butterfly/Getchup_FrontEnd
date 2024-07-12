@@ -27,7 +27,7 @@ const TaskPriorityModelScreen = () => {
             <View style={styles.gridrow}>
               <View style={styles.row}>
                 <HighPriorityIcon style={styles.icon} />
-                <Text style={styles.text}>High</Text>
+                <Text style={[styles.text, defaultStyles.TypographyBody]}>High</Text>
               </View>
               <View>
                 {task_urgency === "high" && (
@@ -43,7 +43,7 @@ const TaskPriorityModelScreen = () => {
             <View style={styles.gridrow}>
               <View style={styles.row}>
                 <MediumPriorityIcon style={styles.icon} />
-                <Text style={styles.text}>Medium</Text>
+                <Text style={[styles.text, defaultStyles.TypographyBody]}>Medium</Text>
               </View>
               <View>
                 {task_urgency === "medium" && (
@@ -59,7 +59,7 @@ const TaskPriorityModelScreen = () => {
             <View style={styles.gridrow}>
               <View style={styles.row}>
                 <LowPriorityIcon style={styles.icon} />
-                <Text style={styles.text}>Low</Text>
+                <Text style={[styles.text, defaultStyles.TypographyBody]}>Low</Text>
               </View>
               <View>
                 {task_urgency === "low" && (
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   text: {
-    fontSize: 16,
+    color: config.tokens.colors.lightBlack
   },
   // image: {
   //   width: 24,
