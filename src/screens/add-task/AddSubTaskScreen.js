@@ -19,6 +19,7 @@ const AddSubTaskScreen = ({}) => {
     //const [subTaskDuration, setSubTaskDuration] = useState("5 minutes");
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [selectedMinute, setSelectedMinute] = useState(5);
+    const [isPressed, setIsPressed] = useState(false);
     
 
     const handleSubTitleChange = (newSubTitle) => {
@@ -33,6 +34,15 @@ const AddSubTaskScreen = ({}) => {
 
     const closeModal = () => {
         setIsModalVisible(false);
+    };
+
+    const handlePressIn = () => {
+        setIsPressed(true);
+    };
+
+    const handlePressOut = () => {
+        setIsPressed(false);
+        applyMinuteSelection();
     };
 
     const applyMinuteSelection = () => {
@@ -82,30 +92,48 @@ const AddSubTaskScreen = ({}) => {
             </View>
         </Card>
         <Modal isOpen={isModalVisible} onClose={closeModal}>
-                <ModalBackdrop/>
-                <ModalContent style={styles.modalContent}>
-                    <HStack style={styles.pickerContainer}>
-                        <Picker
-                            selectedValue={selectedMinute}
-                            onValueChange={(itemValue) => setSelectedMinute(itemValue)}
-                            style={styles.picker}
+            <ModalBackdrop/>
+            <ModalContent style={styles.modalContent}>
+                <HStack style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={selectedMinute}
+                        onValueChange={(itemValue) => setSelectedMinute(itemValue)}
+                        style={styles.picker}
+                    >
+                        {Array.from({ length: 60 }, (_, i) => (
+                            <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} style={defaultStyles.TypographyBodyHeavy}/>
+                        ))}
+                    </Picker>
+                    <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
+                </HStack>
+                <HStack style={styles.buttonContainer}>
+                    <Button style={styles.clearButton} onPress={clearMinuteSelection}>
+                        <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
+                    </Button>
+                    {/* <Button style={styles.submitButton} onPress={applyMinuteSelection}>
+                        <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
+                    </Button> */}
+                    <Button
+                        style={[
+                            styles.submitButton,
+                            isPressed && styles.submitButtonPressed
+                        ]}
+                        onPressIn={handlePressIn}
+                        onPressOut={handlePressOut}
+                    >
+                        <ButtonText
+                            style={[
+                                styles.submitButtonText,
+                                defaultStyles.TypographyBodyHeavy,
+                                isPressed && styles.submitButtonTextPressed
+                            ]}
                         >
-                            {Array.from({ length: 60 }, (_, i) => (
-                                <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} style={defaultStyles.TypographyBodyHeavy}/>
-                            ))}
-                        </Picker>
-                        <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
-                    </HStack>
-                    <HStack style={styles.buttonContainer}>
-                        <Button style={styles.clearButton} onPress={clearMinuteSelection}>
-                            <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
-                        </Button>
-                        <Button style={styles.submitButton} onPress={applyMinuteSelection}>
-                            <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
-                        </Button>
-                    </HStack>
-                </ModalContent>
-            </Modal>
+                            Apply
+                        </ButtonText>
+                    </Button>
+                </HStack>
+            </ModalContent>
+        </Modal>
         {/* <Modal
             visible={isModalVisible}
             animationType="slide"
@@ -183,7 +211,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '100%',
-        height: '38%',
+        height: '40%',
         margin: 0,
         padding: 0,
         borderRadius: 20,
@@ -199,7 +227,7 @@ const styles = StyleSheet.create({
     modalOverlay: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.125)',
     },
     pickerContainer: {
         flexDirection: 'row',
@@ -231,8 +259,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         width: '40%'
     },
+    submitButtonPressed: {
+        backgroundColor: config.tokens.colors.neutralLight,
+    },
     submitButtonText: {
         color:config.tokens.colors.white,
+    },
+    submitButtonTextPressed: {
+        color: config.tokens.colors.neutral,
     },
     clearButton: {
         backgroundColor: config.tokens.colors.neutralLight,

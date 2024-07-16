@@ -5,9 +5,9 @@ const useTaskStore = create((set, get) => ({
   tasks: [],
   selectedDate: DateFormatter(new Date()),
   isTaskInProgress: false,
-    isTaskCompleted: false,
-    setIsTaskInProgress: (status) => set({ isTaskInProgress: status }),
-    setIsTaskCompleted: (status) => set({ isTaskCompleted: status }),
+  isTaskCompleted: false,
+  setIsTaskInProgress: (status) => set({ isTaskInProgress: status }),
+  setIsTaskCompleted: (status) => set({ isTaskCompleted: status }),
   setTasks: (tasks) => set({ tasks }),
   setSelectedDate: (date) => set({ selectedDate: date }),
   addDataTask: (task) => set((state) => {

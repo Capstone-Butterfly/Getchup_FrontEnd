@@ -29,6 +29,7 @@ import SubTaskScreen from './SubTaskScreen';
 import AddSubTaskScreen from './AddSubTaskScreen';
 import { Pressable } from '@gluestack-ui/themed';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 import { Image } from '@gluestack-ui/themed';
 import ConvertTimeStamp from '../../utils/ConvertTimeStamp';
 import { scheduleNotification, saveNotification, fetchNotificationsByUserId } from '../../services/notificationService'
@@ -61,7 +62,6 @@ const AddTaskScreen = ({ navigation }) => {
     const [warningMessage, setWarningMessage] = useState('');
     const [dateTimeWarningMessage, setDateTimeWarningMessage] = useState('');
     const [isAnyModalVisible, setIsAnyModalVisible] = useState(false);
-    //const [isSubTaskModalVisible, setIsSubTaskModalVisible] = useState(false);
 
     const { first_name, userId, profile_movement_reminder, profile_task_reminder } = profileStore((state) => ({
         first_name: state.first_name,
@@ -104,6 +104,8 @@ const AddTaskScreen = ({ navigation }) => {
             setNewSubTaskTitle: state.setNewSubTaskTitle,
             setNewSubTaskDuration: state.setNewSubTaskDuration,
         }));
+    
+    const [dragSubTaskData, setDragSubTaskData] = useState(subTasks);
 
     useFocusEffect(
         useCallback(() => {
@@ -323,6 +325,29 @@ const AddTaskScreen = ({ navigation }) => {
         getAISubTasksResult();
     };
 
+    const renderItem = ({ item, getIndex, drag, isActive }) => (
+        <Box key={getIndex()} style={[styles.subTaskContainer, isActive && { backgroundColor: '#f0f0f0' }]}>
+          <View style={styles.detailSubTask} >
+            <Box width="70%">
+              <TouchableOpacity onLongPress={drag} onPress={() => handleOpenSubTaskModal(getIndex())}>
+                <Text style={[defaultStyles.TypographyBody]}>{item.sub_title}</Text>
+              </TouchableOpacity>
+            </Box>
+            <Box width="25%">
+              <Text style={[defaultStyles.TypographyBody, styles.leftItem]}>
+                {item.time.replace('minutes', 'min.').replace('minute', 'min.')}
+              </Text>
+            </Box>
+            <Box width="5%">
+              <Button onPress={() => handleDeleteSubtask(getIndex())} variant="link" style={styles.boxContainer}>
+                <ButtonIcon as={XIcon} />
+              </Button>
+            </Box>
+          </View>
+        </Box>
+      );
+    
+
     const renderContent = () => (
         <>
             <Card style={defaultStyles.card}>
@@ -361,7 +386,15 @@ const AddTaskScreen = ({ navigation }) => {
                         <Text style={[defaultStyles.TypographyBody]}>Add subtask</Text>
                     </View>                    
                 </Pressable>
-                <FlatList
+                <DraggableFlatList
+                        data={subTasks}
+                        renderItem={renderItem}
+                        keyExtractor={(item) => item.sub_title}
+                        onDragEnd={({ data }) => addSubtask(data)}
+                        windowSize={3}
+                        contentContainerStyle={styles.listContent}
+                />
+                {/* <FlatList
                     data={subTasks}
                     renderItem={({ item, index }) => (
                         <Box key={index} style={styles.subTaskContainer}>
@@ -378,7 +411,6 @@ const AddTaskScreen = ({ navigation }) => {
                             </Box>
                             <Box width="5%">
                                 <Button onPress={() => handleDeleteSubtask(index)} variant="link" size='md' p='$3.5' style={[styles.taskTime, styles.rightItem]}>
-                                    {/* <XIcon/> */}
                                     <ButtonIcon color="$black" as={CloseCircleIcon} />
                                 </Button>
                             </Box>   
@@ -388,7 +420,7 @@ const AddTaskScreen = ({ navigation }) => {
                     keyExtractor={(item) => item.sub_title}
                     windowSize={10}
                     contentContainerStyle={styles.listContent}
-                />
+                /> */}
                 <Text style={[defaultStyles.TypographyBodySmall, styles.txtCenter]}>OR</Text>
                 <Button
                     style={[
@@ -410,35 +442,31 @@ const AddTaskScreen = ({ navigation }) => {
                         Add Subtask by AI
                     </ButtonText>
                 </Button>
-                {/* <Button style={styles.submitButton} onPress={getAISubTasksResult}>
-                    <ButtonIcon as={AI4} style={styles.buttonIcon}/>
-                    <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]} disabled={subTasks.length > 0}>Add Subtask by AI</ButtonText>
-                </Button> */}
             </Card>
         </>
     );
 
     return (
-        <View style={styles.container}>
-            <ImageBackground source={image} resizeMode="cover" style={styles.image}>  
-                <AddTaskHeader handleCancel={handleCancel} handleSaveTask={handleSaveTask} />
-                {isAnyModalVisible && <View style={styles.dimmingOverlay} />}
-                <Box style={styles.overlay}> 
-                    <Box style={styles.content}>
-                        {warningMessage ? (
-                            <Box style={styles.warningBox}>
-                                <Text style={styles.warningText}>{warningMessage}</Text>
-                            </Box>
-                        ) : null}
-                        <FlatList
-                            data={[{ key: 'content' }]} 
-                            renderItem={renderContent}
-                            keyExtractor={(item) => item.key}
-                            contentContainerStyle={styles.content}
-                        />
+        <View style={[styles.container]}>
+            <ImageBackground source={image} resizeMode="cover" style={styles.image}> 
+                <View  style={styles.headerContainer}> 
+                    <AddTaskHeader handleCancel={handleCancel} handleSaveTask={handleSaveTask}/>
+                    {isAnyModalVisible && <View style={styles.dimmingOverlay} />}
+                    <Box style={styles.overlay}> 
+                        <Box>
+                            {warningMessage ? (
+                                <Box style={styles.warningBox}>
+                                    <Text style={styles.warningText}>{warningMessage}</Text>
+                                </Box>
+                            ) : null}
+                            <FlatList
+                                data={[{ key: 'content' }]} 
+                                renderItem={renderContent}
+                                keyExtractor={(item) => item.key}
+                            />
+                        </Box>
                     </Box>
-                </Box>
-                
+                </View>
                 <Modal isOpen={modalTitleVisible} onClose={handleCloseTitleModal}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalContent}>
@@ -534,13 +562,9 @@ const styles = StyleSheet.create({
         height: 48,
         width: "100%",
     },
-    buttonIcon: {
-        height: 24,
-        marginRight: 10,
-        width: 24,
-    },
     headerContainer: {
-        paddingTop: 20
+        flex: 1,
+        paddingTop: 40,
     },
     container: {
         flex: 1,
@@ -637,23 +661,22 @@ const styles = StyleSheet.create({
         paddingTop: 10,
     },
     listContent: {
-        paddingBottom: 20,
-        justifyContent: 'space-between'
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        
     },
     subTaskContainer: {
-        padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 10,
-        paddingHorizontal: 10,
-        paddingVertical:10,
-        justifyContent: 'space-between',
-        width:'100%'
+        paddingTop: 10,
+        paddingLeft: 10,
+        width:'100%',
     },
     taskTime: {
         flexShrink: 0,
+        textAlignVertical: 'top',
+        verticalAlign: 'top',
+        padding: 0,
     },
     txtCenter: {
         textAlign: 'center',
@@ -676,9 +699,9 @@ const styles = StyleSheet.create({
     },
     detailSubTask: {
         flexDirection: 'row',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         margin: 10,
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
     },
     icon: {
         width: 25,
@@ -711,6 +734,8 @@ const styles = StyleSheet.create({
         color: config.tokens.colors.neutral,
     },
     buttonIcon: {
+        height: 24,
+        width: 24,
         marginRight: 10,
         color: config.tokens.colors.white,
     },
@@ -718,12 +743,12 @@ const styles = StyleSheet.create({
         color: config.tokens.colors.neutral,
     },
     leftItem: {
-        alignItems: 'flex-start',
-        
+        alignItems: 'flex-end',
+        marginLeft: 11,
+        color: config.tokens.colors.neutralDark,
     },
     rightItem: {
         alignItems: 'flex-end',
-        
     },
     dimmingOverlay: {
         position: 'absolute',
@@ -731,9 +756,16 @@ const styles = StyleSheet.create({
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex: 1, // Ensure the overlay is above other components
+        backgroundColor: 'rgba(0, 0, 0, 0.125)',
+        zIndex: 1,
     },
+    boxContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        //margin: 0,
+        //padding: 0,
+    }
 });
 
 export default AddTaskScreen;
