@@ -1,14 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, TextInput, Modal, Platform} from "react-native";
+import { StyleSheet, TextInput} from "react-native";
 import usecreateTaskStore from "../../store/createTaskStore";
-import { Box, Card, Text, View, Button, VStack, HStack, ButtonText} from "@gluestack-ui/themed";
+import { Box, Card, Text, View, Button, Modal, HStack, ButtonText, ModalBackdrop, ModalContent} from "@gluestack-ui/themed";
 import { Image } from "@gluestack-ui/themed";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Picker } from '@react-native-picker/picker';
 import { config } from '../../styles/themeConfig'; // Import the theme configuration
 import { defaultStyles } from './../../styles/styles'
 import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
 const SubTaskScreen = ({index}) => {
@@ -43,7 +42,8 @@ const SubTaskScreen = ({index}) => {
     const clearMinuteSelection = () => {
         // const updatedSubtask = { ...selectedSubTask, time: "" };
         // updateSubtask(index, updatedSubtask);
-        closeModal();
+        //closeModal();
+        setSelectedMinute(0);
     };
 
       const handleSubTitleChange = (newTitle) => {
@@ -86,10 +86,35 @@ const SubTaskScreen = ({index}) => {
                 <Text style={[defaultStyles.TypographyBody]}>Minutes</Text>
                 <TouchableOpacity onPress={openModal}>
                     <ChevronRightIcon/>
-                    </TouchableOpacity>
+                </TouchableOpacity>
             </View>
         </Card>
-        <Modal
+        <Modal isOpen={isModalVisible} onClose={closeModal}>
+            <ModalBackdrop/>
+            <ModalContent style={styles.modalContent}>
+                <HStack style={styles.pickerContainer}>
+                    <Picker
+                        selectedValue={selectedMinute}
+                        onValueChange={(itemValue) => setSelectedMinute(itemValue)}
+                        style={styles.picker}
+                    >
+                        {Array.from({ length: 60 }, (_, i) => (
+                            <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} style={defaultStyles.TypographyBodyHeavy}/>
+                        ))}
+                    </Picker>
+                    <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
+                </HStack>
+                <HStack style={styles.buttonContainer}>
+                    <Button style={styles.clearButton} onPress={clearMinuteSelection}>
+                        <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
+                    </Button>
+                    <Button style={styles.submitButton} onPress={applyMinuteSelection}>
+                        <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
+                    </Button>
+                </HStack>
+            </ModalContent>
+        </Modal>
+        {/* <Modal
             visible={isModalVisible}
             animationType="slide"
             transparent={true}
@@ -119,7 +144,7 @@ const SubTaskScreen = ({index}) => {
                 </HStack>
             </VStack>
             </VStack>
-        </Modal>
+        </Modal> */}
         </>    
     );
 };
@@ -165,11 +190,11 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(0, 0, 0, 0.125)',
     },
     modalContent: {
         width: '100%',
-        height: '38%',
+        height: '40%',
         margin: 0,
         padding: 0,
         borderRadius: 20,
