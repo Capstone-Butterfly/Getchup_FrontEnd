@@ -13,7 +13,7 @@ import useTaskStore from '../../store/taskStore';
 import queryClient from '../../services/QueryClient';
 import { useMutation } from '@tanstack/react-query';
 
-const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtasks, task, setCurrentStep, navigation, navigateToNextStep, musicPlayerRef }) => {
+const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtasks, task, setCurrentStep, navigation, navigateToNextStep, musicPlayerRef, handleFlagChange }) => {
     const [isTaskStarted, setIsTaskStarted] = useState(false);
     const [isTaskCompleted, setIsTaskCompleted] = useState(false);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
@@ -22,6 +22,10 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
     const updateDataTask = useTaskStore(state => state.updateDataTask); 
 
     const { isTaskInProgress, setIsTaskInProgress } = useTaskStore();
+
+    const toggleFlag = () => {
+        handleFlagChange(false);
+      };
 
     const updateTaskStatusMutation = useMutation({
         mutationFn: async (task) => await manualCompleteTask(task._id),
@@ -101,6 +105,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                     setIsTaskCompleted(true);
                     MAIN_STATUS = "complete";
                     STATUS = "complete";
+                    toggleFlag();
                 }
     
                 await updateTaskEndTime(task._id, mainTaskEndTime, subtaskEndTime, MAIN_STATUS, STATUS, subtaskIndex, stepNumber === totalSteps);
