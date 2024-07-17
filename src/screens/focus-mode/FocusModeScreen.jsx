@@ -21,6 +21,12 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     const musicPlayerRef = useRef(null);
 
+    const [isToggleShown, setIsToggleShown] = useState(true);
+
+  const handleFlagChange = (newFlag) => {
+    setIsToggleShown(newFlag);
+  };
+
 
     useEffect(() => {
         setCurrentStep(1);
@@ -119,6 +125,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                     setCurrentStep={setCurrentStep}
                     navigateToNextStep={navigateToNextStep}
                     musicPlayerRef={musicPlayerRef}
+                    handleFlagChange={handleFlagChange}
                 />
 
                 {currentStep < totalSteps && (
@@ -129,7 +136,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                         </View>
                     </TouchableOpacity>
                 )}
-
+                {isToggleShown && 
                 <View style={styles.toggleContainer}>
                     <View style={[styles.toggleColumn, styles.toggleCard, { marginRight: 14 }]}>
                         <View style={styles.toggleRow}>
@@ -147,6 +154,8 @@ const FocusModeScreen = ({ route, navigation }) => {
                         </View>
                     </View>
                 </View>
+                
+}
             </ScrollView>
         </SafeAreaView>
     );
