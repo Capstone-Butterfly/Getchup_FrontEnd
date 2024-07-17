@@ -12,6 +12,7 @@ import useTaskStore from '../../store/taskStore';
 
 const FocusModeScreen = ({ route, navigation }) => {
     const { task } = route.params;
+    console.log("task is: ", task);
     const totalSteps = task.subtask.length;
     const [currentStep, setCurrentStep] = useState(1);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);

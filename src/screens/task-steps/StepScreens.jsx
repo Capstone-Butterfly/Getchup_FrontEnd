@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, ButtonText, HStack, Image } from '@gluestack-ui/themed';
 import { updateTaskStartTime, updateTaskEndTime, pauseTask, manualCompleteTask } from '../../services/tasks';
-import MusicPlayer from './MusicPlayer';
 import { defaultStyles } from '../../styles/styles';
 import { config } from '../../styles/themeConfig';
 import FirstStepSVG from '../../../assets/illustrations/1-first-step.svg';
 import BetweenStepSVG from '../../../assets/illustrations/2-between-step.svg';
 import LastStepSVG from '../../../assets/illustrations/3-last-step.svg';
-import CompleteSVG from '../../../assets/illustrations/complete.svg';
 import useTaskStore from '../../store/taskStore';
 import queryClient from '../../services/QueryClient';
 import { useMutation } from '@tanstack/react-query';
@@ -25,13 +23,13 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
 
     const toggleFlag = () => {
         handleFlagChange(false);
-      };
+    };
 
     const updateTaskStatusMutation = useMutation({
         mutationFn: async (task) => await manualCompleteTask(task._id),
         onSuccess: async () => {
             queryClient.invalidateQueries(['tasks']); 
-            console.log("uodate task: ", task);
+            console.log("update task: ", task);
             updateDataTask(task); 
             
         },
@@ -93,6 +91,10 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                 const STATUS = "progress";
     
                 await updateTaskStartTime(task._id, start_date, mainTaskStartTime, subtaskStartTime, MAIN_STATUS, STATUS, subtaskIndex);
+                if (task.movement_tracking && taskSubtasks[subtaskIndex].movement) {
+                    setIsMovementEnabled(true);
+                    console.log("Movement is enebled for the task");
+                }
             } else {
                 setIsTaskInProgress(false);
     
@@ -115,6 +117,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                 } else {
                     navigateToNextStep();
                 }
+                setIsMovementEnabled(false);
             }
         } catch (error) {
             console.error('Error updating task status:', error);
