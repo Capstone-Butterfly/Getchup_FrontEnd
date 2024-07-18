@@ -36,6 +36,7 @@ const CalendarScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   heading: {
+    
     textAlign: "left",
     marginBottom: config.tokens.spacing.md,
   },
@@ -48,7 +49,10 @@ const styles = StyleSheet.create({
     minWidth: 300,
     marginVertical: 0,
     marginHorizontal: "auto",
+    paddingTop:40,
   },
 });
+
+
 
 export default CalendarScreen;

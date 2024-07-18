@@ -65,6 +65,28 @@ const WeeklyCalendar = ({ userId, navigation }) => {
             <CalendarStrip
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 calendarColor={'white'}
+                calendarHeaderStyle={StyleSheet.flatten([defaultStyles.TypographyH3, styles.calendarHeaderStyle])}
+                dateNameStyle={StyleSheet.flatten([defaultStyles.TypographyLabelSmall, styles.dateNameStyle])}
+                dateNumberStyle={StyleSheet.flatten([defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle])}
+                dayContainerStyle={styles.dayContainer}
+                daySelectionAnimation={styles.daySelectionAnimation}
+                disabledDateNameStyle={{ color: 'grey' }}
+                disabledDateNumberStyle={{ color: 'grey' }}
+                highlightDateNameStyle={StyleSheet.flatten([defaultStyles.TypographyLabelSmall, styles.dateNameStyle])}
+                highlightDateNumberStyle={StyleSheet.flatten([defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle])}
+                iconContainer={styles.iconContainer}
+                leftSelector={[]}
+                onDateSelected={handleDateSelected}
+                rightSelector={[]}
+                scrollable
+                selectedDate={selectedDate}
+                style={styles.calendarStrip}
+                shouldAllowFontScaling={true}
+                dayComponentHeight={56}
+            />
+            {/* <CalendarStrip
+                calendarAnimation={{ type: 'sequence', duration: 30 }}
+                calendarColor={'white'}
                 calendarHeaderStyle={[defaultStyles.TypographyH3, styles.calendarHeaderStyle]}
                 dateNameStyle={[defaultStyles.TypographyLabelSmall, styles.dateNameStyle]}
                 dateNumberStyle={[defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle]}
@@ -83,7 +105,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 style={styles.calendarStrip}
                 shouldAllowFontScaling = {true}
                 dayComponentHeight={56}
-            />
+            /> */}
             {isLoading ? (
                 <Text>Loading...</Text>
             ) : error ? (

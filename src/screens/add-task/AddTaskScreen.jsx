@@ -354,25 +354,25 @@ const AddTaskScreen = ({ navigation }) => {
                 <Pressable onPress={handleOpenTitleModal} style={styles.bottomLine}>                   
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
-                        <Text style={[defaultStyles.TypographyH2]}>{title ? title : "Add Task Title"}</Text>
+                        <Text style={[defaultStyles.TypographyH2, styles.textBlack]}>{title ? title : "Add Task Title"}</Text>
                     </View>
                 </Pressable>
                 <Pressable onPress={handleOpenDateTimeModal} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
                         <CalendarIcon style={styles.icon}/>
-                        <Text style={[defaultStyles.TypographyBody]}>{start_date ? start_date : "Date"}</Text>
+                        <Text style={[defaultStyles.TypographyBody, styles.textBlack]}>{start_date ? start_date : "Date"}</Text>
                     </View>
                 </Pressable>
                 <Pressable onPress={handleOpenNoteModal} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
                         <NotesIcon style={styles.icon}/> 
-                        <Text style={[defaultStyles.TypographyBody]}>{notes? notes : "Notes"}</Text>
+                        <Text style={[defaultStyles.TypographyBody, styles.textBlack]}>{notes? notes : "Notes"}</Text>
                     </View>
                 </Pressable>
                 <Pressable onPress={handleOpenPriorityModal}>
                     <View style={styles.detailItem}>
                         <TasksIcon style={styles.icon}/>
-                        <Text style={[defaultStyles.TypographyBody]}>{task_urgency? task_urgency.charAt(0).toUpperCase() + task_urgency.slice(1) : "Task priority"}</Text>
+                        <Text style={[defaultStyles.TypographyBody, styles.textBlack]}>{task_urgency? task_urgency.charAt(0).toUpperCase() + task_urgency.slice(1) : "Task priority"}</Text>
                     </View>
                 </Pressable>
             </Card>
@@ -383,7 +383,7 @@ const AddTaskScreen = ({ navigation }) => {
                 <Pressable onPress={handleOpenAddSubTaskModal} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
-                        <Text style={[defaultStyles.TypographyBody]}>Add subtask</Text>
+                        <Text style={[defaultStyles.TypographyBody, styles.textBlack]}>Add subtask</Text>
                     </View>                    
                 </Pressable>
                 <DraggableFlatList
@@ -765,6 +765,12 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         //margin: 0,
         //padding: 0,
+    },
+    textBlack: {
+        color: config.tokens.colors.black,
+    },
+    textNeutral: {
+        color: config.tokens.colors.neutral,
     }
 });
 

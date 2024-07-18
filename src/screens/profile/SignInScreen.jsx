@@ -28,7 +28,7 @@ function SignInScreen() {
         setUserId(data.userId);
 
         const userData = await userDataProfile(data.userId);
-        console.log(userData);
+        //console.log(userData);
         setPhone(userData.profile.phone);
         setNotification(userData.profile.notification);
         setTaskReminder(userData.profile.task_reminder);
@@ -56,7 +56,7 @@ function SignInScreen() {
     <View style={styles.container}>
     <View style={styles.logoDiv}>
 
-    <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} />
+    <Image source={require('../../../assets/logo/logomark.png')} alt='Getchup Logo' style={styles.logo} />
     <Text style={styles.logoText}>Getchup!</Text>
 
     </View>
