@@ -36,7 +36,7 @@ const ProgressChart = ({name, userId}) => {
     }
 
     return(
-        <SafeAreaView style={styles.container}>
+        <View style={styles.container}>
              <HStack style={styles.hstack}>
                 <Heading style={defaultStyles.TypographyH1}>Progress</Heading>
              </HStack>
@@ -65,7 +65,7 @@ const ProgressChart = ({name, userId}) => {
                     </VStack>
                 </Card>
              </Box>
-        </SafeAreaView>
+        </View>
     )
 };
 
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-between',
         paddingBottom: 0,
-        paddingTop: 40,
+        paddingTop: 60,
     }, 
     headerCard: {
         paddingTop:20,
