@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import { getTodayChartDetails, getWeeklyChartDetails } from "../services/progress";
@@ -21,6 +21,9 @@ const WeeklyProgressChartDetail = ({userId}) => {
       setchartSelectedStartDate: state.setchartSelectedStartDate,
       setchartSelectedEndDate: state.setchartSelectedEndDate,
   }));
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateData, setSelectedDateData] = useState({});
 
   useEffect(() => {
     const updateDateRange = () => {
@@ -55,7 +58,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
   });
 
   if (isWeeklyLoading || isTodayLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size="large" color={config.tokens.colors.primary} />;
   }
 
   if (isWeeklyError || isTodayError) {
@@ -76,12 +79,18 @@ const WeeklyProgressChartDetail = ({userId}) => {
     const stackData = timePeriods.map((period) => {
       const completeCount = wData.sortedTasksByDay[period.full]?.completeCount || 0;
       const incompleteCount = wData.sortedTasksByDay[period.full]?.incompleteCount || 0;
+      const isSelected = selectedDate === period.full;
       return {
         stacks: [
-          { value: incompleteCount, color: "#F1938E", marginBottom: 0 },
-          { value: completeCount, color: "#94B6EF" }
+          { value: incompleteCount, color: isSelected ? config.tokens.colors.primaryDark : config.tokens.colors.highPriority, marginBottom: 0 },
+          { value: completeCount, color: isSelected ? config.tokens.colors.primary : config.tokens.colors.blue }
         ],
-        label: period.short
+        // stacks: [
+        //   { value: incompleteCount, color: config.tokens.colors.highPriority, marginBottom: 0 },
+        //   { value: completeCount, color: config.tokens.colors.blue }
+        // ],
+        label: period.short,
+        full: period.full
       };
     });
   
@@ -89,16 +98,19 @@ const WeeklyProgressChartDetail = ({userId}) => {
   };  
   
   const renderTitle = (tData) => {
+    const completeCount = selectedDateData.completeCount ?? tData.totalCompletedTasks;
+    const incompleteCount = selectedDateData.incompleteCount ?? tData.totalIncompleteTasks;
+
     return (
       <View style={styles.titleContainer}>
         <View style={styles.titleRow}>
           <View style={styles.titleItem}>
             <View style={styles.completedIndicator} />
-            <Text style={defaultStyles.TypographyLabelSmall}>{tData.totalCompletedTasks} Completed</Text>
+            <Text style={defaultStyles.TypographyLabelSmall}>{completeCount} Completed</Text>
           </View>
           <View style={styles.titleItem}>
             <View style={styles.incompleteIndicator} />
-            <Text style={defaultStyles.TypographyLabelSmall}>{tData.totalIncompleteTasks} On Going</Text>
+            <Text style={defaultStyles.TypographyLabelSmall}>{incompleteCount} On Going</Text>
           </View>
         </View>
       </View>
@@ -106,6 +118,14 @@ const WeeklyProgressChartDetail = ({userId}) => {
   };
 
   const stackData = transformData(weeklyData);
+  const now = dayjs().format('h:mm A'); 
+
+  const handleBarPress = (period) => {
+    if (period) {
+      setSelectedDate(period.full);
+      setSelectedDateData(weeklyData.sortedTasksByDay[period.full] || {});
+    }
+  };
   
   return (
     <View style={styles.container}>
@@ -115,11 +135,15 @@ const WeeklyProgressChartDetail = ({userId}) => {
             width={260}
             noOfSections={7}
             barWidth={15}
-            barBorderRadius={6}
+            //barBorderRadius={6}
             yAxisThickness={0}
             rulesType="solid"
             stackData={stackData}
+            onPress={(index) => {handleBarPress(index)}}
           />
+        </Box>
+        <Box style={styles.updateContainer}>
+          <Text style={defaultStyles.TypographyBodySmall}>Updated today at {now}</Text>
         </Box>
         <VStack style={styles.vStack}>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
@@ -157,6 +181,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingTop: 30,
     paddingLeft: 20,
+  },
+  updateContainer: {
+    flex: 1, // Make the container take full width of the parent
+    flexDirection: 'row', // Ensure it's a row layout
+    justifyContent: 'flex-end', // Align items to the end of the row
+    alignItems: 'center', // Center align items vertically
+    paddingTop: 20,
+    paddingRight: 20,
   },
   barchartContainer: {
     display: 'flex',
