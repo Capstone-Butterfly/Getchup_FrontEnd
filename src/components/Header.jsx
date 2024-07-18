@@ -54,7 +54,7 @@ const Header = ({ userId, navigation }) => {
                     <ModalBackdrop />
                     <ModalContent style={styles.modalContent}>
                         <ModalHeader style={[defaultStyles.TypographyH1, styles.modalHeader]}>
-                            <Heading style={[styles.headerTitle, styles.title]}>Notifications</Heading>
+                            <Heading style={[defaultStyles.TypographyH1, styles.headerTitle]}>Notifications</Heading>
                             <ModalCloseButton style={styles.closeButton} onPress={closePopover}>
                                 <Icon as={CloseIcon} />
                             </ModalCloseButton>
@@ -80,9 +80,10 @@ const styles = StyleSheet.create({
         top: 0,
         width: '100%',
         zIndex: 1000,
+        paddingBottom: 16,
     },
     headerTitle: {
-        color: config.tokens.colors.neutralDark,
+        color: config.tokens.colors.black,
         flexGrow: 1,
         textAlign: "center",
     },
@@ -96,6 +97,7 @@ const styles = StyleSheet.create({
     icon: {
         display: 'flex',
         alignSelf: 'center',
+        borderColor: "transparent"
     },
     modal: {
         height: "100%",
@@ -126,9 +128,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
-    title: {
-        color: config.tokens.colors.black,
-    },
+    // title: {
+    //     color: config.tokens.colors.black,
+    // },
 });
 
 export default Header;
