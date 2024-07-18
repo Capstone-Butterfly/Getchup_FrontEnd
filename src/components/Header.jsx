@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton, Text } from "@gluestack-ui/themed";
+import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton, Text, ModalBackdrop } from "@gluestack-ui/themed";
 import { CloseIcon } from '@gluestack-ui/themed';
 import useNotificationStore from '../store/notificationStore';
 import NotificationsList from './NotificationList';
@@ -51,9 +51,10 @@ const Header = ({ userId, navigation }) => {
                 </Pressable>
 
                 <Modal isOpen={isOpen} onClose={closePopover} style={styles.modal}>
+                    <ModalBackdrop />
                     <ModalContent style={styles.modalContent}>
                         <ModalHeader style={[defaultStyles.TypographyH1, styles.modalHeader]}>
-                            <Heading style={styles.headerTitle}>Notifications</Heading>
+                            <Heading style={[styles.headerTitle, styles.title]}>Notifications</Heading>
                             <ModalCloseButton style={styles.closeButton} onPress={closePopover}>
                                 <Icon as={CloseIcon} />
                             </ModalCloseButton>
@@ -122,6 +123,9 @@ const styles = StyleSheet.create({
         padding: 10,
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
+    },
+    title: {
+        color: config.tokens.colors.black,
     },
 });
 
