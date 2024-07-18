@@ -46,7 +46,7 @@ const MonthlyCalendar = () => {
                 const dateKey = taskDate.toISOString().split('T')[0];
                 marks[dateKey] = { 
                 marked: true,
-                dotColor: '#BFBFBF', 
+                dotColor: config.tokens.colors.neutral, 
             };
             }
         });
@@ -76,20 +76,20 @@ const MonthlyCalendar = () => {
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
                 theme={{
-                    backgroundColor: '#ffffff',
-                    calendarBackground: '#ffffff',
+                    backgroundColor: config.tokens.colors.white,
+                    calendarBackground: config.tokens.colors.white,
                     textSectionTitleColor: '#b6c1cd',
                     textSectionTitleDisabledColor: '#d9e1e8',
                     selectedDayBackgroundColor: '#00adf5',
-                    selectedDayTextColor: '#ffffff',
-                    todayTextColor: '#ffffff',
-                    dayTextColor: '#2d4150',
+                    selectedDayTextColor: config.tokens.colors.white,
+                    todayTextColor: config.tokens.colors.white,
+                    dayTextColor: config.tokens.colors.black,
                     textDisabledColor: '#d9e1e8',
                     dotColor: config.tokens.colors.neutral,
-                    selectedDotColor: '#ffffff',
+                    selectedDotColor: config.tokens.colors.white,
                     arrowColor: 'orange',
                     disabledArrowColor: '#d9e1e8',
-                    monthTextColor: 'black',
+                    monthTextColor: config.tokens.colors.black,
                     indicatorColor: 'blue',
                     textDayFontFamily: 'Archivo_400Regular',
                     textMonthFontFamily: 'Archivo_400Regular',
