@@ -46,7 +46,7 @@ const Header = ({ userId, navigation }) => {
                 <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
                 <Pressable onPress={openPopover}>
                     {isLoading ? null : (
-                        <Icon as={NotificationIconComponent} title="open" style={styles.icon} />
+                        <NotificationIconComponent title="open" style={styles.icon}/>
                     )}
                 </Pressable>
 
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
     icon: {
         display: 'flex',
         alignSelf: 'center',
-        borderColor: "transparent"
+        // borderColor: "transparent"
     },
     modal: {
         height: "100%",

@@ -6,8 +6,14 @@ import { Box, HStack, Icon, Pressable, VStack, View } from '@gluestack-ui/themed
 import { config } from '../styles/themeConfig';
 import CheckboxEmptyIcon from '../../assets/icons/checkbox-empty.svg'
 import CheckboxCheckedIcon from '../../assets/icons/checkbox-checked.svg'
+import useTaskStore from '../store/taskStore.js';
+import { manualCompleteTask } from '../services/tasks.js';
+
 
 const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false }) => {
+
+    const { tasks, setTasks } = useTaskStore();
+
     const formatEstimateTime = (time) => {
         if (time === 0 || time === null) {
             return '';
@@ -33,6 +39,20 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
         return [styles.urgencyBar, { backgroundColor: borderColor }];
     };
 
+    const handleMarkAsDone = async () => {
+        try {
+            await manualCompleteTask(task._id);
+
+            const updatedTasks = tasks.map((t) =>
+                t._id === task._id ? { ...t, main_status: "complete" } : t
+            );
+            setTasks(updatedTasks);
+            console.log("updating task", task._id)
+        } catch (error) {
+            console.log("error marking task as done:", error)
+        }
+    };
+
     return (
         <TouchableOpacity
             style={styles.card}
@@ -41,11 +61,8 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
             <HStack style={styles.task}>
                 {task.main_status === "complete" ? (
                     <> 
-                    {/* // task is completed */}
                         <Box style={styles.urgencyBar} />
-                        <Pressable>
                             <Icon as={CheckboxCheckedIcon} style={styles.checkbox} />
-                        </Pressable>
                         <Text style={[styles.taskInfo, defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>
                             {task.title}
                         </Text>
@@ -53,7 +70,7 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                 ) : (
                     <>
                         <Box style={getCardStyle(task.task_urgency)} />
-                        <Pressable>
+                        <Pressable onPress={handleMarkAsDone}>
                             <Icon as={CheckboxEmptyIcon} style={styles.checkbox} />
                         </Pressable>
                         <VStack style={styles.taskInfo}>
@@ -97,7 +114,6 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: config.tokens.colors.white,
         paddingHorizontal: 11,
-        // paddingVertical: 5,
         marginVertical: 5,
         borderRadius: 8,
         width: '100%',
