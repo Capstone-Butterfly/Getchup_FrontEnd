@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, ButtonText, HStack, Image } from '@gluestack-ui/themed';
+import { Button, ButtonText, Center, HStack, Image, Progress, ProgressFilledTrack } from '@gluestack-ui/themed';
 import { updateTaskStartTime, updateTaskEndTime, pauseTask, manualCompleteTask } from '../../services/tasks';
 import { defaultStyles } from '../../styles/styles';
 import { config } from '../../styles/themeConfig';
@@ -11,15 +11,38 @@ import useTaskStore from '../../store/taskStore';
 import queryClient from '../../services/QueryClient';
 import { useMutation } from '@tanstack/react-query';
 
-const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtasks, task, setCurrentStep, navigation, navigateToNextStep, musicPlayerRef, handleFlagChange }) => {
+const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtasks, task, setCurrentStep, navigation, navigateToNextStep, musicPlayerRef, handleFlagChange, duration    }) => {
     const [isTaskStarted, setIsTaskStarted] = useState(false);
     const [isTaskCompleted, setIsTaskCompleted] = useState(false);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
     const [isAlertShown, setIsAlertShown] = useState(false);
     const [showCompletionScreen, setShowCompletionScreen] = useState(false);
     const updateDataTask = useTaskStore(state => state.updateDataTask); 
+    const [progressValue, setProgressValue] = useState(0);
 
     const { isTaskInProgress, setIsTaskInProgress } = useTaskStore();
+
+    useEffect(() => {
+        if (isTaskInProgress) {
+            const interval = duration / 100; 
+            const timer = setInterval(() => {
+                setProgressValue(prev => {
+                    const newValue = prev + 1;
+                    if (newValue >= 100) {
+                        clearInterval(timer);
+                        return 100;
+                    }
+                    return newValue;
+                });
+            }, interval);
+
+            return () => {
+                clearInterval(timer);
+                setProgressValue(0); 
+            };
+        }
+    }, [isTaskInProgress, duration]);
+
 
     const toggleFlag = () => {
         handleFlagChange(false);
@@ -172,6 +195,12 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                         <TouchableOpacity onPress={navigateToNextStep} style={styles.button}>
                             <Text style={styles.buttonText}>Next</Text>
                         </TouchableOpacity>
+                        
+                    </View>
+                    <View style={styles.progressContainer}>
+                    <Progress value={progressValue} w={288} h={8} style={styles.progress} >
+                            <ProgressFilledTrack backgroundColor={config.tokens.colors.primary}/>
+                        </Progress>
                     </View>
                 </View>
             ) : (
@@ -190,6 +219,15 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
 };
 
 const styles = StyleSheet.create({
+    progress: {
+        borderRadius: 8, 
+        marginTop: 24,
+        alignSelf:'center'
+
+    },
+    progressContainer: {
+        justifyContent:'center'
+    },
     mainCard: {
         marginHorizontal: 20
     },

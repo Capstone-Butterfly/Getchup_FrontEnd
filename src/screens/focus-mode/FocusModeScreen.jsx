@@ -51,7 +51,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                     setIsAlertShown(true);
                     Alert.alert('Reminder', 'Please take a moment to calm down and refocus on the task.', [
                         { text: 'OK', onPress: () => {
-                            setTimeout(() => setIsAlertShown(false), 5000); // Set timeout for resetting isAlertShown
+                            setTimeout(() => setIsAlertShown(false), 5000); 
                         }}
                     ]);
                 }
@@ -83,6 +83,7 @@ const FocusModeScreen = ({ route, navigation }) => {
         const nextStepNumber = currentStep + 1;
         if (nextStepNumber <= totalSteps) {
             setCurrentStep(nextStepNumber);
+            musicPlayerRef.current.stopMusic();
         } 
     };
 
@@ -90,6 +91,7 @@ const FocusModeScreen = ({ route, navigation }) => {
         const previousStepNumber = currentStep - 1;
         if (previousStepNumber >= 1) {
             setCurrentStep(previousStepNumber);
+            musicPlayerRef.current.stopMusic();
         }
     };
 
@@ -127,6 +129,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                     navigateToNextStep={navigateToNextStep}
                     musicPlayerRef={musicPlayerRef}
                     handleFlagChange={handleFlagChange}
+                    duration={parseInt(task.subtask[currentStep - 1].time) * 60 * 1000} 
                 />
 
                 {currentStep < totalSteps && (

@@ -26,6 +26,9 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
         await sound.unloadAsync();
       }
     },
+    playNewTrack: async () => {
+      await playNextTrack();
+    },
   }));
 
   useEffect(() => {
