@@ -2,10 +2,18 @@ import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 import ConvertTimeStamp from '../utils/ConvertTimeStamp';
 import { defaultStyles } from '../styles/styles';
-import { HStack, VStack, View } from '@gluestack-ui/themed';
+import { Box, HStack, Icon, Pressable, VStack, View } from '@gluestack-ui/themed';
 import { config } from '../styles/themeConfig';
+import CheckboxEmptyIcon from '../../assets/icons/checkbox-empty.svg'
+import CheckboxCheckedIcon from '../../assets/icons/checkbox-checked.svg'
+import useTaskStore from '../store/taskStore.js';
+import { manualCompleteTask } from '../services/tasks.js';
+
 
 const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false }) => {
+
+    const { tasks, setTasks } = useTaskStore();
+
     const formatEstimateTime = (time) => {
         if (time === 0 || time === null) {
             return '';
@@ -28,31 +36,56 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
             default:
                 borderColor = 'transparent';
         }
-        return [styles.card, { borderLeftWidth: 7, borderLeftColor: borderColor }];
+        return [styles.urgencyBar, { backgroundColor: borderColor }];
+    };
+
+    const handleMarkAsDone = async () => {
+        try {
+            await manualCompleteTask(task._id);
+
+            const updatedTasks = tasks.map((t) =>
+                t._id === task._id ? { ...t, main_status: "complete" } : t
+            );
+            setTasks(updatedTasks);
+            console.log("updating task", task._id)
+        } catch (error) {
+            console.log("error marking task as done:", error)
+        }
     };
 
     return (
         <TouchableOpacity
-            style={getCardStyle(task.task_urgency)}
+            style={styles.card}
             onPress={() => navigation.navigate('TaskDetailScreen', { task })}
         >
             <HStack style={styles.task}>
                 {task.main_status === "complete" ? (
-                    <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>
-                        {task.title}
-                    </Text>
+                    <> 
+                        <Box style={styles.urgencyBar} />
+                            <Icon as={CheckboxCheckedIcon} style={styles.checkbox} />
+                        <Text style={[styles.taskInfo, defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>
+                            {task.title}
+                        </Text>
+                    </>
                 ) : (
+                    <>
+                        <Box style={getCardStyle(task.task_urgency)} />
+                        <Pressable onPress={handleMarkAsDone}>
+                            <Icon as={CheckboxEmptyIcon} style={styles.checkbox} />
+                        </Pressable>
                         <VStack style={styles.taskInfo}>
-                            <View>
-                            <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>
-                                {task.title}
-                            </Text>
-                            <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>
-                                {task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks
-                            </Text>
+                            <View style={styles.view}>
+                                <Text style={[defaultStyles.TypographyBodyHeavy, styles.taskTitle]}>
+                                    {task.title}
+                                </Text>
+                                <Text style={[defaultStyles.TypographyBodySmall, styles.subtask]}>
+                                    {task.subtask.filter(subtask => subtask.status === 'complete').length}/{task.subtask.length} Subtasks
+                                </Text>
                             </View>
                         </VStack>
+                    </>
                 )}
+                {task.main_status !== "complete" && (
                 <View style={styles.taskTimeContainer}>
                     {showStartTime && (
                         <Text style={[defaultStyles.TypographyLabelSmall, styles.taskTime]}>
@@ -65,6 +98,7 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                         </Text>
                     )}
                 </View>
+                )}
             </HStack>
         </TouchableOpacity>
     );
@@ -80,8 +114,7 @@ const styles = StyleSheet.create({
     card: {
         backgroundColor: config.tokens.colors.white,
         paddingHorizontal: 11,
-        paddingVertical: 5,
-        marginVertical: 12,
+        marginVertical: 5,
         borderRadius: 8,
         width: '100%',
     },
@@ -91,18 +124,26 @@ const styles = StyleSheet.create({
     strikethrough: {
         textDecorationLine: 'line-through',
         textDecorationStyle: 'solid',
+        color: config.tokens.colors.neutralDark,
     },
     subtask: {
         color: config.tokens.colors.muted,
     },
     task: {
         alignItems: 'center',
+        borderBottomColor: config.tokens.colors.neutralLight,
+        borderBottomWidth: 1,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'space-between', 
+        justifyContent: "center",
+        maxHeight: 73,
+        minHeight: 48,
+        paddingVertical: 12,
+        paddingRight: 10,
     },
     taskInfo: {
-        alignItems: 'flex-end', 
+        alignItems: 'flex-start',
+        flexGrow: 1,
     },
     taskTime: {
         fontSize: 12,
@@ -119,5 +160,18 @@ const styles = StyleSheet.create({
     taskTitle: {
         fontSize: 16,
         lineHeight: 20,
+    },
+    urgencyBar: {
+        borderRadius: 10,
+        height: "100%",
+        marginRight: 11,
+        width: 8,
+    },
+    view: {
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
+
     },
 });

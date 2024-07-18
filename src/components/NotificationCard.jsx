@@ -64,22 +64,25 @@ const NotificationCard = ({ navigation, notification, userId }) => {
         }
     };
 
+    const task = tasks.find(task => task._id === notification.task_id)
     const cardStyle = notification.read ? styles.read : styles.unread;
 
     return (
         <Pressable onPress={handleNotificationClick} style={styles.container}>
             <Card key={notification.identifier} style={[styles.card, cardStyle]}>
                 <HStack style={styles.firstLine}>
-                    {!notification.read && <Circle height="8px" width="8px" style={styles.circle} />}
+                    <Circle height="8px" width="8px" style={!notification.read ? styles.circleUnread : styles.circleRead} />
                     <Clock style={styles.clock} />
                     <Heading style={[defaultStyles.TypographyH3, styles.heading]}>Reminder!</Heading>
-                    <Text style={defaultStyles.TypographyLabelSmall}>{formatDateToString(notification.sent_at)}</Text>
+                    <Text style={[defaultStyles.TypographyLabelSmall, styles.sentAt]}>{formatDateToString(notification.sent_at)}</Text>
                 </HStack>
                 <Text style={styles.message}>{notification.message}</Text>
                 <ButtonGroup style={styles.buttonGroup}>
-                    <Button style={styles.button} onPress={handleMarkAsDone}>
-                        <ButtonText style={[defaultStyles.TypographyBodySmallHeavy, styles.buttonText]}>Mark as done</ButtonText>
-                    </Button>
+                    {task && task.main_status !== "complete" && (
+                        <Button style={styles.button} onPress={handleMarkAsDone}>
+                            <ButtonText style={[defaultStyles.TypographyBodySmallHeavy, styles.buttonText]}>Mark as done</ButtonText>
+                        </Button>
+                    )}
                     {!notification.read && (
                         <Button style={styles.button} onPress={handleMarkAsRead}>
                             <ButtonText style={[defaultStyles.TypographyBodySmallHeavy, styles.buttonText]}>Mark as read</ButtonText>
@@ -112,7 +115,12 @@ const styles = StyleSheet.create({
         paddingRight: config.tokens.spacing.lg,
         width: "100%",
     },
-    circle: {
+    circleUnread: {
+        marginRight: 8,
+        alignSelf: "center",
+        color: "#E3281C",
+    },
+    circleRead: {
         marginRight: 8,
         alignSelf: "center",
     },
@@ -132,10 +140,14 @@ const styles = StyleSheet.create({
     },
     message: {
         marginBottom: config.tokens.spacing.xs,
-        paddingLeft: 20
+        paddingLeft: 20,
+        color: config.tokens.colors.black,
     },
     read: {
         backgroundColor: config.tokens.colors.white,
+    },
+    sentAt: {
+        color: config.tokens.colors.black,
     },
     unread: {
         backgroundColor: config.tokens.colors.primary,

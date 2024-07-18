@@ -95,7 +95,7 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
                           showStartTime={true}
                           showEndTime={true}
                       />
-                      <Divider style={styles.divider} />
+                      {/* <Divider style={styles.divider} /> */}
                     </React.Fragment>
                   ))}
                 </View>

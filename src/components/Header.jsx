@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton, Text } from "@gluestack-ui/themed";
-import { CloseIcon } from '@gluestack-ui/themed';
+import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton, Text, ModalBackdrop } from "@gluestack-ui/themed";
 import useNotificationStore from '../store/notificationStore';
 import NotificationsList from './NotificationList';
 import { defaultStyles } from '../styles/styles';
@@ -11,6 +10,7 @@ import NotificationUnreadIcon from '../../assets/icons/notification-badges.svg';
 import { config } from '../styles/themeConfig';
 import { getSortedNotificationsByUserId } from '../services/notificationService';
 import { useQuery } from '@tanstack/react-query';
+import CloseIcon from '../../assets/icons/x.svg';
 
 const Header = ({ userId, navigation }) => {
     const { isOpen, openPopover, closePopover } = useNotificationStore();
@@ -46,14 +46,15 @@ const Header = ({ userId, navigation }) => {
                 <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
                 <Pressable onPress={openPopover}>
                     {isLoading ? null : (
-                        <Icon as={NotificationIconComponent} title="open" style={styles.icon} />
+                        <NotificationIconComponent title="open" style={styles.icon}/>
                     )}
                 </Pressable>
 
                 <Modal isOpen={isOpen} onClose={closePopover} style={styles.modal}>
+                    <ModalBackdrop />
                     <ModalContent style={styles.modalContent}>
                         <ModalHeader style={[defaultStyles.TypographyH1, styles.modalHeader]}>
-                            <Heading style={styles.headerTitle}>Notifications</Heading>
+                            <Heading style={[defaultStyles.TypographyH1, styles.headerTitle]}>Notifications</Heading>
                             <ModalCloseButton style={styles.closeButton} onPress={closePopover}>
                                 <Icon as={CloseIcon} />
                             </ModalCloseButton>
@@ -79,9 +80,10 @@ const styles = StyleSheet.create({
         top: 0,
         width: '100%',
         zIndex: 1000,
+        paddingBottom: 16,
     },
     headerTitle: {
-        color: config.tokens.colors.neutralDark,
+        color: config.tokens.colors.black,
         flexGrow: 1,
         textAlign: "center",
     },
@@ -95,14 +97,18 @@ const styles = StyleSheet.create({
     icon: {
         display: 'flex',
         alignSelf: 'center',
+        // borderColor: "transparent"
+    },
+    modal: {
+        height: "100%",
     },
     modalContent: {
         width: '100%',
-        height: '85%',
+        height: '100%',
         margin: 0,
         marginTop: 8,
         padding: 0,
-        borderRadius: 10,
+        borderRadius: 0,
         backgroundColor: 'white',
         position: 'absolute',
         bottom: 0,
@@ -111,7 +117,6 @@ const styles = StyleSheet.create({
     modalHeader: {
         display: "flex",
     },
-    closeButton: {},
     modalBody: {
         flex: 1,
         paddingTop: 20,
@@ -123,6 +128,9 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderBottomColor: '#ccc',
     },
+    // title: {
+    //     color: config.tokens.colors.black,
+    // },
 });
 
 export default Header;

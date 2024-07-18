@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from 'react';
-import { SafeAreaView } from 'react-native';
 import { CalendarList } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
 import dayjs from 'dayjs';
 import { config } from '../styles/themeConfig'; 
+import { SafeAreaView } from '@gluestack-ui/themed';
 
 const MonthlyCalendar = () => {
     const navigation = useNavigation();
@@ -12,12 +12,21 @@ const MonthlyCalendar = () => {
         tasks: state.tasks,
     }));
 
+    const isValidDate = (date) => {
+        return date instanceof Date && !isNaN(date);
+    };
+
     const handleDateSelected = useCallback((day) => {
         const date = dayjs(day.dateString).format('YYYY-MM-DD');
 
         const hasTasks = tasks.some(task => {
             const taskDate = new Date(task.estimate_start_date);
-            return taskDate.toISOString().split('T')[0] === date;
+            if (isValidDate(taskDate)) {
+                return taskDate.toISOString().split('T')[0] === date;
+            } else {
+                return false;
+            }
+            
         });
 
         if (hasTasks) {
@@ -33,12 +42,13 @@ const MonthlyCalendar = () => {
         
         tasks.forEach(task => {
             const taskDate = new Date(task.estimate_start_date);
-            const dateKey = taskDate.toISOString().split('T')[0];
-            marks[dateKey] = { 
+            if (isValidDate(taskDate)) {
+                const dateKey = taskDate.toISOString().split('T')[0];
+                marks[dateKey] = { 
                 marked: true,
-                dotColor: '#BFBFBF',
-                
+                dotColor: config.tokens.colors.neutral, 
             };
+            }
         });
         
         marks[today] = {
@@ -66,20 +76,20 @@ const MonthlyCalendar = () => {
                 markedDates={markedDates}
                 onDayPress={handleDateSelected}
                 theme={{
-                    backgroundColor: '#ffffff',
-                    calendarBackground: '#ffffff',
+                    backgroundColor: config.tokens.colors.white,
+                    calendarBackground: config.tokens.colors.white,
                     textSectionTitleColor: '#b6c1cd',
                     textSectionTitleDisabledColor: '#d9e1e8',
                     selectedDayBackgroundColor: '#00adf5',
-                    selectedDayTextColor: '#ffffff',
-                    todayTextColor: '#ffffff',
-                    dayTextColor: '#2d4150',
+                    selectedDayTextColor: config.tokens.colors.white,
+                    todayTextColor: config.tokens.colors.white,
+                    dayTextColor: config.tokens.colors.black,
                     textDisabledColor: '#d9e1e8',
                     dotColor: config.tokens.colors.neutral,
-                    selectedDotColor: '#ffffff',
+                    selectedDotColor: config.tokens.colors.white,
                     arrowColor: 'orange',
                     disabledArrowColor: '#d9e1e8',
-                    monthTextColor: 'black',
+                    monthTextColor: config.tokens.colors.black,
                     indicatorColor: 'blue',
                     textDayFontFamily: 'Archivo_400Regular',
                     textMonthFontFamily: 'Archivo_400Regular',

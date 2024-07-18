@@ -43,12 +43,22 @@ const WeeklyCalendar = ({ userId, navigation }) => {
 
     const filterTasksByDate = (tasks, date) => {
         const selectedDateString = date.toISOString().split('T')[0];
-        return tasks.filter(task => {
+        const tasksForSelectedDate = tasks.filter(task => {
             if (task.estimate_start_date) {
                 return task.estimate_start_date.split('T')[0] === selectedDateString;
             }
             return false;
         });
+
+        const incompleteTasks = tasksForSelectedDate
+            .filter(task => task.main_status !== "complete")
+            .sort((a, b) => new Date(a.estimate_start_time) - new Date(b.estimate_start_time))
+
+        const completeTasks = tasksForSelectedDate
+            .filter(task => task.main_status === "complete")
+            .sort((a, b) => new Date(a.estimate_start_time) - new Date(b.estimate_start_time))
+
+        return [...incompleteTasks, ...completeTasks]
     };
 
     const filteredTasks = useMemo(() => {
@@ -65,15 +75,15 @@ const WeeklyCalendar = ({ userId, navigation }) => {
             <CalendarStrip
                 calendarAnimation={{ type: 'sequence', duration: 30 }}
                 calendarColor={'white'}
-                calendarHeaderStyle={[defaultStyles.TypographyH3, styles.calendarHeaderStyle]}
-                dateNameStyle={[defaultStyles.TypographyLabelSmall, styles.dateNameStyle]}
-                dateNumberStyle={[defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle]}
+                calendarHeaderStyle={StyleSheet.flatten([defaultStyles.TypographyH3, styles.calendarHeaderStyle])}
+                dateNameStyle={StyleSheet.flatten([defaultStyles.TypographyLabelSmall, styles.dateNameStyle])}
+                dateNumberStyle={StyleSheet.flatten([defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle])}
                 dayContainerStyle={styles.dayContainer}
                 daySelectionAnimation={styles.daySelectionAnimation}
                 disabledDateNameStyle={{ color: 'grey' }}
                 disabledDateNumberStyle={{ color: 'grey' }}
-                highlightDateNameStyle={[defaultStyles.TypographyLabelSmall, styles.dateNameStyle]}
-                highlightDateNumberStyle={[defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle]}
+                highlightDateNameStyle={StyleSheet.flatten([defaultStyles.TypographyLabelSmall, styles.dateNameStyle])}
+                highlightDateNumberStyle={StyleSheet.flatten([defaultStyles.TypographyBodyHeavy, styles.dateNumberStyle])}
                 iconContainer={styles.iconContainer}
                 leftSelector={[]}
                 onDateSelected={handleDateSelected}
@@ -81,7 +91,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 scrollable
                 selectedDate={selectedDate}
                 style={styles.calendarStrip}
-                shouldAllowFontScaling = {true}
+                shouldAllowFontScaling={true}
                 dayComponentHeight={56}
             />
             {isLoading ? (
@@ -96,7 +106,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
             ) : tasksCompleted ? (
                 <Box style={styles.tasksContainer}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
-                    <TasksCompletedCard />
+                    <TasksCompletedCard tasks={filteredTasks}/>
                 </Box>
             ) : (
                 <Box style={styles.tasksContainer}>
@@ -106,7 +116,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                         renderItem={({ item }) => (
                             <>
                                 <TaskCard task={item} navigation={navigation} />
-                                <Divider style={styles.divider} />
+                                {/* <Divider style={styles.divider} /> */}
                             </>
                         )}
                         keyExtractor={(item) => item._id}
@@ -195,6 +205,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 24,
+        marginBottom: 20
     },
     
 });

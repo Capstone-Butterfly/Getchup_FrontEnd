@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Button, Text, Heading, Image, ButtonText, Box } from "@gluestack-ui/themed";
+import { Button, Text, Heading, Image, ButtonText, Box, FlatList, Divider, HStack, Icon, Card } from "@gluestack-ui/themed";
 import { defaultStyles } from '../styles/styles';
-import CompleteImg from '../../assets/illustrations/complete.svg'
+import CheckedIcon from '../../assets/icons/checkbox-checked.svg'
+import { config } from '../styles/themeConfig';
 
-const TasksCompletedCard = ({navigation}) => {
+const TasksCompletedCard = ({ navigation, tasks }) => {
 
     return (
         <SafeAreaView style={styles.container}>
@@ -16,6 +17,22 @@ const TasksCompletedCard = ({navigation}) => {
                 <Heading style={[defaultStyles.TypographyH2, styles.heading]}>All tasks completed</Heading>
                 <Text style={[defaultStyles.TypographyBody, styles.text]}>Enjoy the rest of the day</Text>
             </Box>
+            <FlatList
+                data={tasks}
+                keyExtractor={(item) => item._id}
+                renderItem={({ item }) => (
+                    <>
+                        <Card style={styles.card}>
+                            <HStack>
+                                <Icon as={CheckedIcon} style={styles.icon} />
+                                <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle]}>{item.title}</Text>
+                            </HStack>
+                        </Card>
+                    </>
+                )}
+                style={styles.list}
+                contentContainerStyle={styles.listContent}
+            />
 
         </SafeAreaView>
     );
@@ -24,6 +41,16 @@ const TasksCompletedCard = ({navigation}) => {
 const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
+    },
+    card: {
+        backgroundColor: "transparent",
+        borderBottomColor: config.tokens.colors.neutralLight,
+        borderBottomWidth: 1,
+        elevation: 0,
+        margin: 0,
+        marginTop: 10,
+        paddingHorizontal: 17,
+        paddingVertical: 12,
     },
     container: {
         // flex: 1,
@@ -37,10 +64,23 @@ const styles = StyleSheet.create({
         marginBottom: 8,
         textAlign: 'center',
     },
+    icon: {
+        marginRight: 11,
+    },
     image: {
         width: 200,
         height: 150,
         marginBottom: 16,
+    },
+    list: {
+        width: "100%",
+        
+    },
+    listContent: {
+        paddingHorizontal: 20,
+    },
+    taskTitle: {
+        color: config.tokens.colors.neutralDark,
     },
     text: {
         textAlign: 'center'

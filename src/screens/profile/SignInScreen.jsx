@@ -169,6 +169,7 @@ marginVertical:0,
     paddingVertical: 10,
     paddingHorizontal: 20, 
     alignItems: 'center',
+    width:width/3
   },
   submitButtonPressed: {
     backgroundColor: config.tokens.colors.neutral,
