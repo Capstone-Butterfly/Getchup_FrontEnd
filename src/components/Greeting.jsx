@@ -42,10 +42,10 @@ const Greeting = ({ name }) => {
         <SafeAreaView style={styles.container}>
             <HStack style={styles.hstack}>
                 <VStack style={styles.vstack}>
-                    <Heading style={defaultStyles.TypographyH2}>{greeting.split('\n')[0]}</Heading>
+                    <Heading style={[defaultStyles.TypographyH2, styles.heading]}>{greeting.split('\n')[0]}</Heading>
                     <Text style={[defaultStyles.TypographyBody, styles.text]}>{greeting.split('\n')[1]}</Text>
                 </VStack>
-                <VStack style={styles.vstack}>
+                <VStack>
                     {ImageComponent ? (
                         <ImageComponent style={styles.image} />
                     ) : (
@@ -61,10 +61,13 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
         flexShrink: 0,
-        marginTop: 40,
+        marginTop: 55,
         paddingHorizontal: 20,
         width: '100%',
         marginBottom: 1,
+    },
+    heading: {
+        marginTop: 15,
     },
     hstack: {
         width: '100%',
@@ -72,18 +75,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         flexShrink: 0,
+        justifyContent: "space-between"
     },
     text: {
-        marginTop: 12,
+        marginBottom: 8,
     },
     vstack: {
-        width: '60%',
+        flexGrow: 1,
+        display: "flex",
+        justifyContent: "space-between",
+        height: 90,
     },
     image: {
         alignSelf: 'center',
-        height: 120, // Adjust the size as needed
-        marginRight: 38,
-        width: 116,
+        height: 82,
+        width: 82,
     },
 });
 
