@@ -14,7 +14,16 @@ const image = require("../../../assets/background/background.png");
 
 // Get device dimensions
 const { width, height } = Dimensions.get("window");
+
+// Function to format the date
+const formatDate = (date) => {
+  const options = { month: "long", day: "numeric" };
+  return date.toLocaleDateString("en-US", options);
+};
+
+
 const CalendarScreen = ({ navigation }) => {
+  const today = new Date();
   return (
     <View>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
@@ -24,7 +33,7 @@ const CalendarScreen = ({ navigation }) => {
               Calendar
             </Heading>
             <View>
-              <Text>Today, July 12</Text>
+            <Text style={[defaultStyles.TypographyBodyHeavy]}>Today, {formatDate(today)}</Text>
             </View>
           </View>
         </View>
@@ -35,13 +44,16 @@ const CalendarScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
+  image: {
+    width: "100%",
+    height: "100%",
+  },
   heading: {
-    
     textAlign: "left",
-    marginBottom: config.tokens.spacing.md,
+    marginBottom: config.tokens.spacing.sm,
   },
   calendarHeader: {
-    paddingVertical: 20,
+    paddingVertical: 56,
   },
   calendarContainer: {
     width: width * 0.9,
@@ -49,7 +61,6 @@ const styles = StyleSheet.create({
     minWidth: 300,
     marginVertical: 0,
     marginHorizontal: "auto",
-    paddingTop:40,
   },
 });
 

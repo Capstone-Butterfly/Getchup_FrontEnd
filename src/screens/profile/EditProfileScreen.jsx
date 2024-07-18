@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Alert, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Alert, StyleSheet, Dimensions, Platform, KeyboardAvoidingView, Keyboard } from 'react-native';
 import { VStack, HStack, Icon, Image, Modal, ModalBackdrop, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Heading, Input, InputField, Button, ButtonText, ImageBackground, Center, ChevronRightIcon, FormControl } from '@gluestack-ui/themed';
 import { EditIcon, CloseIcon } from '@gluestack-ui/themed';
 import { updateUserProfile } from '../../services/profile';
@@ -102,8 +102,9 @@ function EditProfileScreen({ navigation }) {
   };
 
   return (
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+
     <SafeAreaView style={styles.container}>
-      <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={styles.profContainer}>
           <Heading style={[styles.heading, defaultStyles.TypographyH1]}>
             User Profile
@@ -190,21 +191,26 @@ function EditProfileScreen({ navigation }) {
             finalFocusRef={null}
           >
             <ModalBackdrop />
+            <KeyboardAvoidingView
+              style={[styles.KeyboardModalStyle]}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 5 : 0} 
+            >
             <ModalContent style={[styles.modalStyle]}>
             <ModalFooter style={[styles.buttonGrid]}>
                 <Button
-               style={[styles.cancelButton1st]}
+               style={[styles.cancelButton]}
       
                   onPress={() => setShowModal(false)}
                 >
-                  <ButtonText           style={[defaultStyles.TypographyBodySmall, styles.cancelButton1stText]}>Cancel</ButtonText>
+                  <ButtonText           style={[defaultStyles.TypographyBodyHeavy, styles.cancelButtonText]}>Cancel</ButtonText>
                 </Button>
                 <Button
              
-             style={[styles.submitButton1st]}
+             style={[styles.submitButton]}
                   onPress={handleSave}
                 >
-                  <ButtonText style={[defaultStyles.TypographyBodyHeavy, styles.submitButton1stText]}>Save</ButtonText>
+                  <ButtonText style={[defaultStyles.TypographyBodyHeavy, styles.submitButtonText]}>Save</ButtonText>
                 </Button>
               </ModalFooter>
               <ModalBody>
@@ -218,6 +224,7 @@ function EditProfileScreen({ navigation }) {
               </ModalBody>
               
             </ModalContent>
+            </KeyboardAvoidingView>
           </Modal>
           <Modal 
             isOpen={showLogoutModal}
@@ -226,7 +233,7 @@ function EditProfileScreen({ navigation }) {
             finalFocusRef={null}
           >
             <ModalBackdrop />
-            <ModalContent style={[styles.modalStyle]}>
+            <ModalContent style={[styles.modalStyleLogout]}>
               <ModalHeader>
                 <Heading style={[defaultStyles.TypographyH1 , styles.modalLogouttext]}>Logout</Heading>
             
@@ -251,8 +258,9 @@ function EditProfileScreen({ navigation }) {
             </ModalContent>
           </Modal>
         </View>
-      </ImageBackground>
     </SafeAreaView>
+    </ImageBackground>
+
   );
 }
 
@@ -410,9 +418,19 @@ const styles = StyleSheet.create({
   ,
   modalStyle :{
 paddingVertical:50,
-width:'100%',
-position: 'absolute',
-bottom:0,
+  width:'100%',
+
+  },
+  modalStyleLogout:{
+    paddingVertical:50,
+  width:'100%',
+  position:'absolute',
+  bottom:0
+  },
+  KeyboardModalStyle:{
+    bottom:0,
+    position: 'absolute',
+    width:'100%'
   },
   buttonGrid:{
     grid:1
