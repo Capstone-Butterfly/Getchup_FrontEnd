@@ -4,7 +4,8 @@ import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
 import dayjs from 'dayjs';
 import { config } from '../styles/themeConfig'; 
-import { SafeAreaView } from '@gluestack-ui/themed';
+import { SafeAreaView, Text, View } from '@gluestack-ui/themed';
+import { StyleSheet } from 'react-native';
 
 const MonthlyCalendar = () => {
     const navigation = useNavigation();
@@ -54,15 +55,14 @@ const MonthlyCalendar = () => {
         marks[today] = {
             customStyles: {
                 container: {
-                    backgroundColor: '#F1938E',
+                    backgroundColor: config.tokens.colors.highPriority,
                     borderRadius: 100,
                 },
                 text: {
                     color: config.tokens.colors.black,
                     fontFamily: "Archivo_600SemiBold",
                     fontSize: 16,
-                    lineHeight: 22,
-
+                    //lineHeight: 22,
                 },
             },
         };
@@ -103,9 +103,26 @@ const MonthlyCalendar = () => {
                     dotStyle: { width: 10, height: 10, borderRadius: 20 } 
                 }}
                 markingType={'custom'}
+                renderHeader={(date) => (
+                    <Text style={styles.monthText}>
+                        {dayjs(date).format('MMM YYYY')}
+                    </Text>
+                )}
             />
         </SafeAreaView>
     );
 };
+
+const styles = StyleSheet.create({
+    monthText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: config.tokens.colors.black,
+        textAlign: 'left',
+        width: '100%',
+        paddingLeft: 5, 
+        paddingBottom: 10,
+    },
+});
 
 export default MonthlyCalendar;
