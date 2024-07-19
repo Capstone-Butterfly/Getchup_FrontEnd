@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
     marginBottom: config.tokens.spacing.sm,
   },
   calendarHeader: {
+    padding: 0,
+    marginLeft : -10,
   },
   calendarContainer: {
     width: width * 0.9,
@@ -69,7 +71,7 @@ const styles = StyleSheet.create({
     marginHorizontal: "auto",
     paddingHorizontal: 20,
     paddingVertical: 10,
-    marginTop: 20,
+    marginTop: 50,
   },
   weekLabels: {
     color: config.tokens.colors.neutralDark,

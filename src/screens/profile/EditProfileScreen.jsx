@@ -273,6 +273,7 @@ const styles = StyleSheet.create({
     width: width * 0.9, 
     maxWidth: 400, 
     minWidth: 300, 
+    paddingTop:20,
   },
   stackBox: {
     flexDirection: 'row',
