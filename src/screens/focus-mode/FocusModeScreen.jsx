@@ -9,9 +9,11 @@ import MusicPlayer from '../task-steps/MusicPlayer';
 import ToggleSwitch from '../../components/ToggleSwitch';
 import { config } from '../../styles/themeConfig';
 import useTaskStore from '../../store/taskStore';
+import { useFocusEffect } from '@react-navigation/native';
 
 const FocusModeScreen = ({ route, navigation }) => {
     const { task } = route.params;
+    console.log("task is: ", task);
     const totalSteps = task.subtask.length;
     const [currentStep, setCurrentStep] = useState(1);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
@@ -26,6 +28,16 @@ const FocusModeScreen = ({ route, navigation }) => {
   const handleFlagChange = (newFlag) => {
     setIsToggleShown(newFlag);
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+        return () => {
+            if (musicPlayerRef.current) {
+                musicPlayerRef.current.stopMusic();
+            }
+        };
+    }, [])
+);
 
 
     useEffect(() => {
@@ -82,6 +94,9 @@ const FocusModeScreen = ({ route, navigation }) => {
         const nextStepNumber = currentStep + 1;
         if (nextStepNumber <= totalSteps) {
             setCurrentStep(nextStepNumber);
+            console.log("Playing new track for step: ", nextStepNumber);
+            musicPlayerRef.current.stopMusic();
+            musicPlayerRef.current.playNewTrack();
         } 
     };
 
@@ -89,6 +104,7 @@ const FocusModeScreen = ({ route, navigation }) => {
         const previousStepNumber = currentStep - 1;
         if (previousStepNumber >= 1) {
             setCurrentStep(previousStepNumber);
+            musicPlayerRef.current.stopMusic();
         }
     };
 
@@ -126,6 +142,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                     navigateToNextStep={navigateToNextStep}
                     musicPlayerRef={musicPlayerRef}
                     handleFlagChange={handleFlagChange}
+                    duration={parseInt(task.subtask[currentStep - 1].time) * 60 * 1000} 
                 />
 
                 {currentStep < totalSteps && (

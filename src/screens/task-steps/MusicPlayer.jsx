@@ -1,5 +1,5 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
 import ToggleSwitch from '../../components/ToggleSwitch';
 
@@ -17,23 +17,32 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
   useImperativeHandle(ref, () => ({
     stopMusic: async () => {
       if (sound) {
-        await sound.pauseAsync();
+        // await sound.pauseAsync();
+        await sound.stopAsync();
         setIsPlaying(false);
       }
     },
     unloadMusic: async () => {
       if (sound) {
         await sound.unloadAsync();
+        setSound(null);
       }
+    },
+    playNewTrack: async () => {
+      await playNextTrack();
     },
   }));
 
   useEffect(() => {
     const loadSound = async () => {
+      if (sound) {
+        await sound.unloadAsync();
+      }
+
       try {
         const { sound: newSound } = await Audio.Sound.createAsync(
           { uri: tracks[currentTrack] },
-          { shouldPlay: false }
+          { shouldPlay: isPlaying }
         );
         setSound(newSound);
         newSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
@@ -53,28 +62,36 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
   }, [currentTrack]);
 
   const onPlaybackStatusUpdate = (status) => {
-    if (status.didJustFinish) {
+    if (status.didJustFinish && !status.isLooping) {
       playNextTrack();
     }
   };
 
   const toggleSwitch = async () => {
     if (sound) {
-      if (!isPlaying) {
-        await sound.playAsync();
-      } else {
+      if (isPlaying) {
         await sound.pauseAsync();
+      } else {
+        await sound.playAsync();
       }
       setIsPlaying(!isPlaying);
     }
   };
 
   const playNextTrack = async () => {
-    if (sound) {
-      await sound.unloadAsync();
+    try {
+      console.log("Playing track:", tracks[currentTrack]); 
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: tracks[currentTrack] },
+        { shouldPlay: true }
+      );
+      setSound(newSound);
+      newSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      setIsPlaying(true);
+      setCurrentTrack((prevTrack) => (prevTrack + 1) % tracks.length);
+    } catch (error) {
+      console.error('Error playing next track:', error);
     }
-    const nextTrackIndex = Math.floor(Math.random() * tracks.length);
-    setCurrentTrack(nextTrackIndex);
   };
 
   return (
@@ -83,7 +100,6 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
         value={isPlaying}
         onToggle={toggleSwitch}
       />
-      
     </View>
   );
 });
