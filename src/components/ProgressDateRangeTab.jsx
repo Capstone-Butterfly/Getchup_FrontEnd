@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: config.tokens.colors.neutralLight,
     borderRadius: 15,
-    height: 50,
+    height: 45,
   },
   tab: {
     flex: 1,
