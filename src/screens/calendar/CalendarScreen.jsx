@@ -1,11 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-  Center,
-  Heading,
-  ImageBackground,
-  Text,
-  View,
-} from "@gluestack-ui/themed";
+import { Center, Heading, ImageBackground, Text, View, Box, } from "@gluestack-ui/themed";
 import MonthlyCalendar from "../../components/Calendar";
 import { StyleSheet, Dimensions } from "react-native";
 import { config } from "../../styles/themeConfig";
@@ -21,6 +15,8 @@ const formatDate = (date) => {
   return date.toLocaleDateString("en-US", options);
 };
 
+const weekLabels = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+
 
 const CalendarScreen = ({ navigation }) => {
   const today = new Date();
@@ -28,22 +24,33 @@ const CalendarScreen = ({ navigation }) => {
     <View>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={[styles.calendarContainer]}>
-          <View style={[styles.calendarHeader, defaultStyles.TypographyH1]}>
+          <Box style={[styles.calendarHeader, defaultStyles.TypographyH1]}>
             <Heading style={[styles.heading, defaultStyles.TypographyH1]}>
               Calendar
             </Heading>
-            <View>
             <Text style={[defaultStyles.TypographyBodyHeavy]}>Today, {formatDate(today)}</Text>
-            </View>
-          </View>
+          </Box>
         </View>
-        <MonthlyCalendar navigation={navigation} />
+          <Box style={styles.weekLabelsContainer}>
+            {weekLabels.map((label) => {
+              return (
+                <Text style={[defaultStyles.TypographyLabelSmall, styles.weekLabels]}>{label}</Text>
+              )
+            })}
+          </Box>
+        <MonthlyCalendar navigation={navigation} style={styles.calendar} />
       </ImageBackground>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  calendar: {
+    width: "100%"
+  },
   image: {
     width: "100%",
     height: "100%",
@@ -53,7 +60,6 @@ const styles = StyleSheet.create({
     marginBottom: config.tokens.spacing.sm,
   },
   calendarHeader: {
-    paddingVertical: 56,
   },
   calendarContainer: {
     width: width * 0.9,
@@ -61,7 +67,24 @@ const styles = StyleSheet.create({
     minWidth: 300,
     marginVertical: 0,
     marginHorizontal: "auto",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    marginTop: 20,
   },
+  weekLabels: {
+    color: config.tokens.colors.neutralDark,
+    textAlign: "center"
+  },
+  weekLabelsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    backgroundColor: config.tokens.colors.white,
+    paddingVertical: 9,
+    paddingHorizontal: 38,
+    justifyContent: "space-between",
+    borderColor: config.tokens.colors.neutralLight,
+    borderWidth: 1,
+  }
 });
 
 

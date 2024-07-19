@@ -110,7 +110,7 @@ const MonthlyCalendar = () => {
                             rotation={0}
                             tintColor={isToday ? config.tokens.colors.highPriority : config.tokens.colors.primary}
                             backgroundColor={config.tokens.colors.neutralLight}
-                            style={[styles.dayContainer, { backgroundColor: isToday ? config.tokens.colors.highPriority : "transparent" }]}
+                            style={StyleSheet.flatten([styles.dayContainer, { backgroundColor: isToday ? config.tokens.colors.highPriority : "transparent" }])}
                         >
                             {() => (
                                 <Text style={[styles.dayText, { fontWeight: isToday ? "bold" : "normal" }]}>
@@ -170,6 +170,7 @@ const MonthlyCalendar = () => {
                     textDayHeaderFontSize: 16,
                     dotStyle: { width: 10, height: 10, borderRadius: 20 }
                 }}
+                hideDayNames={true}
                 dayComponent={renderDayComponent}
                 markingType={'custom'}
                 renderHeader={(date) => (
