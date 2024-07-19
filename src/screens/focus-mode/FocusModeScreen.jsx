@@ -9,6 +9,7 @@ import MusicPlayer from '../task-steps/MusicPlayer';
 import ToggleSwitch from '../../components/ToggleSwitch';
 import { config } from '../../styles/themeConfig';
 import useTaskStore from '../../store/taskStore';
+import { useFocusEffect } from '@react-navigation/native';
 
 const FocusModeScreen = ({ route, navigation }) => {
     const { task } = route.params;
@@ -27,6 +28,16 @@ const FocusModeScreen = ({ route, navigation }) => {
   const handleFlagChange = (newFlag) => {
     setIsToggleShown(newFlag);
   };
+
+  useFocusEffect(
+    React.useCallback(() => {
+        return () => {
+            if (musicPlayerRef.current) {
+                musicPlayerRef.current.stopMusic();
+            }
+        };
+    }, [])
+);
 
 
     useEffect(() => {
@@ -83,7 +94,7 @@ const FocusModeScreen = ({ route, navigation }) => {
         const nextStepNumber = currentStep + 1;
         if (nextStepNumber <= totalSteps) {
             setCurrentStep(nextStepNumber);
-            musicPlayerRef.current.stopMusic();
+            musicPlayerRef.current.playNewTrack();
         } 
     };
 

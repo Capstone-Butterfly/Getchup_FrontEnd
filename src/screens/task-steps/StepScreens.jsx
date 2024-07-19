@@ -116,7 +116,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                 await updateTaskStartTime(task._id, start_date, mainTaskStartTime, subtaskStartTime, MAIN_STATUS, STATUS, subtaskIndex);
                 if (task.movement_tracking && taskSubtasks[subtaskIndex].movement) {
                     setIsMovementEnabled(true);
-                    console.log("Movement is enebled for the task");
+                    console.log("Movement is enabled for the task");
                 }
             } else {
                 setIsTaskInProgress(false);
@@ -131,6 +131,10 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                     MAIN_STATUS = "complete";
                     STATUS = "complete";
                     toggleFlag();
+                    
+                    if (musicPlayerRef.current) {
+                        musicPlayerRef.current.stopMusic();
+                    }
                 }
     
                 await updateTaskEndTime(task._id, mainTaskEndTime, subtaskEndTime, MAIN_STATUS, STATUS, subtaskIndex, stepNumber === totalSteps);
@@ -147,6 +151,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
             setIsTaskInProgress(!isTaskInProgress); 
         }
     };
+    
 
     const toggleMovementSwitch = () => {
         setIsMovementEnabled(previousState => !previousState);
