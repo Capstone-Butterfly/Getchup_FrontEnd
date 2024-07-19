@@ -79,11 +79,19 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
   };
 
   const playNextTrack = async () => {
-    if (sound) {
-      await sound.stopAsync();
+    try {
+      console.log("Playing track:", tracks[currentTrack]); 
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: tracks[currentTrack] },
+        { shouldPlay: true }
+      );
+      setSound(newSound);
+      newSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      setIsPlaying(true);
+      setCurrentTrack((prevTrack) => (prevTrack + 1) % tracks.length);
+    } catch (error) {
+      console.error('Error playing next track:', error);
     }
-    const nextTrackIndex = Math.floor(Math.random() * tracks.length);
-    setCurrentTrack(nextTrackIndex);
   };
 
   return (

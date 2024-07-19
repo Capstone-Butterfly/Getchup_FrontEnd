@@ -94,6 +94,8 @@ const FocusModeScreen = ({ route, navigation }) => {
         const nextStepNumber = currentStep + 1;
         if (nextStepNumber <= totalSteps) {
             setCurrentStep(nextStepNumber);
+            console.log("Playing new track for step: ", nextStepNumber);
+            musicPlayerRef.current.stopMusic();
             musicPlayerRef.current.playNewTrack();
         } 
     };
