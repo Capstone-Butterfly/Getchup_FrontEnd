@@ -25,7 +25,7 @@ const transformData = (data) => {
         { value: completeCount, color: config.tokens.colors.blue },
       ],
       label: period.charAt(0).toUpperCase() + period.slice(1),
-      labelTextStyle: { fontSize: 12 },
+      labelTextStyle: { fontSize: 10 },
     };
   });
   return stackData;
@@ -74,7 +74,7 @@ const TodayProgressChartDetail = ({ userId }) => {
   });
 
   if (isLoading) {
-    return <ActivityIndicator size="large" color="#0000ff" />;
+    return <ActivityIndicator size="large" color={config.tokens.colors.primary} />;
   }
 
   if (isError) {
@@ -89,11 +89,15 @@ const TodayProgressChartDetail = ({ userId }) => {
         <BarChart
           width={230}
           noOfSections={5}
+          rotateLabel
           barWidth={15}
           yAxisThickness={0}
-          barBorderRadius={6}
+          barBorderRadius={0}
           spacing={35}
           rulesType="solid"
+          xAxisTextNumberOfLines={2}
+          // labelsExtraHeight={10}
+
           stackData={stackData}
         />
       </Box>

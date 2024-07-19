@@ -13,4 +13,9 @@ const getWeeklyChartDetails = async (userId, sDate, eDate) => {
     return data;
 };
 
-export {  getTodayChartDetails, getWeeklyChartDetails }
+const getMonthlyChartDetails = async (userId, sDate, eDate) => {
+    const { data } = await axios.get( `${base_url}/monthlychartdetails/${userId}/${sDate}/${eDate}`);
+    return data;
+};
+
+export {  getTodayChartDetails, getWeeklyChartDetails, getMonthlyChartDetails }

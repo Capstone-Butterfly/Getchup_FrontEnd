@@ -52,7 +52,7 @@ const ProgressChart = ({name, userId}) => {
                             <Text style={defaultStyles.TypographyBodySmallHeavy}>Activity Progress</Text>
                         </View>
                         <View style={styles.progressItem}>
-                            <Progress value={progressCart.completionPercentage} w='$80' h='$2.5'>
+                            <Progress value={progressCart.completionPercentage} w={285} h='$2.5'>
                             <ProgressFilledTrack bg={config.tokens.colors.primaryDark}/>
                             </Progress>
                         </View>
@@ -60,7 +60,7 @@ const ProgressChart = ({name, userId}) => {
                             <Text style={defaultStyles.TypographyBodySmallHeavy}>{progressCart.completionPercentage} %</Text>
                         </View>
                         <View style={styles.percentageItem}>
-                            <Text style={defaultStyles.TypographyH2}>{progressCart.totalCompletedTasks} out of {progressCart.totalTasks} tasks completed</Text>
+                            <Text style={defaultStyles.TypographyBody}><Text style={defaultStyles.TypographyBodyHeavy}>{progressCart.totalCompletedTasks}</Text> out of {progressCart.totalTasks} tasks completed</Text>
                         </View>
                     </VStack>
                 </Card>
@@ -109,6 +109,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        // paddingLeft: 30,
+        // paddingRight: 30
     },
     percentageItem :{
         display: 'flex',

@@ -5,6 +5,7 @@ import ProgressCalendar from "./ProgressCalendar";
 import ProgressDateRangeTab from "./ProgressDateRangeTab";
 import useProgressDateRangeStore from "../store/progressDateRangeStore";
 import WeeklyProgressChartDetail from "../components/WeeklyProgressChartDetail"
+import MonthlyProgressChartDetail from "../components/MonthlyProgressChartDetail";
 import TodayProgressChartDetail from "../components/TodayProgressChartDetail"
 import dayjs from "dayjs";
 
@@ -53,8 +54,10 @@ const ProgressChartDetail = ({userId}) => {
         <ProgressCalendar chartStartDate={chartSelectedStartDate} chartEndDate={chartSelectedEndDate}/>
         {activeDateRangeTab === 'Day' ? (
           <TodayProgressChartDetail userId={userId} />
-        ) : (
+        ) : activeDateRangeTab === 'Weekly' ? (
           <WeeklyProgressChartDetail userId={userId} />
+        ) : (
+          <MonthlyProgressChartDetail userId={userId} />
         )}
       </Card>
     </SafeAreaView>
