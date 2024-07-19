@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from 'react-native';
-import { SafeAreaView, ScrollView } from '@gluestack-ui/themed';
+import { SafeAreaView, ScrollView, AlertDialog, AlertDialogBackdrop, AlertDialogContent, AlertDialogHeader, Heading, AlertDialogBody, AlertDialogFooter, Button, ButtonText } from '@gluestack-ui/themed';
 import { Accelerometer } from 'expo-sensors';
 import StepScreen from '../task-steps/StepScreens';
 import CustomProgressBar from '../../components/CustomProgressBarTabs';
@@ -60,11 +60,11 @@ const FocusModeScreen = ({ route, navigation }) => {
     
                 if (accelerationMagnitude > movementThreshold && !isAlertShown) {
                     setIsAlertShown(true);
-                    Alert.alert('Reminder', 'Please take a moment to calm down and refocus on the task.', [
-                        { text: 'OK', onPress: () => {
-                            setTimeout(() => setIsAlertShown(false), 5000); 
-                        }}
-                    ]);
+                    // Alert.alert('Reminder', 'Please take a moment to calm down and refocus on the task.', [
+                    //     { text: 'OK', onPress: () => {
+                    //         setTimeout(() => setIsAlertShown(false), 5000); // Set timeout for resetting isAlertShown
+                    //     }}
+                    // ]);
                 }
             });
         }
@@ -172,11 +172,46 @@ const FocusModeScreen = ({ route, navigation }) => {
                 
 }
             </ScrollView>
+            <AlertDialog
+            isOpen={isAlertShown}
+            onClose={() => setIsAlertShown(false)}
+            closeOnOverlayClick
+            style={styles.alertDialog}
+            >
+                <AlertDialogBackdrop/>
+                <AlertDialogContent>
+                    <AlertDialogHeader style={styles.alertHeader}>
+                        <Heading style={[defaultStyles.TypographyH2, styles.alertText]}>Hey there!</Heading>
+                    </AlertDialogHeader>
+                    <AlertDialogBody>
+                        <Text style={[defaultStyles.TypographyBody, styles.alertText]}>Just a gentle reminder to stay still.</Text>
+                        <Text style={[defaultStyles.TypographyBody, styles.alertText]}>It will help you focus better.</Text>
+                    </AlertDialogBody>
+                    <AlertDialogFooter>
+                        <Button style={defaultStyles.ButtonDefault} onPress={() => setIsAlertShown(false)}>
+                            <ButtonText>OK</ButtonText>
+                        </Button>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    alertHeader: {
+        padding: 0,
+        paddingTop: 20,
+        marginBottom: 14,
+    },
+    alertDialog: {
+        borderRadius: 10,
+        padding: 20,
+    },
+    alertText: {
+        textAlign: "center",
+        width: "100%",
+    },
     nextStep: {
         marginHorizontal: 20
     },
