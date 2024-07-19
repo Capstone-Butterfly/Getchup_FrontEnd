@@ -103,6 +103,7 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     modalContent: {
+        paddingTop: 50,
         width: '100%',
         height: '100%',
         margin: 0,
