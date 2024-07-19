@@ -56,7 +56,7 @@ function SignInScreen() {
     <View style={styles.container}>
     <View style={styles.logoDiv}>
 
-    <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} />
+    <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} alt="logo"/>
     <Text style={styles.logoText}>Getchup!</Text>
 
     </View>

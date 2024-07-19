@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         marginBottom: 10,
-        paddingLeft: 20,
+        paddingLeft: 30,
         paddingTop: 20,
     },
     progressItem: {
