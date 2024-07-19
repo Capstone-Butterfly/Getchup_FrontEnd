@@ -3,9 +3,10 @@ import { CalendarList } from 'react-native-calendars';
 import { useNavigation } from '@react-navigation/native';
 import useTaskStore from '../store/taskStore';
 import dayjs from 'dayjs';
-import { config } from '../styles/themeConfig'; 
-import { SafeAreaView, Text, View } from '@gluestack-ui/themed';
+import { config } from '../styles/themeConfig';
+import { SafeAreaView, Text, View, Box, Center, Pressable } from '@gluestack-ui/themed';
 import { StyleSheet } from 'react-native';
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 const MonthlyCalendar = () => {
     const navigation = useNavigation();
@@ -27,7 +28,7 @@ const MonthlyCalendar = () => {
             } else {
                 return false;
             }
-            
+
         });
 
         if (hasTasks) {
@@ -40,35 +41,102 @@ const MonthlyCalendar = () => {
     const markedDates = useMemo(() => {
         const marks = {};
         const today = dayjs().format('YYYY-MM-DD');
-        
+
         tasks.forEach(task => {
             const taskDate = new Date(task.estimate_start_date);
             if (isValidDate(taskDate)) {
                 const dateKey = taskDate.toISOString().split('T')[0];
-                marks[dateKey] = { 
-                marked: true,
-                dotColor: config.tokens.colors.neutral, 
-            };
+                marks[dateKey] = marks[dateKey] || { tasks: [], completed: 0, marked: false, dotColor: config.tokens.colors.neutral };
+                marks[dateKey].tasks.push(task);
+                if (task.main_status === 'complete') {
+                    marks[dateKey].completed += 1;
+                }
+                marks[dateKey].marked = true;
             }
         });
-        
+
+        for (const dateKey in marks) {
+            const totalTasks = marks[dateKey].tasks.length;
+            const completedTasks = marks[dateKey].completed;
+            const progress = (completedTasks / totalTasks) * 100;
+
+            marks[dateKey].customStyles = {
+                container: {
+                    // backgroundColor: config.tokens.colors.neutral,
+                    // borderRadius: 100,
+                },
+                text: {
+                    // color: config.tokens.colors.black,
+                    // fontFamily: "Archivo_600SemiBold",
+                    // fontSize: 16,
+                },
+                fill: progress,
+            };
+        }
+
         marks[today] = {
             customStyles: {
                 container: {
                     backgroundColor: config.tokens.colors.highPriority,
-                    borderRadius: 100,
+                    // borderRadius: 100,
                 },
                 text: {
                     color: config.tokens.colors.black,
-                    fontFamily: "Archivo_600SemiBold",
-                    fontSize: 16,
+                    // fontFamily: "Archivo_600SemiBold",
+                    // fontSize: 16,
                     //lineHeight: 22,
                 },
             },
         };
-        
+
         return marks;
     }, [tasks]);
+
+    const renderDayComponent = useCallback(({ date, state, marking }) => {
+        const progress = marking?.customStyles?.fill || 0;
+        const isToday = dayjs().isSame(dayjs(date.dateString), 'day')
+        const isBeforeToday = dayjs(date.dateString).isBefore(dayjs(), 'day')
+        const isMarked = marking?.marked
+        const hasCompletedTasks = marking?.completed > 0
+
+        return (
+            <View>
+                <Pressable onPress={() => handleDateSelected(date)}>
+                    {((isBeforeToday || isToday) && (isMarked && hasCompletedTasks || isToday)) ? (
+                        <AnimatedCircularProgress
+                            size={32}
+                            width={3}
+                            fill={isToday ? 100 : progress}
+                            rotation={0}
+                            tintColor={isToday ? config.tokens.colors.highPriority : config.tokens.colors.primary}
+                            backgroundColor={config.tokens.colors.neutralLight}
+                            style={[styles.dayContainer, { backgroundColor: isToday ? config.tokens.colors.highPriority : "transparent" }]}
+                        >
+                            {() => (
+                                <Text style={[styles.dayText, { fontWeight: isToday ? "bold" : "normal" }]}>
+                                    {date.day}
+                                </Text>
+                            )}
+                        </AnimatedCircularProgress>
+                    ) : (
+                        <Pressable onPress={handleDateSelected}>
+
+                            <Box style={styles.dayContainer}>
+                                <Text style={[styles.dayText]}>
+                                    {date.day}
+                                </Text>
+                            </Box>
+                        </Pressable>
+                    )}
+                    <Center>
+                        <Box
+                            style={[styles.dot, { backgroundColor: marking ? config.tokens.colors.neutralLight : "transparent" }]}
+                        />
+                    </Center>
+                </Pressable>
+            </View>
+        );
+    }, []);
 
     return (
         <SafeAreaView>
@@ -100,8 +168,9 @@ const MonthlyCalendar = () => {
                     textDayFontSize: 16,
                     textMonthFontSize: 16,
                     textDayHeaderFontSize: 16,
-                    dotStyle: { width: 10, height: 10, borderRadius: 20 } 
+                    dotStyle: { width: 10, height: 10, borderRadius: 20 }
                 }}
+                dayComponent={renderDayComponent}
                 markingType={'custom'}
                 renderHeader={(date) => (
                     <Text style={styles.monthText}>
@@ -120,8 +189,28 @@ const styles = StyleSheet.create({
         color: config.tokens.colors.black,
         textAlign: 'left',
         width: '100%',
-        paddingLeft: 5, 
+        paddingLeft: 5,
         paddingBottom: 10,
+    },
+    dayContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+    },
+    dayText: {
+        fontSize: 16,
+        color: config.tokens.colors.black,
+    },
+    disabledText: {
+        color: '#d9e1e8',
+    },
+    dot: {
+        width: 8,
+        height: 8,
+        borderRadius: 50,
+        marginTop: 6,
     },
 });
 
