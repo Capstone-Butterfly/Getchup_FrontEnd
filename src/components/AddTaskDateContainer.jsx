@@ -79,6 +79,7 @@ const DateModelScreen = () => {
       toggleStartDateModal();
     } else if (showEndDateModal) {
       setEndDate(day.dateString);
+      setDateLabel(`${start_date}  -  ${day.dateString}`);
       toggleEndDateModal();
     }
   };

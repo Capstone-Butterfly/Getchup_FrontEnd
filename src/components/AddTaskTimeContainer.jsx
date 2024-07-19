@@ -88,6 +88,20 @@ const TimeModelScreen = () => {
         hour12: false,
       })
     );
+
+    let start = new Date(`1970-01-01T${start_time}`).toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    let end =  selectedDate.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    })
+
+    setTimeLabel(`${start} - ${end}`);
     setEndTimePickerVisible(false);
   };
 
