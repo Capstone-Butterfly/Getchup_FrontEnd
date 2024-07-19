@@ -113,7 +113,11 @@ const CreatedTasks = ({
               key={item._id}
               onPress={() => {
                 setTitle(item.title);
-                addSubtask(item.subtask);
+                const updatedSubtasks = item.subtask.map(subtask => ({
+                  ...subtask,
+                  status: 'new'
+                }));
+                addSubtask(updatedSubtasks);
                 setPressedItemId(item._id);
               }}
             >
