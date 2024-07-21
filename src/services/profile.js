@@ -1,12 +1,16 @@
 // src/services/profile.js
 import axios from 'axios';
 import { BASE_URL } from '../config/apiConfig';
+import profileStore from '../store/profileStore';
 
 const base_url = BASE_URL;
 
 const signInProfile = async (email, password) => {
     try {
         const response = await axios.post(`${base_url}/login`, { email, password });
+        const { token, userId } = response.data;
+        profileStore.setState({ token, userId, is_login: true });
+
         return response.data;
     } catch (error) {
         console.error("Error signIn:", error);
@@ -26,7 +30,12 @@ const signUpProfile = async (firstName, lastName, email, password, phone) => {
 
 const surveyQuestionProfile = async (questions) => {
     try {
-        const response = await axios.post(`${base_url}/surveys/submit`, { questions });
+        const { token } = profileStore.getState();
+        const response = await axios.post(`${base_url}/surveys/submit`, { questions }, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
     } catch (error) {
         console.error("Error surveyQuestion:", error);
@@ -36,7 +45,12 @@ const surveyQuestionProfile = async (questions) => {
 
 const userDataProfile = async (userId) => {
     try {
-        const response = await axios.get(`${base_url}/getUserDetails/${userId}`);
+        const { token } = profileStore.getState();
+        const response = await axios.get(`${base_url}/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
         return response.data;
     } catch (error) {
         console.error("Error userData:", error);
@@ -46,9 +60,11 @@ const userDataProfile = async (userId) => {
 
 const updateUserProfile = async (userId, userInfo) => {
     try {
-        const response = await axios.put(`${base_url}/update/${userId}`, userInfo, {
+        const { token } = profileStore.getState();
+        const response = await axios.put(`${base_url}/${userId}`, userInfo, {
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
             },
         });
         return response.data;
