@@ -18,7 +18,7 @@ const capitalizeFirstLetter = (string) => {
 
 const TaskDetails = ({ task }) => {
     return (
-        <View style={defaultStyles.card}>
+        <View style={[defaultStyles.card, styles.card]}>
             <Text style={[styles.title, [defaultStyles.TypographyH2]]}>{task.title}</Text>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
@@ -42,19 +42,14 @@ const TaskDetails = ({ task }) => {
 export default TaskDetails;
 
 const styles = StyleSheet.create({
-    detailsContainer: {
-        backgroundColor: '#fff',
-        padding: 20,
-        borderRadius: 20,
-        marginBottom: 20,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 3,
+    card: {
+        marginVertical: 0,
+        paddingHorizontal: 20,
+        paddingVertical: 0
     },
     title: {
-        marginBottom: 15,
+        marginTop: 20,
+        marginBottom: 10,
         textAlign:'center'
     },
     detailItem: {

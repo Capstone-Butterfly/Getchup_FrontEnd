@@ -46,7 +46,7 @@ const surveyQuestionProfile = async (questions) => {
 const userDataProfile = async (userId) => {
     try {
         const { token } = profileStore.getState();
-        const response = await axios.get(`${base_url}/${userId}`, {
+        const response = await axios.get(`${base_url}/getUserDetails/${userId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
