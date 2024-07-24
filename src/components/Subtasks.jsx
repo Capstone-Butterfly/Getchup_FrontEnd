@@ -5,6 +5,7 @@ import { config } from '../styles/themeConfig';
 import CheckboxEmpty from '../../assets/icons/checkbox-empty.svg';
 import CheckboxChecked from '../../assets/icons/checkbox-checked.svg';
 import { markSubtaskAsComplete } from '../services/tasks';
+import { Divider } from '@gluestack-ui/themed';
 
 const extractMinutes = (timeString) => {
     const match = timeString.match(/\d+/);
@@ -42,11 +43,12 @@ const Subtasks = ({ subtasks, taskId }) => {
     };
 
     return (
-        <View style={[defaultStyles.card]}>
+        <View style={[ styles.card]}>
             <Text style={[styles.subtitle, defaultStyles.TypographyH3]}>Subtask</Text>
             <FlatList
                 data={subtaskList}
                 renderItem={({ item, index }) => (
+                    <View>
                     <View style={styles.subtaskItem}>
                         <View style={styles.checkBoxAndTitle}>
                             <TouchableOpacity onPress={() => handleSubtaskClick(index)}>
@@ -67,6 +69,9 @@ const Subtasks = ({ subtasks, taskId }) => {
                             </Text>
                         </View>
                         <Text style={[defaultStyles.TypographyBody, styles.time]}>{extractMinutes(item.time)}</Text>
+                        
+                    </View>
+                    <Divider style={styles.divider} />
                     </View>
                 )}
                 keyExtractor={(item, index) => index.toString()}
@@ -78,13 +83,21 @@ const Subtasks = ({ subtasks, taskId }) => {
 export default Subtasks;
 
 const styles = StyleSheet.create({
+    card: {
+        padding: 20,
+        backgroundColor: config.tokens.colors.white,
+        borderRadius: 20,
+        marginVertical: 16
+    },
     subtitle: {
-        marginBottom: 15,
+        marginBottom: 10,    
     },
     subtaskItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        paddingTop: 10,
         marginBottom: 10,
+        
     },
     checkbox: {
         marginRight: 11,
@@ -103,5 +116,8 @@ const styles = StyleSheet.create({
     },
     time: {
         color: config.tokens.colors.neutralDark,
+    },
+    divider: {
+        backgroundColor: '#e6e6e6',
     },
 });

@@ -1,21 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, ButtonText, ImageBackground, SafeAreaView, ScrollView } from '@gluestack-ui/themed';
+import { Button, ButtonText, ImageBackground, SafeAreaView } from '@gluestack-ui/themed';
 import TaskDetails from '../../components/TaskDetails';
 import Subtasks from '../../components/Subtasks';
 import { manualCompleteTask, markSubtaskAsComplete } from '../../services/tasks';
-import useTaskStore from '../../store/taskStore'; // Import your Zustand store hook
+import useTaskStore from '../../store/taskStore'; 
 import { config } from '../../styles/themeConfig';
 import { defaultStyles } from '../../styles/styles';
 import { useMutation } from '@tanstack/react-query';
 import queryClient from '../../services/QueryClient';
+import { ScrollView } from 'react-native-gesture-handler';
+
 
 const image = require('../../../assets/background/background.png');
 
 const TaskDetailScreen = ({ route, navigation }) => {
     const { task } = route.params;
     const [subtaskList, setSubtaskList] = useState(task.subtask);
-    const updateDataTask = useTaskStore(state => state.updateDataTask); // Accessing updateDataTask from Zustand store
+    const updateDataTask = useTaskStore(state => state.updateDataTask);
 
     useEffect(() => {
         setSubtaskList(task.subtask);
@@ -24,7 +26,7 @@ const TaskDetailScreen = ({ route, navigation }) => {
     const updateTaskStatusMutation = useMutation({
         mutationFn: async (task) => await manualCompleteTask(task._id),
         onSuccess: async () => {
-            queryClient.invalidateQueries(['tasks']); // Invalidate task queries
+            queryClient.invalidateQueries(['tasks']); 
             console.log("uodate task: ", task);
             updateDataTask(task); 
         },
@@ -101,7 +103,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        marginTop: 10,
     },
     completeButton: {
         paddingHorizontal: 20,
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
-        marginTop: 10,
+        marginTop: 16,
     },
     defaultButtonText: {
         color: config.tokens.colors.white,

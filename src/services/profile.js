@@ -61,7 +61,7 @@ const userDataProfile = async (userId) => {
 const updateUserProfile = async (userId, userInfo) => {
     try {
         const { token } = profileStore.getState();
-        const response = await axios.put(`${base_url}/${userId}`, userInfo, {
+        const response = await axios.put(`${base_url}/update/${userId}`, userInfo, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
