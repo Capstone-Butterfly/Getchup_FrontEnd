@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     taskTimeContainer: {
         alignItems: 'flex-end',
         flexDirection: 'column',
+        justifyContent: "flex-start"
     },
     taskTitle: {
         fontSize: 16,
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         height: "100%",
         marginRight: 11,
-        width: 8,
+        width: 6,
     },
     view: {
         height: "100%",

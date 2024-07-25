@@ -2,7 +2,7 @@ import React, { useEffect, useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import CalendarStrip from 'react-native-calendar-strip';
 import TaskCard from './TaskCard';
-import { Box, Card, Divider, FlatList } from '@gluestack-ui/themed';
+import { Box, Card, Center, Divider, FlatList } from '@gluestack-ui/themed';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import useTaskStore from '../store/taskStore';
 import { fetchTasksByUserId } from '../services/tasks';
@@ -95,21 +95,23 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                 dayComponentHeight={56}
             />
             {isLoading ? (
-                <Text>Loading...</Text>
+                <Center>
+                    <Text style={defaultStyles.TypographyBody}>Loading...</Text>
+                </Center>
             ) : error ? (
                 <Text>No Tasks!</Text>
             ) : filteredTasks && filteredTasks.length === 0 ? (
-                <Box style={[styles.tasksContainer]}>
+                <Card style={[defaultStyles.Card]}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
-                    <NoTasksCard navigation={navigation}/>
-                </Box>
+                    <NoTasksCard navigation={navigation} />
+                </Card>
             ) : tasksCompleted ? (
-                <Box style={styles.tasksContainer}>
+                <Card style={defaultStyles.Card}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
-                    <TasksCompletedCard tasks={filteredTasks}/>
-                </Box>
+                    <TasksCompletedCard tasks={filteredTasks} />
+                </Card>
             ) : (
-                <Box style={styles.tasksContainer}>
+                <Card style={[defaultStyles.Card]}>
                     <Text style={[defaultStyles.TypographyH3, styles.cardDate]}>{formatDateToString(selectedDate)}</Text>
                     <FlatList
                         data={filteredTasks}
@@ -123,7 +125,7 @@ const WeeklyCalendar = ({ userId, navigation }) => {
                         style={styles.list}
                         contentContainerStyle={styles.listContent}
                     />
-                </Box>
+                </Card>
             )}
         </View>
     );
@@ -139,8 +141,8 @@ const styles = StyleSheet.create({
         // marginBottom: 24,
         // marginHorizontal: 20,
         padding: 20,
-        margin:20,
-        marginTop:0,
+        margin: 20,
+        marginTop: 0,
     },
     calendarHeaderStyle: {
         marginBottom: 12,
@@ -204,8 +206,8 @@ const styles = StyleSheet.create({
     // ROOT
     container: {
         flex: 1,
-        marginTop: 24,
+        marginTop: 15,
         marginBottom: 20
     },
-    
+
 });

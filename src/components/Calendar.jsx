@@ -101,11 +101,11 @@ const MonthlyCalendar = () => {
 
         return (
             <View>
-                <Pressable onPress={() => handleDateSelected(date)}>
+                <Pressable onPress={() => handleDateSelected(date)} key={date.dateString}>
                     {((isBeforeToday || isToday) && (isMarked && hasCompletedTasks || isToday)) ? (
                         <AnimatedCircularProgress
                             size={32}
-                            width={3}
+                            width={4}
                             fill={isToday ? 100 : progress}
                             rotation={0}
                             tintColor={isToday ? config.tokens.colors.highPriority : config.tokens.colors.primary}
@@ -130,7 +130,7 @@ const MonthlyCalendar = () => {
                     )}
                     <Center>
                         <Box
-                            style={[styles.dot, { backgroundColor: marking ? config.tokens.colors.neutralLight : "transparent" }]}
+                            style={[styles.dot, { backgroundColor: marking ? config.tokens.colors.neutral : "transparent" }]}
                         />
                     </Center>
                 </Pressable>
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
         color: config.tokens.colors.black,
         textAlign: 'left',
         width: '100%',
-        paddingLeft: 5,
+        // paddingLeft: 5,
         paddingBottom: 10,
     },
     dayContainer: {

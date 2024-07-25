@@ -66,7 +66,7 @@ async function cancelNotification(identifier) {
 }
 
 const fetchNotificationsByUserId = async (userId) => {
-    console.log("fetching notifications...");
+    // console.log("fetching notifications...");
     const { data } = await axios.get(`${base_url}/notifications/user/${userId}`);
     // console.log(data)
     return data;
