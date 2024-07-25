@@ -21,7 +21,7 @@ function SignUpScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [isMatched, setIsMatched] = useState(false);
+  const [isMatched, setIsMatched] = useState(true);
 
   const handlePasswordState = () => {
     setShowPassword((showState) => !showState);
@@ -49,19 +49,19 @@ function SignUpScreen() {
       },
       onSuccess: async (data) => {
         setUserId(data.userId);
-        console.log('Signup successful, navigating to SurveyQuestionScreen');
-        
-        navigation.navigate('SurveyQuestionScreen');
+        //console.log('Signup successful, navigating to SurveyQuestionScreen');
+        //navigation.navigate('SurveyQuestionScreen');
+        navigation.navigate('ADHDCatScreen');
       },
       onError: (error) => {
-        console.log('Signup error:', error);
-        Alert.alert('Signup failed', 'Something went wrong. Please try again.');
+        //console.log('Signup error:', error);
+        //Alert.alert('Signup failed', 'Something went wrong. Please try again.');
       },
     }
   );
 
   useEffect(() => {
-    console.log('Navigation object:', navigation);
+    //console.log('Navigation object:', navigation);
   }, []);
 
   return (
@@ -69,25 +69,25 @@ function SignUpScreen() {
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.logoDiv}>
-          <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} />
+          <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} alt="Getchyp" />
           <Text style={styles.logoText}>Getchup!</Text>
         </View>
         <FormControl style={styles.formBox}>
           <VStack space="xl">
             <Heading style={[styles.heading, defaultStyles.TypographyH1]}>Create New Account</Heading>
             <VStack space="xs">
-              <Text style={defaultStyles.TypographyBodyHeavy}>First Name</Text>
+              <Text style={defaultStyles.TypographyBodyHeavy}>Full Name</Text>
               <Input style={styles.inputContainer}>
                 <InputField value={first_name} onChangeText={setFirstName} type="text" />
               </Input>
             </VStack>
 
-            <VStack space="xs">
+            {/* <VStack space="xs">
               <Text style={defaultStyles.TypographyBodyHeavy}>Last Name</Text>
               <Input style={styles.inputContainer}>
                 <InputField value={last_name} onChangeText={setLastName} type="text" />
               </Input>
-            </VStack>
+            </VStack> */}
 
             <VStack space="xs">
               <Text style={defaultStyles.TypographyBodyHeavy}>Email</Text>
@@ -96,12 +96,12 @@ function SignUpScreen() {
               </Input>
             </VStack>
 
-            <VStack space="xs">
+            {/* <VStack space="xs">
               <Text style={defaultStyles.TypographyBodyHeavy}>Phone No.</Text>
               <Input style={styles.inputContainer}>
                 <InputField value={phone} onChangeText={setPhone} type="text" />
               </Input>
-            </VStack>
+            </VStack> */}
 
             <VStack space="xs">
               <Text style={defaultStyles.TypographyBodyHeavy}>Password</Text>
@@ -160,18 +160,19 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingVertical: 10,
   },
   container: {
     flex: 1,
     position: 'relative',
-    justifyContent: 'center', 
-    alignItems: 'center', 
-    paddingBottom: 40, 
+    alignItems: 'center',
+    marginTop:20,
   },
   logoDiv: {
-    marginBottom: 20,
+    marginTop:20,
+    marginBottom:20,
     alignItems: 'center',
-    paddingTop:50
+    //paddingTop:50
   },
   logoText: {
     textAlign: 'center',
@@ -179,8 +180,8 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
   logo: {
-    width: 100,
-    height: 100,
+    //width: 100,
+    //height: 100,
     marginBottom: 10,
   },
   formBox: {
@@ -258,6 +259,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
   },

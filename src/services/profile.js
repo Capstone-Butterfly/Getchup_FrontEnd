@@ -20,6 +20,7 @@ const signInProfile = async (email, password) => {
 
 const signUpProfile = async (firstName, lastName, email, password, phone) => {
     try {
+        phone = " ";
         const response = await axios.post(`${base_url}/createaccount`, { first_name: firstName, last_name: lastName, email, password, phone });
         return response.data;
     } catch (error) {

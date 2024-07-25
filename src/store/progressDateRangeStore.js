@@ -9,6 +9,13 @@ const useProgressDateRangeStore = create((set) => ({
   setActiveDateRangeTab: (value) => set({ activeDateRangeTab: value }),
   setchartSelectedStartDate: (date) => set({ chartSelectedStartDate : date }),
   setchartSelectedEndDate: (date) => set({ chartSelectedEndDate : date }),
+
+  clearProgressDateRangeStore: () => set({
+    activeDateRangeTab: 'Day', 
+    chartSelectedStartDate: dayjs().format('YYYY-MM-DD'),
+    chartSelectedEndDate: dayjs().format('YYYY-MM-DD'),
+  }),
+
 }));
 
 export default useProgressDateRangeStore;

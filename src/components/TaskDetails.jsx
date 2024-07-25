@@ -1,14 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { defaultStyles } from '../styles/styles';
-import { Divider } from '@gluestack-ui/themed';
+import { Box, Divider } from '@gluestack-ui/themed';
 
 import CalendarSVG from '../../assets/icons/calendar.svg'
 import RepeatSVG from '../../assets/icons/repeat.svg'
 import TasksSVG from '../../assets/icons/tasks.svg'
 
 const formatDate = (dateString) => {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'};
     return new Date(dateString).toLocaleDateString('en-US', options);
 };  
 
@@ -23,7 +23,7 @@ const TaskDetails = ({ task }) => {
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>
                 <CalendarSVG style={styles.icon} />
-                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}> {formatDate(task.created_datetime)}</Text>
+                <Text style={[styles.detailText, [defaultStyles.TypographyBody]]}> {formatDate(task.estimate_start_date)}</Text>
             </View>
             <Divider style={styles.divider} />
             <View style={styles.detailItem}>

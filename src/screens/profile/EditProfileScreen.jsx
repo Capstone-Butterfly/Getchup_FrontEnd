@@ -4,6 +4,9 @@ import { VStack, HStack, Icon, Image, Modal, ModalBackdrop, ModalContent, ModalH
 import { EditIcon, CloseIcon } from '@gluestack-ui/themed';
 import { updateUserProfile } from '../../services/profile';
 import profileStore from '../../store/profileStore';
+import useCreateTaskStore from '../../store/createTaskStore';
+import useAddTaskDateModelStore from '../../store/addTaskDateModelStore';
+import useProgressDateRangeStore from "../../store/progressDateRangeStore";
 import { useMutation } from '@tanstack/react-query';
 import CustomSwitch from '../../components/customSwitch';
 import { config } from '../../styles/themeConfig'; 
@@ -16,6 +19,15 @@ const { width, height } = Dimensions.get('window');
 
 function EditProfileScreen({ navigation }) {
   const { email, first_name, last_name, profile_img, password, phone, userId, setPhone, setLastName, setFirstName, setEmail, setPassword, notification, movement_reminder, task_reminder, setNotification, setMovementReminder, setTaskReminder, clearToken, clearUserId, setIsLogin } = profileStore((state) => state);
+  const { clearCreateTaskStore } = useCreateTaskStore((state) => ({ 
+    clearCreateTaskStore: state.clearCreateTaskStore 
+  }));
+  const { clearAddTaskDateModelStore } = useAddTaskDateModelStore((state) => ({
+    clearAddTaskDateModelStore: state.clearAddTaskDateModelStore,
+  }));
+  const { clearProgressDateRangeStore } = useProgressDateRangeStore((state) => ({
+    clearProgressDateRangeStore: state.clearProgressDateRangeStore,
+  }));
 
   const [editableField, setEditableField] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -27,9 +39,9 @@ function EditProfileScreen({ navigation }) {
       const userInfo = {
         email: email,
         first_name: first_name,
-        last_name: last_name,
+        last_name: "",
         password: password,
-        phone: phone,
+        //phone: phone,
         task_reminder: task_reminder,
         movement_reminder: movement_reminder,
         notification: notification,
@@ -37,11 +49,11 @@ function EditProfileScreen({ navigation }) {
       return updateUserProfile(userId, userInfo);
     },
     onSuccess: () => {
-      Alert.alert('Success', 'User profile updated successfully.');
+      //Alert.alert('Success', 'User profile updated successfully.');
     },
     onError: (error) => {
       console.error('Error updating user data:', error);
-      Alert.alert('Error', 'Failed to update user data. Please try again.');
+      //Alert.alert('Error', 'Failed to update user data. Please try again.');
     }
   });
 
@@ -90,11 +102,16 @@ function EditProfileScreen({ navigation }) {
 
   const handleLogout = async () => {
     try {
-      console.log('Logged out');
       clearToken();
       clearUserId();
       setIsLogin(false);
       setShowLogoutModal(false);
+      setFirstName("");
+      setEmail("");
+      setPassword("");
+      clearCreateTaskStore();
+      clearAddTaskDateModelStore();
+      clearProgressDateRangeStore();
       navigation.navigate('HomeScreen');
     } catch (error) {
       console.error('Error logging out: ', error);
@@ -103,7 +120,7 @@ function EditProfileScreen({ navigation }) {
 
 
   const fieldLabels = {
-    first_name: 'First Name',
+    first_name: 'Full Name',
     last_name: 'Last Name',
     email: 'Email',
     phone: 'Phone',
@@ -142,14 +159,14 @@ function EditProfileScreen({ navigation }) {
                   </TouchableOpacity>
                 </VStack>
 
-                <VStack>
+                {/* <VStack>
                   <TouchableOpacity onPress={() => handleEdit('last_name', last_name)}>
                     <HStack style={styles.stackBox}>
                       <Text style={styles.userDataText}>{last_name}</Text>
                       <Icon as={ChevronRightIcon} style={styles.iconDataText} size={32} />
                     </HStack>
                   </TouchableOpacity>
-                </VStack>
+                </VStack> */}
 
                 <VStack>
                   <TouchableOpacity onPress={() => handleEdit('email', email)}>
@@ -250,11 +267,10 @@ function EditProfileScreen({ navigation }) {
             <ModalBackdrop />
             <ModalContent style={[styles.modalStyleLogout]}>
               <ModalHeader style={styles.modalHeaderStyle}> 
-                <Heading style={[defaultStyles.TypographyH1 , styles.modalLogouttext]}>Logout</Heading>
-            
+                <Heading style={[defaultStyles.TypographyH1 , styles.modalLogouttext]}>Logout?</Heading>
               </ModalHeader>
               <ModalBody>
-                <Text style={[defaultStyles.TypographyBody]}>Are you sure you want to Logout?</Text>
+                <Text style={[defaultStyles.TypographyBody, styles.modalAreYouSuretext]}>Are you sure you want to Logout?</Text>
               </ModalBody>
               <ModalFooter style={styles.modalFooter}>
                 <Button
@@ -387,8 +403,10 @@ const styles = StyleSheet.create({
   modalLogouttext:{
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    marginBottom:10,
-    
+  },
+  modalAreYouSuretext:{
+    marginTop:20,
+    marginBottom:0,
   },
   submitButton: {
     backgroundColor: config.tokens.colors.primaryDark,
@@ -428,8 +446,6 @@ const styles = StyleSheet.create({
     borderRadius: config.tokens.borderRadius.sm,
     width:'45%',
     minHeight:45
-    
-
   },
 
   cancelButtonText: {
@@ -438,15 +454,16 @@ const styles = StyleSheet.create({
   }
   ,
   modalStyle :{
-paddingVertical:20,
+  paddingVertical:20,
   width:'100%',
   borderRadius:20
 
   },
   modalStyleLogout:{
-    paddingVertical:50,
+  paddingVertical:20,
   width:'100%',
   position:'absolute',
+  borderRadius:20,
   bottom:0
   },
   KeyboardModalStyle:{

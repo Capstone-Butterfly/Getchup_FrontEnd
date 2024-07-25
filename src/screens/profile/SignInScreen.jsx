@@ -123,12 +123,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     position: 'relative',
-    flex: 1,
-    justifyContent: 'center', 
-    alignItems: 'center', 
   },
   logoDiv:{
-marginBottom:40
+  marginTop:20,
+  marginBottom:20
   },
   logoText:{
 textAlign:'center',
