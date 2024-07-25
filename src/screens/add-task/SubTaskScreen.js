@@ -8,6 +8,7 @@ import { Picker } from '@react-native-picker/picker';
 import { config } from '../../styles/themeConfig'; // Import the theme configuration
 import { defaultStyles } from './../../styles/styles'
 import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
+import { SafeAreaView } from "@gluestack-ui/themed";
 
 
 const SubTaskScreen = ({index}) => {
@@ -56,16 +57,16 @@ const SubTaskScreen = ({index}) => {
     }
 
     return(
-        <>
-         <Card style={styles.cardBody}>
+        <View style={styles.container}>
+         <Card style={[defaultStyles.card, styles.cardBody]}>
             <TextInput
-                style={[defaultStyles.TypographyBody, styles.input ]}
+                style={[defaultStyles.TypographyBodyHeavy, styles.input ]}
                 placeholder="Add Task Title"
                 value={selectedSubTask.sub_title}
                 onChangeText={handleSubTitleChange}
             />
         </Card>  
-        <Card style={styles.cardBody}>
+        <Card style={[defaultStyles.card, styles.cardBody]}>
             <View style={styles.detailItem}>
                 <Text style={[defaultStyles.TypographyBodyHeavy]}>Time</Text>
                 {selectedSubTask.time ? (<Text style={[defaultStyles.TypographyBody]}>{selectedSubTask.time}</Text>) :
@@ -145,34 +146,40 @@ const SubTaskScreen = ({index}) => {
             </VStack>
             </VStack>
         </Modal> */}
-        </>    
+        </View>    
     );
 };
 
 export default SubTaskScreen;
 
 const styles = StyleSheet.create({
+    container: {
+        width:'100%',
+        paddingRight: 20,
+        paddingLeft: 20,
+    },
     cardBody:{
-        width:'80%',
-        borderRadius:20,
-        marginBottom:20,
+        marginTop: 10,
+        marginVertical: 0,
+        marginBottom:0,
+        paddingTop:10,
     },
     detailItem: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
         borderBottomWidth: 1,
-        borderBottomColor: "gray",
+        borderBottomColor: config.tokens.colors.neutralLight,
         paddingHorizontal: 10,
-        paddingVertical:20,
+        paddingVertical:10,
         justifyContent: 'space-between'
     },
     detailLastItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        //marginBottom: 10,
         paddingHorizontal: 10,
-        paddingVertical:20,
+        paddingTop:10,
         justifyContent: 'space-between'
     },
     input: {
@@ -182,44 +189,40 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
     },
-        tickImage: {
+    tickImage: {
         width: 15,
         height: 15,
         marginRight: 20,
     },
-    modalContainer: {
-        flex: 1,
-        justifyContent: 'flex-end',
-        backgroundColor: 'rgba(0, 0, 0, 0.125)',
-    },
     modalContent: {
         width: '100%',
-        height: '40%',
+        height: '25%',
         margin: 0,
         padding: 0,
-        borderRadius: 20,
-        backgroundColor: 'white',
+        borderRadius: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
         padding: 20,
         alignItems: 'center',
-        
-    },
-    scrollViewContent: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
     },
     modalTitle: {
         marginLeft: 10,
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        backgroundColor: 'rgba(0, 0, 0, 0.125)',
     },
     pickerContainer: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        marginTop: 70,
-        marginBottom: 40,
+        marginTop: 20,
+        marginBottom: -10,
     },
     picker: {
         width: 100,
@@ -243,8 +246,14 @@ const styles = StyleSheet.create({
         marginHorizontal: 'auto',
         width: '40%'
     },
+    submitButtonPressed: {
+        backgroundColor: config.tokens.colors.neutralLight,
+    },
     submitButtonText: {
         color:config.tokens.colors.white,
+    },
+    submitButtonTextPressed: {
+        color: config.tokens.colors.neutral,
     },
     clearButton: {
         backgroundColor: config.tokens.colors.neutralLight,

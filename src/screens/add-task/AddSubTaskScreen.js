@@ -8,6 +8,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { config } from '../../styles/themeConfig'; // Import the theme configuration
 import { defaultStyles } from './../../styles/styles'
 import ChevronRightIcon from '../../../assets/icons/chevron-right.svg';
+import { SafeAreaView } from "@gluestack-ui/themed";
 
 const AddSubTaskScreen = ({}) => {
     const { setNewSubTaskTitle, setNewSubTaskDuration, newSubTaskDuration } = usecreateTaskStore((state) => ({
@@ -58,16 +59,16 @@ const AddSubTaskScreen = ({}) => {
 
 
     return(
-        <>
-         <Card style={styles.cardBody}>
+        <View style={styles.container}>
+         <Card style={[defaultStyles.card, styles.cardBody]}>
             <TextInput
                 style={[defaultStyles.TypographyBody, styles.input ]}
-                placeholder="Add Task Title"
+                placeholder="Add subtask title"
                 onChangeText={handleSubTitleChange}
                 
             />
         </Card>  
-        <Card style={styles.cardBody}>
+        <Card style={[defaultStyles.card, styles.cardBody]}>
             <View style={styles.detailItem}>
                 <Text style={[defaultStyles.TypographyBodyHeavy]}>Time</Text>
                 {newSubTaskDuration ? (<Text style={[defaultStyles.TypographyBody]}>{newSubTaskDuration}</Text>) :
@@ -98,10 +99,10 @@ const AddSubTaskScreen = ({}) => {
                     <Picker
                         selectedValue={selectedMinute}
                         onValueChange={(itemValue) => setSelectedMinute(itemValue)}
-                        style={styles.picker}
+                        style={[defaultStyles.TypographyBodySmallHeavy, styles.picker]}
                     >
                         {Array.from({ length: 60 }, (_, i) => (
-                            <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} style={defaultStyles.TypographyBodyHeavy}/>
+                            <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} style={defaultStyles.TypographyBodySmallHeavy}/>
                         ))}
                     </Picker>
                     <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
@@ -110,9 +111,6 @@ const AddSubTaskScreen = ({}) => {
                     <Button style={styles.clearButton} onPress={clearMinuteSelection}>
                         <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
                     </Button>
-                    {/* <Button style={styles.submitButton} onPress={applyMinuteSelection}>
-                        <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
-                    </Button> */}
                     <Button
                         style={[
                             styles.submitButton,
@@ -134,67 +132,40 @@ const AddSubTaskScreen = ({}) => {
                 </HStack>
             </ModalContent>
         </Modal>
-        {/* <Modal
-            visible={isModalVisible}
-            animationType="slide"
-            transparent={true}
-            onRequestClose={closeModal}
-        >
-        
-        <VStack style={styles.modalContainer}>
-          <VStack style={styles.modalContent}>
-            <HStack style={styles.pickerContainer}>
-                <Picker
-                selectedValue={selectedMinute}
-                onValueChange={(itemValue) => setSelectedMinute(itemValue)}
-                style={styles.picker}
-                >
-                {Array.from({ length: 60 }, (_, i) => (
-                    <Picker.Item key={i + 1} label={`${i + 1}`} value={i + 1} color={config.tokens.colors.black} style={defaultStyles.TypographyBodyHeavy}/>
-                ))}
-                </Picker>
-                <Text style={[styles.modalTitle, defaultStyles.TypographyBodyHeavy]}>Minutes</Text>
-            </HStack>
-            <HStack style={styles.buttonContainer}>
-                <Button style={styles.clearButton} onPress={clearMinuteSelection}>
-                    <ButtonText style={[styles.clearButtonText, defaultStyles.TypographyBodyHeavy]}>Clear</ButtonText>
-                </Button>
-                <Button style={styles.submitButton} onPress={applyMinuteSelection}>
-                    <ButtonText style={[styles.submitButtonText, defaultStyles.TypographyBodyHeavy]}>Apply</ButtonText>
-                </Button>
-            </HStack>
-          </VStack>
-        </VStack>
-        
-      </Modal> */}
-        </>    
+        </View>    
     );
 };
 
 export default AddSubTaskScreen;
 
 const styles = StyleSheet.create({
+    container: {
+        width:'100%',
+        paddingRight: 20,
+        paddingLeft: 20,
+    },
     cardBody:{
-        width:'80%',
-        borderRadius:20,
-        marginBottom:20,
+        marginTop: 10,
+        marginVertical: 0,
+        marginBottom:0,
+        paddingTop:10,
     },
     detailItem: {
         flexDirection: 'row',
         alignItems: 'center',
         marginBottom: 10,
         borderBottomWidth: 1,
-        borderBottomColor: "gray",
+        borderBottomColor: config.tokens.colors.neutralLight,
         paddingHorizontal: 10,
-        paddingVertical:20,
+        paddingVertical:10,
         justifyContent: 'space-between'
     },
     detailLastItem: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 10,
+        //marginBottom: 10,
         paddingHorizontal: 10,
-        paddingVertical:20,
+        paddingTop:10,
         justifyContent: 'space-between'
     },
     input: {
@@ -211,10 +182,12 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '100%',
-        height: '40%',
+        height: '25%',
         margin: 0,
         padding: 0,
-        borderRadius: 20,
+        borderRadius: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
@@ -234,8 +207,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
-        marginTop: 70,
-        marginBottom: 40,
+        marginTop: 20,
+        marginBottom: -10,
     },
     picker: {
         width: 100,

@@ -350,7 +350,7 @@ const AddTaskScreen = ({ navigation }) => {
 
     const renderContent = () => (
         <>
-            <Card style={defaultStyles.card}>
+            <Card style={[defaultStyles.card, styles.card]}>
                 <Pressable onPress={handleOpenTitleModal} style={styles.bottomLine}>                   
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
@@ -376,10 +376,10 @@ const AddTaskScreen = ({ navigation }) => {
                     </View>
                 </Pressable>
             </Card>
-            <Card style={defaultStyles.card}>
+            <Card style={[defaultStyles.card, styles.card]}>
                 <ToggleSwitch label="Track Movement" value={movement_reminder} onToggle={toggleSwitch}/>
             </Card>
-            <Card style={defaultStyles.card}>
+            <Card style={[defaultStyles.card, styles.card, styles.lastCard]}>
                 <Pressable onPress={handleOpenAddSubTaskModal} style={styles.bottomLine}>
                     <View style={styles.detailItem}>
                         <PlusCircleIcon style={styles.icon}/>
@@ -424,7 +424,7 @@ const AddTaskScreen = ({ navigation }) => {
                 <Text style={[defaultStyles.TypographyBodySmall, styles.txtCenter]}>OR</Text>
                 <Button
                     style={[
-                        styles.submitButton,
+                        defaultStyles.ButtonDefault,
                         isAIPressed && styles.submitButtonPressed
                     ]}
                     onPressIn={handlePressIn}
@@ -452,25 +452,25 @@ const AddTaskScreen = ({ navigation }) => {
                 <View  style={styles.headerContainer}> 
                     <AddTaskHeader handleCancel={handleCancel} handleSaveTask={handleSaveTask}/>
                     {isAnyModalVisible && <View style={styles.dimmingOverlay} />}
-                    <Box style={styles.overlay}> 
-                        <Box>
+                    <View style={styles.overlay}> 
+                        <View>
                             {warningMessage ? (
-                                <Box style={styles.warningBox}>
+                                <View style={styles.warningBox}>
                                     <Text style={styles.warningText}>{warningMessage}</Text>
-                                </Box>
+                                </View>
                             ) : null}
                             <FlatList
                                 data={[{ key: 'content' }]} 
                                 renderItem={renderContent}
                                 keyExtractor={(item) => item.key}
                             />
-                        </Box>
-                    </Box>
+                        </View>
+                    </View>
                 </View>
                 <Modal isOpen={modalTitleVisible} onClose={handleCloseTitleModal}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalContent}>
-                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Add Task Title</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Add Task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseTitleModal}>
                             <Icon as={CloseIcon} style={styles.closeIcon}/>
                         </ModalCloseButton>
@@ -482,7 +482,7 @@ const AddTaskScreen = ({ navigation }) => {
                 <Modal isOpen={modalDateTimeVisible} onClose={handleCloseDateTimeModal}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalContent}>
-                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Date and Time</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Date and Time</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseDateTimeModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -500,7 +500,7 @@ const AddTaskScreen = ({ navigation }) => {
                     <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareNoteStyle}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalNoteContent}>
-                        <Heading textAlign='center' style={[defaultStyles.TypographyH1]}>Notes</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Notes</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseNoteModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -513,7 +513,7 @@ const AddTaskScreen = ({ navigation }) => {
                 <Modal isOpen={modalPriorityVisible} onClose={handleClosePriorityModal}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalPriorityContent}>
-                        <Heading size='lg' textAlign='center' style={[defaultStyles.TypographyH1]}>Task Priority</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Task Priority</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleClosePriorityModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -526,7 +526,7 @@ const AddTaskScreen = ({ navigation }) => {
                     <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareStyle}>
                     <ModalBackdrop />
                     <ModalContent style={styles.modalSubTaskContent}>
-                        <Heading textAlign='center'>Sub-task Title</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Sub-task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseAddSubTaskModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -540,7 +540,7 @@ const AddTaskScreen = ({ navigation }) => {
                     <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareStyle}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalSubTaskContent}>
-                        <Heading textAlign='center'>Sub-task Title</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Sub-task Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseSubTaskModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -576,10 +576,15 @@ const styles = StyleSheet.create({
     overlay: {
         flex: 1,
         paddingHorizontal: 20,
-        //paddingVertical:20,
+        paddingTop: 5,
+        paddingBottom:20,
     },
-    content: {
-        //flex: 1,
+    card: {
+        marginTop: 10,
+        marginVertical: 0,
+    },
+    lastCard: {
+        marginVertical: 10,
     },
     subTaskCard: {
         backgroundColor: '#fff',
@@ -592,7 +597,9 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         paddingTop: 15,
-        borderRadius: 20,
+        borderRadius: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
@@ -610,6 +617,7 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         paddingTop: 15,
+        borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         backgroundColor: config.tokens.colors.background,
@@ -629,6 +637,7 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         paddingTop: 15,
+        borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         backgroundColor: config.tokens.colors.background,
@@ -641,7 +650,9 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         paddingTop: 15,
-        borderRadius: 20,
+        borderRadius: 0,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
         backgroundColor: config.tokens.colors.background,
         position: 'absolute',
         bottom: 0,
@@ -656,7 +667,6 @@ const styles = StyleSheet.create({
     },
     modalBody: {
         flex: 1,
-        // justifyContent: 'center',
         alignItems: 'center',
         paddingTop: 10,
     },
@@ -717,13 +727,6 @@ const styles = StyleSheet.create({
     warningText: {
         color: '#cc0000',
     },
-    submitButton: {
-        backgroundColor: config.tokens.colors.primaryDark,
-        borderRadius: config.tokens.borderRadius.sm,
-        fontSize: 20,
-        marginHorizontal: 'auto',
-        width: '100%',
-    },
     submitButtonPressed: {
         backgroundColor: config.tokens.colors.neutralLight,
     },
@@ -763,8 +766,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-start',
-        //margin: 0,
-        //padding: 0,
     },
     textBlack: {
         color: config.tokens.colors.black,
