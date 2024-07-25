@@ -1,4 +1,4 @@
-import { EyeIcon, EyeOffIcon, Image, LinkText } from '@gluestack-ui/themed';
+import { EyeIcon, EyeOffIcon, Image, ImageBackground, LinkText } from '@gluestack-ui/themed';
 import { ButtonText, FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack } from '@gluestack-ui/themed';
 import React, { useState, useEffect } from 'react';
 import { View, Text, Alert, TouchableOpacity, StyleSheet, Dimensions, Pressable, ScrollView } from 'react-native';
@@ -8,6 +8,8 @@ import profileStore from '../../store/profileStore';
 import { signUpProfile } from '../../services/profile';
 import { config } from '../../styles/themeConfig'; 
 import { defaultStyles } from './../../styles/styles'
+const image = require('../../../assets/background/Signin.png');
+
 
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
@@ -63,6 +65,7 @@ function SignUpScreen() {
   }, []);
 
   return (
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <View style={styles.logoDiv}>
@@ -144,13 +147,10 @@ function SignUpScreen() {
             </TouchableOpacity>
           </VStack>
         </FormControl>
-        <View style={styles.circlesContainer}>
-          <View style={[styles.circle, styles.circleYellow]} />
-          <View style={[styles.circle, styles.circleRed]} />
-          <View style={[styles.circle, styles.circleBlue]} />
-        </View>
+   
       </View>
     </ScrollView>
+    </ImageBackground>
   );
 }
 
@@ -163,7 +163,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: config.tokens.colors.background,
     position: 'relative',
     justifyContent: 'center', 
     alignItems: 'center', 
@@ -256,6 +255,11 @@ const styles = StyleSheet.create({
   circleBlue: {
     backgroundColor: config.tokens.colors.blue,
     zIndex: 0,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

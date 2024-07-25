@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Alert, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Center, EyeIcon, EyeOffIcon, Image, LinkText } from '@gluestack-ui/themed';
+import { Center, EyeIcon, EyeOffIcon, Image, ImageBackground, LinkText } from '@gluestack-ui/themed';
 import { FormControl, Heading, Input, InputField, InputIcon, InputSlot, VStack, ButtonText } from '@gluestack-ui/themed';
 import profileStore from '../../store/profileStore';
 import { useMutation } from '@tanstack/react-query';
 import { signInProfile, userDataProfile } from '../../services/profile';
 import { config } from '../../styles/themeConfig'; 
 import { defaultStyles } from './../../styles/styles'
+import { SafeAreaView } from 'react-native-safe-area-context';
+const image = require('../../../assets/background/Signin.png');
+
 
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
@@ -53,7 +56,9 @@ function SignInScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ImageBackground source={image} resizeMode="cover" style={styles.image}>
+
+    <SafeAreaView style={styles.container}>
     <View style={styles.logoDiv}>
 
     <Image source={require('../../../assets/logo/logomark.png')} style={styles.logo} alt="logo"/>
@@ -103,16 +108,13 @@ function SignInScreen() {
             Do not have an Account yet?
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
-            <LinkText style={[styles.callToNavigate , defaultStyles.TypographyLink]}>Create an account!</LinkText>
+            <LinkText style={[styles.callToNavigate , defaultStyles.TypographyLink]}>Create Account!</LinkText>
           </TouchableOpacity>
         </VStack>
       </FormControl>
-      <View style={styles.circlesContainer}>
-        <View style={[styles.circle, styles.circleYellow]} />
-        <View style={[styles.circle, styles.circleRed]} />
-        <View style={[styles.circle, styles.circleBlue]} />
-      </View>
-    </View>
+      
+    </SafeAreaView>
+    </ImageBackground>
   );
 }
 
@@ -120,14 +122,13 @@ function SignInScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: config.tokens.colors.background,
     position: 'relative',
     flex: 1,
     justifyContent: 'center', 
     alignItems: 'center', 
   },
   logoDiv:{
-marginBottom:20
+marginBottom:40
   },
   logoText:{
 textAlign:'center',
@@ -137,7 +138,7 @@ fontSize:40
   },
   logo:{
 marginHorizontal:'auto',
-marginVertical:0,
+marginBottom:20
   },
 
   formBox: {
@@ -166,10 +167,10 @@ marginVertical:0,
     backgroundColor: config.tokens.colors.primaryDark,
     borderRadius: config.tokens.borderRadius.sm,
     marginHorizontal: 'auto',
-    paddingVertical: 10,
-    paddingHorizontal: 20, 
+justifyContent:'center',
     alignItems: 'center',
-    width:width/3
+    width:width/3,
+    minHeight:50
   },
   submitButtonPressed: {
     backgroundColor: config.tokens.colors.neutral,
@@ -209,6 +210,11 @@ marginVertical:0,
   },
   circleBlue: {
     backgroundColor: config.tokens.colors.blue,
+  },
+  image: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

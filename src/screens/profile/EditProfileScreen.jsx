@@ -101,6 +101,16 @@ function EditProfileScreen({ navigation }) {
     }
   };
 
+
+  const fieldLabels = {
+    first_name: 'First Name',
+    last_name: 'Last Name',
+    email: 'Email',
+    phone: 'Phone',
+    password: 'Password'
+  };
+
+
   return (
     <ImageBackground source={image} resizeMode="cover" style={styles.image}>
 
@@ -110,7 +120,9 @@ function EditProfileScreen({ navigation }) {
             User Profile
           </Heading>
           <View style={styles.prof2ndContainer}>
-          <VStack >
+         
+            <FormControl style={styles.formBox}>
+            <VStack >
                   <HStack>
                     <Image style={styles.imageProfile}
                       source={{ uri: profile_img }}
@@ -120,7 +132,6 @@ function EditProfileScreen({ navigation }) {
                     />
                   </HStack>
                 </VStack>
-            <FormControl style={styles.formBox}>
               <VStack>
                 <VStack>
                   <TouchableOpacity onPress={() => handleEdit('first_name', first_name)}>
@@ -197,7 +208,19 @@ function EditProfileScreen({ navigation }) {
               keyboardVerticalOffset={Platform.OS === 'ios' ? 5 : 0} 
             >
             <ModalContent style={[styles.modalStyle]}>
-            <ModalFooter style={[styles.buttonGrid]}>
+            <ModalHeader>
+        <Heading><Text>{fieldLabels[editableField]}</Text></Heading>
+      </ModalHeader>
+            <ModalBody>
+                <Input>
+                  <InputField
+                    value={inputValue}
+                    onChangeText={setInputValue}
+                    type={editableField === 'password' ? 'password' : 'text'}
+                  />
+                </Input>
+              </ModalBody>
+            <ModalFooter  style={styles.modalFooter}>
                 <Button
                style={[styles.cancelButton]}
       
@@ -213,15 +236,7 @@ function EditProfileScreen({ navigation }) {
                   <ButtonText style={[defaultStyles.TypographyBodyHeavy, styles.submitButtonText]}>Save</ButtonText>
                 </Button>
               </ModalFooter>
-              <ModalBody>
-                <Input>
-                  <InputField
-                    value={inputValue}
-                    onChangeText={setInputValue}
-                    type={editableField === 'password' ? 'password' : 'text'}
-                  />
-                </Input>
-              </ModalBody>
+            
               
             </ModalContent>
             </KeyboardAvoidingView>
@@ -234,14 +249,14 @@ function EditProfileScreen({ navigation }) {
           >
             <ModalBackdrop />
             <ModalContent style={[styles.modalStyleLogout]}>
-              <ModalHeader>
+              <ModalHeader style={styles.modalHeaderStyle}> 
                 <Heading style={[defaultStyles.TypographyH1 , styles.modalLogouttext]}>Logout</Heading>
             
               </ModalHeader>
               <ModalBody>
                 <Text style={[defaultStyles.TypographyBody]}>Are you sure you want to Logout?</Text>
               </ModalBody>
-              <ModalFooter>
+              <ModalFooter style={styles.modalFooter}>
                 <Button
                    style={[styles.cancelButton]}
                   onPress={() => setShowLogoutModal(false)}
@@ -313,7 +328,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: config.tokens.borderRadius.md,
     borderColor: 'transparent',
-    padding: config.tokens.spacing.md,
+    padding: config.tokens.spacing.sm,
     shadowColor: '#000006', 
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06, 
@@ -372,12 +387,14 @@ const styles = StyleSheet.create({
   modalLogouttext:{
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    marginBottom:10
+    marginBottom:10,
+    
   },
   submitButton: {
     backgroundColor: config.tokens.colors.primaryDark,
     borderRadius: config.tokens.borderRadius.sm,
-    marginHorizontal: 'auto',
+    width:'45%',
+    minHeight:45
     
   },
   buttonGrid: {
@@ -409,7 +426,10 @@ const styles = StyleSheet.create({
   cancelButton: {
     backgroundColor: config.tokens.colors.neutral,
     borderRadius: config.tokens.borderRadius.sm,
-    marginHorizontal: 'auto',
+    width:'45%',
+    minHeight:45
+    
+
   },
 
   cancelButtonText: {
@@ -418,8 +438,9 @@ const styles = StyleSheet.create({
   }
   ,
   modalStyle :{
-paddingVertical:50,
+paddingVertical:20,
   width:'100%',
+  borderRadius:20
 
   },
   modalStyleLogout:{
@@ -435,6 +456,16 @@ paddingVertical:50,
   },
   buttonGrid:{
     grid:1
+  },
+  modalFooter:{
+    flex:1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalHeaderStyle:{
+    borderBottomColor:'#CCC',
+    borderBottomWidth:1,
   }
 });
 
