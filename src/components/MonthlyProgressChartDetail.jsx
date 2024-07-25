@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, ActivityIndicator } from "react-native";
 import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import {
@@ -26,6 +26,9 @@ const MonthlyProgressChartDetail = ({ userId }) => {
     setchartSelectedStartDate: state.setchartSelectedStartDate,
     setchartSelectedEndDate: state.setchartSelectedEndDate,
   }));
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateData, setSelectedDateData] = useState({});
 
   const {
     data: monthlyData,
@@ -68,7 +71,9 @@ const MonthlyProgressChartDetail = ({ userId }) => {
   });
 
   if (isMonthlyLoading || isTodayLoading) {
-    return <ActivityIndicator size="large" color={config.tokens.colors.primary} />;
+    return (
+      <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+    );
   }
 
   if (isMonthlyError || isTodayError) {
@@ -80,14 +85,14 @@ const MonthlyProgressChartDetail = ({ userId }) => {
   }
 
   const transformData = (mData) => {
-    const selectedDate = dayjs(chartSelectedStartDate);
-    const daysInMonth = selectedDate.daysInMonth();
+    const selectedMonthDate = dayjs(chartSelectedStartDate);
+    const daysInMonth = selectedMonthDate.daysInMonth();
     const timePeriods = Array.from({ length: daysInMonth }, (_, i) => {
-        const day = (i + 1);
-        return {
-          full: day,
-          short: day % 5 === 0 ? day : null
-        };
+      const day = i + 1;
+      return {
+        full: day,
+        short: day % 5 === 0 ? day : null,
+      };
     });
 
     const stackData = timePeriods.map((period) => {
@@ -95,12 +100,26 @@ const MonthlyProgressChartDetail = ({ userId }) => {
         mData.sortedTasksByDay[period.full]?.completeCount || 0;
       const incompleteCount =
         mData.sortedTasksByDay[period.full]?.incompleteCount || 0;
+      const isSelected = selectedDate === period.full;
       return {
         stacks: [
-          { value: incompleteCount, color: config.tokens.colors.highPriority, marginBottom: 0 },
-          { value: completeCount, color: config.tokens.colors.blue },
+          {
+            value: incompleteCount,
+            color: isSelected
+              ? config.tokens.colors.primaryDark
+              : config.tokens.colors.highPriority,
+            marginBottom: 0,
+          },
+          {
+            value: completeCount,
+            color: isSelected
+              ? config.tokens.colors.primary
+              : config.tokens.colors.blue,
+          },
         ],
         label: period.short,
+        full: period.full,
+        isSelected,
       };
     });
 
@@ -108,19 +127,24 @@ const MonthlyProgressChartDetail = ({ userId }) => {
   };
 
   const renderTitle = (tData) => {
+    const completeCount =
+      selectedDateData.completeCount ?? tData.totalCompletedTasks;
+    const incompleteCount =
+      selectedDateData.incompleteCount ?? tData.totalIncompleteTasks;
+
     return (
       <View style={styles.titleContainer}>
         <View style={styles.titleRow}>
           <View style={styles.titleItem}>
             <View style={styles.completedIndicator} />
             <Text style={defaultStyles.TypographyLabelSmall}>
-              {tData.totalCompletedTasks} Completed
+              {completeCount} Completed
             </Text>
           </View>
           <View style={styles.titleItem}>
             <View style={styles.incompleteIndicator} />
             <Text style={defaultStyles.TypographyLabelSmall}>
-              {tData.totalIncompleteTasks} On Going
+              {incompleteCount} Ongoing
             </Text>
           </View>
         </View>
@@ -128,25 +152,38 @@ const MonthlyProgressChartDetail = ({ userId }) => {
     );
   };
 
-//   const formatXLabel = (label) => {
-//     const numericLabel = parseInt(label, 10);
-//     console.log(
-//       `Label: ${label}, Formatted: ${
-//         numericLabel % 5 === 0 ? numericLabel.toString() : ""
-//       }`
-//     );
-//     if (numericLabel % 5 === 0) {
-//       return `${numericLabel}`;
-//     }
-//     return "";
-//   };
+  //   const formatXLabel = (label) => {
+  //     const numericLabel = parseInt(label, 10);
+  //     console.log(
+  //       `Label: ${label}, Formatted: ${
+  //         numericLabel % 5 === 0 ? numericLabel.toString() : ""
+  //       }`
+  //     );
+  //     if (numericLabel % 5 === 0) {
+  //       return `${numericLabel}`;
+  //     }
+  //     return "";
+  //   };
 
-//   const staticFormatXLabel = (label) => {
-//     console.log("label" +label);
-//     return label % 5 === 0 ? `${label}` : '';
-//   };
+  //   const staticFormatXLabel = (label) => {
+  //     console.log("label" +label);
+  //     return label % 5 === 0 ? `${label}` : '';
+  //   };
 
   const stackData = transformData(monthlyData);
+  const now = dayjs().format("h:mm a");
+
+  const handleBarPress = (period) => {
+    if (period) {
+      if (period.isSelected === true) {
+        setSelectedDate(null);
+        setSelectedDateData({});
+        return;
+      }
+      setSelectedDate(period.full);
+      setSelectedDateData(monthlyData.sortedTasksByDay[period.full] || {});
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -161,15 +198,21 @@ const MonthlyProgressChartDetail = ({ userId }) => {
           xAxisLabelWidth={20}
           spacing={3}
           rulesType="solid"
-        //   formatXLabel = {(label) => {
-        //     console.log("label" +label);
-        //     return label % 5 === 0 ? `${label}` : '';
-        //   }}
           stackData={stackData}
-          xAxisLabelTextStyle={{fontSize: 10, color: "black"}}
-        //   rotateLabel
+          xAxisLabelTextStyle={{ fontSize: 10, color: "black" }}
+          //   rotateLabel
           xAxisTextNumberOfLines={2}
+          onPress={(index) => {
+            handleBarPress(index);
+          }}
         />
+        <Box style={styles.updateContainer}>
+          <Text
+            style={[defaultStyles.TypographyLabelSmallHeavy, styles.updateText]}
+          >
+            Updated today at {now}
+          </Text>
+        </Box>
       </Box>
       <VStack style={styles.vStack}>
         <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
@@ -273,6 +316,17 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: config.tokens.colors.highPriority,
     marginRight: 8,
+  },
+  updateContainer: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "center",
+    paddingTop: 20,
+    paddingRight: 20,
+  },
+  updateText: {
+    color: config.tokens.colors.neutralDark,
   },
 });
 

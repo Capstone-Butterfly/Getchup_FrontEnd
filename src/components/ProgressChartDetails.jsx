@@ -67,6 +67,7 @@ const ProgressChartDetail = ({userId}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginBottom: 50,
   },
   cardBody: {
     borderRadius: 20,
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 20,
     marginRight: 20,
+    
   },
 });
 
