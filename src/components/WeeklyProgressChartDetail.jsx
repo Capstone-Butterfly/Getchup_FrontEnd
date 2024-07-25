@@ -90,7 +90,9 @@ const WeeklyProgressChartDetail = ({userId}) => {
         //   { value: completeCount, color: config.tokens.colors.blue }
         // ],
         label: period.short,
-        full: period.full
+        full: period.full,
+        labelTextStyle: { fontSize: 10 },
+        isSelected
       };
     });
   
@@ -110,7 +112,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
           </View>
           <View style={styles.titleItem}>
             <View style={styles.incompleteIndicator} />
-            <Text style={defaultStyles.TypographyLabelSmall}>{incompleteCount} On Going</Text>
+            <Text style={defaultStyles.TypographyLabelSmall}>{incompleteCount} Ongoing</Text>
           </View>
         </View>
       </View>
@@ -118,10 +120,15 @@ const WeeklyProgressChartDetail = ({userId}) => {
   };
 
   const stackData = transformData(weeklyData);
-  const now = dayjs().format('h:mm A'); 
+  const now = dayjs().format('h:mm a'); 
 
   const handleBarPress = (period) => {
     if (period) {
+      if(period.isSelected === true){
+        setSelectedDate(null);
+        setSelectedDateData({});
+        return;
+      }
       setSelectedDate(period.full);
       setSelectedDateData(weeklyData.sortedTasksByDay[period.full] || {});
     }
@@ -132,8 +139,8 @@ const WeeklyProgressChartDetail = ({userId}) => {
         {renderTitle(todayData)}
         <Box style={styles.barchartContainer}>
           <BarChart
-            width={260}
-            noOfSections={7}
+            width={230}
+            noOfSections={5}
             barWidth={15}
             //barBorderRadius={6}
             yAxisThickness={0}
@@ -141,9 +148,9 @@ const WeeklyProgressChartDetail = ({userId}) => {
             stackData={stackData}
             onPress={(index) => {handleBarPress(index)}}
           />
-        </Box>
-        <Box style={styles.updateContainer}>
-          <Text style={defaultStyles.TypographyBodySmall}>Updated today at {now}</Text>
+          <Box style={styles.updateContainer}>
+            <Text style={[defaultStyles.TypographyLabelSmallHeavy,styles.updateText]}>Updated today at {now}</Text>
+          </Box>
         </Box>
         <VStack style={styles.vStack}>
           <HStack space={4} style={[styles.hstack, styles.hstackWithBorder]}>
@@ -189,6 +196,9 @@ const styles = StyleSheet.create({
     alignItems: 'center', // Center align items vertically
     paddingTop: 20,
     paddingRight: 20,
+  },
+  updateText : {
+    color: config.tokens.colors.neutralDark
   },
   barchartContainer: {
     display: 'flex',

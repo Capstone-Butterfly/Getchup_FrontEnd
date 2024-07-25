@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -12,14 +12,24 @@ import { config } from "../styles/themeConfig";
 
 const ProgressDateRangeTab = () => {
   const { activeDateRangeTab, setActiveDateRangeTab } =
-    useProgressDateRangeStore();
-  console.log("activeDateRangeTab" + activeDateRangeTab);
-  const [index, setIndex] = useState(0);
+    useProgressDateRangeStore((state) => ({
+      activeDateRangeTab: state.activeDateRangeTab,
+      setActiveDateRangeTab: state.setActiveDateRangeTab,
+    }));
+  console.log("activeDateRangeTab " + activeDateRangeTab);
+
   const routes = [
     { key: "Day", title: "Day" },
     { key: "Weekly", title: "Weekly" },
     { key: "Monthly", title: "Monthly" },
   ];
+
+  useEffect(() => {
+    setIndex(initialIndex);
+  }, [activeDateRangeTab]);
+
+  const initialIndex = routes.findIndex(route => route.key === activeDateRangeTab) !== -1 ? routes.findIndex(route => route.key === activeDateRangeTab) : 0;
+  const [index, setIndex] = useState(initialIndex);
 
   const handleIndexChange = (newIndex) => {
     setIndex(newIndex);
