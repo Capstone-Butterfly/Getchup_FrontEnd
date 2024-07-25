@@ -2,11 +2,12 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { HStack } from '@gluestack-ui/themed';
 import { config } from '../styles/themeConfig'; 
+import { defaultStyles } from '../styles/styles';
 
 const ToggleSwitch = ({ label, value, onToggle }) => {
   return (
     <HStack  style={styles.switchContainer}>
-      <Text style={styles.switchLabel}>{label}</Text>
+      <Text style={[defaultStyles.TypographyBodyHeavy, styles.switchLabel]}>{label}</Text>
       <TouchableOpacity
         style={[styles.switchWrapper, value ? styles.switchWrapperActive : styles.switchWrapperInactive]}
         onPress={onToggle}
@@ -29,8 +30,7 @@ const styles = StyleSheet.create({
     padding:16
   },
   switchLabel: {
-    fontSize: 16,
-    color: config.tokens.colors.black,
+    color: config.tokens.colors.lightBlack,
   },
   switchWrapper: {
     width: 50,

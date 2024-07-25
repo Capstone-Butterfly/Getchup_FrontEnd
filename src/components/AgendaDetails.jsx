@@ -20,8 +20,9 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
   };
 
   const formatGroupDate = (date) => {
-    const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' };
-    return new Intl.DateTimeFormat('en-US', options).format(date);
+    const options = { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC'};
+    const formattedGroupDate = date.toLocaleString('en-US', options);
+    return formattedGroupDate;
   };
 
   const loadMoreDates = () => {
@@ -41,7 +42,7 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
     const groupedTasks = {};
     tasks.forEach(task => {
       const taskStartDate = new Date(task.estimate_start_date);
-      const dateKey = taskStartDate.toDateString();
+      const dateKey = taskStartDate;
       if (!groupedTasks[dateKey]) {
         groupedTasks[dateKey] = [];
       }
@@ -76,7 +77,7 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
   const sortedDates = Object.keys(groupedTasks).sort((a, b) => new Date(a) - new Date(b));
 
   return (
-    <SafeAreaView>
+    // <View>
       <ImageBackground source={image} resizeMode="cover" style={styles.image}>
         <View style={styles.mainContainer}>
           <Text style={[defaultStyles.TypographyBodyHeavy, styles.todayDate]}>{formatDate(today, true)}</Text>
@@ -111,7 +112,7 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
           )}
         </View>
       </ImageBackground>
-    </SafeAreaView>
+    // </View>
   );
 };
 
@@ -122,6 +123,9 @@ const isSameDate = (date1, date2) => (
 );
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   mainContainer: {
     paddingVertical: 10,
     paddingHorizontal: 20
