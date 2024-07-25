@@ -1,7 +1,7 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Center, Heading, ImageBackground, Text, View, Box, } from "@gluestack-ui/themed";
 import MonthlyCalendar from "../../components/Calendar";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { config } from "../../styles/themeConfig";
 import { defaultStyles } from "./../../styles/styles";
 const image = require("../../../assets/background/background.png");
@@ -68,10 +68,15 @@ const styles = StyleSheet.create({
     maxWidth: 400,
     minWidth: 300,
     marginVertical: 0,
-    marginHorizontal: "auto",
-    paddingHorizontal: 20,
+    // marginHorizontal: "auto",
+    paddingHorizontal: 30,
     paddingVertical: 10,
-    marginTop: 50,
+    marginTop: 56,
+    ...Platform.select({
+        android: {
+          marginTop: 10,
+        }
+    })
   },
   weekLabels: {
     color: config.tokens.colors.neutralDark,

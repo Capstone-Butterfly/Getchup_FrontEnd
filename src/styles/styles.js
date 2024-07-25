@@ -8,6 +8,20 @@ const defaultStyles = StyleSheet.create({
         height: 48,
         width: "100%",
     },
+    Card: {
+        borderRadius: 20,
+        shadowColor: 'rgba(229, 229, 229, 0.35)',
+        shadowOffset: {
+          width: 0,
+          height: 8,
+        },
+        shadowOpacity: 1,
+        shadowRadius: 15,
+        elevation: 5,
+        padding: 20,
+        marginHorizontal: 20,
+        backgroundColor: config.tokens.colors.white,
+    },
     TypographyH1: {
         fontFamily: "WorkSans_700Bold",
         fontSize: 24,

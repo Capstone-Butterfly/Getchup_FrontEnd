@@ -11,6 +11,7 @@ import { config } from '../styles/themeConfig';
 import { getSortedNotificationsByUserId } from '../services/notificationService';
 import { useQuery } from '@tanstack/react-query';
 import CloseIcon from '../../assets/icons/x.svg';
+import Logo from '../../assets/logo/wordmark-logo.svg';
 
 const Header = ({ userId, navigation }) => {
     const { isOpen, openPopover, closePopover } = useNotificationStore();
@@ -44,6 +45,7 @@ const Header = ({ userId, navigation }) => {
         <SafeAreaView style={styles.container}>
             <HStack style={styles.hstack}>
                 <Heading style={[defaultStyles.TypographyH1, styles.brand]}>Getchup!</Heading>
+                {/* <Logo style={styles.brand}/> */}
                 <Pressable onPress={openPopover}>
                     {isLoading ? null : (
                         <NotificationIconComponent title="open" style={styles.icon}/>

@@ -64,6 +64,7 @@ const HomeScreen = ({ navigation }) => {
                     renderItem={({ item }) => item.component}
                     keyExtractor={(item) => item.key}
                     contentContainerStyle={styles.listContainer}
+                    style={styles.flatlist}
                 />
             </ImageBackground>
         </View>
@@ -75,6 +76,9 @@ export default HomeScreen;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    flatlist: {
+        marginTop: 0
     },
     image: {
         flex: 1,
