@@ -72,7 +72,9 @@ const MonthlyProgressChartDetail = ({ userId }) => {
 
   if (isMonthlyLoading || isTodayLoading) {
     return (
-      <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+      <View style={styles.loaderBox}>
+        <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+      </View>
     );
   }
 
@@ -151,24 +153,6 @@ const MonthlyProgressChartDetail = ({ userId }) => {
       </View>
     );
   };
-
-  //   const formatXLabel = (label) => {
-  //     const numericLabel = parseInt(label, 10);
-  //     console.log(
-  //       `Label: ${label}, Formatted: ${
-  //         numericLabel % 5 === 0 ? numericLabel.toString() : ""
-  //       }`
-  //     );
-  //     if (numericLabel % 5 === 0) {
-  //       return `${numericLabel}`;
-  //     }
-  //     return "";
-  //   };
-
-  //   const staticFormatXLabel = (label) => {
-  //     console.log("label" +label);
-  //     return label % 5 === 0 ? `${label}` : '';
-  //   };
 
   const stackData = transformData(monthlyData);
   const now = dayjs().format("h:mm a");
@@ -328,6 +312,11 @@ const styles = StyleSheet.create({
   updateText: {
     color: config.tokens.colors.neutralDark,
   },
+  loaderBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 40,
+  }
 });
 
 export default MonthlyProgressChartDetail;

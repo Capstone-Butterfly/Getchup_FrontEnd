@@ -50,7 +50,9 @@ const TodayProgressChartDetail = ({ userId }) => {
 
   if (isLoading) {
     return (
-      <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+      <View style={styles.loaderBox}>
+        <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+      </View>
     );
   }
 
@@ -277,6 +279,11 @@ const styles = StyleSheet.create({
   updateText: {
     color: config.tokens.colors.neutralDark,
   },
+  loaderBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 40,
+  }
 });
 
 export default TodayProgressChartDetail;
