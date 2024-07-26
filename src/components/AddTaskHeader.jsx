@@ -52,7 +52,7 @@ const AddTaskHeader = ({ handleCancel, handleSaveTask }) => {
 
 const styles = StyleSheet.create({
     headerContainer: {
-        paddingTop:20,
+        paddingTop:30,
         paddingLeft: 20,
         paddingRight: 20,
         justifyContent: 'space-between',

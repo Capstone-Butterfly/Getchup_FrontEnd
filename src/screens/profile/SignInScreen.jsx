@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   logoDiv:{
   marginTop:20,
-  marginBottom:20
+  marginBottom:20,
   },
   logoText:{
 textAlign:'center',
@@ -136,7 +136,7 @@ fontSize:40
   },
   logo:{
 marginHorizontal:'auto',
-marginBottom:20
+marginBottom:20,
   },
 
   formBox: {

@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingVertical: 10,
+    marginTop:40,
   },
   container: {
     flex: 1,
@@ -182,7 +182,8 @@ const styles = StyleSheet.create({
   logo: {
     //width: 100,
     //height: 100,
-    marginBottom: 10,
+    marginHorizontal:'auto',
+    marginBottom: 20,
   },
   formBox: {
     backgroundColor: 'white',

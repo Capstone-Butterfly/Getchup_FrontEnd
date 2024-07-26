@@ -144,7 +144,7 @@ const TodayProgressChartDetail = ({ userId }) => {
       {renderTitle(data)}
       <Box style={styles.barchartContainer}>
         <BarChart
-          width={220}
+          width={250}
           noOfSections={5}
           // rotateLabel
           barWidth={15}

@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
   },
   calendarHeader: {
     padding: 0,
+    paddingTop: 10,
     marginLeft : -10,
   },
   calendarContainer: {
