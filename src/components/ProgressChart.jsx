@@ -27,9 +27,19 @@ const ProgressChart = ({name, userId}) => {
         refetchOnReconnect: true,
     });
 
+    // if (isLoading) {
+    //     return <Text style={styles.loadingText}>Loading...</Text>;
+    // }
     if (isLoading) {
-        return <Text style={styles.loadingText}>Loading...</Text>;
-    }
+        return (
+          <View style={styles.loaderContainer}>
+            <View style={styles.loaderBox}>
+              <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+            </View>
+        </View>
+        );
+      }
+   
 
     if (error) {
         return <Text style={styles.loadingText}>Error: {error.message}</Text>;
@@ -132,5 +142,23 @@ const styles = StyleSheet.create({
     },
     loadingText: {
         color: config.tokens.colors.white,
-    }
+    },
+    loaderContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '90%',
+        marginLeft: 20,
+        marginBottom: 135,
+      },
+    loaderBox: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: config.tokens.colors.white,
+        borderRadius: 20,
+        paddingBottom: 20,
+        marginTop: 220,
+      }
 });

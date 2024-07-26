@@ -58,7 +58,11 @@ const WeeklyProgressChartDetail = ({userId}) => {
   });
 
   if (isWeeklyLoading || isTodayLoading) {
-    return <ActivityIndicator size="large" color={config.tokens.colors.primary} />;
+    return (
+      <View style={styles.loaderBox}>
+        <ActivityIndicator size="large" color={config.tokens.colors.primary} />
+      </View>
+    );
   }
 
   if (isWeeklyError || isTodayError) {
@@ -244,6 +248,11 @@ const styles = StyleSheet.create({
     backgroundColor: config.tokens.colors.highPriority,
     marginRight: 8,
   },
+  loaderBox: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 40,
+  }
 });
 
 export default WeeklyProgressChartDetail;
