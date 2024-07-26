@@ -174,7 +174,7 @@ const MonthlyProgressChartDetail = ({ userId }) => {
       {renderTitle(todayData)}
       <Box style={styles.barchartContainer}>
         <BarChart
-          width={260}
+          width={280}
           noOfSections={5}
           barWidth={5}
           barBorderRadius={0}

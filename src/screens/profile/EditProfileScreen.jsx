@@ -143,8 +143,8 @@ function EditProfileScreen({ navigation }) {
                   <HStack>
                     <Image style={styles.imageProfile}
                       source={{ uri: profile_img }}
-                      width={180}
-                      height={180}
+                      width={100}
+                      height={100}
                       alt='user-profile-image'
                     />
                   </HStack>
@@ -337,8 +337,8 @@ const styles = StyleSheet.create({
     borderRadius: config.tokens.borderRadius.xl,
     marginHorizontal: 'auto',
     marginBottom:config.tokens.spacing.lg,
-    borderColor: config.tokens.colors.black,
-    borderWidth:1
+    // borderColor: config.tokens.colors.black,
+    // borderWidth:1
   },
   formBox: {
     backgroundColor: 'white',

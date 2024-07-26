@@ -143,7 +143,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
         {renderTitle(todayData)}
         <Box style={styles.barchartContainer}>
           <BarChart
-            width={230}
+            width={260}
             noOfSections={5}
             barWidth={15}
             //barBorderRadius={6}
