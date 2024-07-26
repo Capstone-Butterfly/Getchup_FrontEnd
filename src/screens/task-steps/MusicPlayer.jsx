@@ -4,9 +4,9 @@ import { Audio } from 'expo-av';
 import ToggleSwitch from '../../components/ToggleSwitch';
 
 const tracks = [
-  'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/acousticbreeze.mp3',
-  'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/buddy.mp3',
-  'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/creativeminds.mp3',
+  'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/Holizna.mp3',
+  'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/HoliznaB.mp3',
+  'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/HoliznaC.mp3',
 ];
 
 const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
