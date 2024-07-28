@@ -62,7 +62,7 @@ const ProgressChart = ({name, userId}) => {
                             <Text style={defaultStyles.TypographyBodySmallHeavy}>Activity Progress</Text>
                         </View>
                         <View style={styles.progressItem}>
-                            <Progress value={progressCart.completionPercentage} w={300} h='$2.5'>
+                            <Progress value={progressCart.completionPercentage} w={'90%'} h='$2.5'>
                             <ProgressFilledTrack bg={config.tokens.colors.primaryDark}/>
                             </Progress>
                         </View>

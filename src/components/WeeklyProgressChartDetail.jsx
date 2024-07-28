@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, Dimensions } from "react-native";
 import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import { getTodayChartDetails, getWeeklyChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
@@ -12,6 +12,8 @@ import { defaultStyles } from '../styles/styles';
 import { config } from '../styles/themeConfig';
 
 const WeeklyProgressChartDetail = ({userId}) => {
+  const screenWidth = Dimensions.get('window').width;
+  const chartWidth = screenWidth * 0.55;
 
   const { activeDateRangeTab, chartSelectedStartDate, chartSelectedEndDate , setchartSelectedStartDate, 
     setchartSelectedEndDate} = useProgressDateRangeStore((state) => ({
@@ -143,7 +145,7 @@ const WeeklyProgressChartDetail = ({userId}) => {
         {renderTitle(todayData)}
         <Box style={styles.barchartContainer}>
           <BarChart
-            width={260}
+            width={chartWidth}
             noOfSections={5}
             barWidth={15}
             //barBorderRadius={6}
@@ -199,7 +201,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end', // Align items to the end of the row
     alignItems: 'center', // Center align items vertically
     paddingTop: 20,
-    paddingRight: 20,
+    paddingRight: 40,
   },
   updateText : {
     color: config.tokens.colors.neutralDark
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignContent: 'center',
-    paddingTop: 5,
+    paddingTop: 10,
     paddingLeft: 10,
   },
   hstack: {

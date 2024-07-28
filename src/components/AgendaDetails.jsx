@@ -3,6 +3,7 @@ import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-nativ
 import useTaskStore from '../store/taskStore';
 import TaskCard from './TaskCard';
 import { defaultStyles } from '../styles/styles';
+import { config } from "../styles/themeConfig";
 import { Divider, ImageBackground, SafeAreaView } from '@gluestack-ui/themed';
 
 const image = require('../../assets/background/background.png');
@@ -56,9 +57,9 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
 
     try {
       taskStartDate = new Date(task.estimate_start_date);
-      if (isNaN(taskStartDate.getTime())) {
-        throw new Error('Invalid date');
-      }
+      // if (isNaN(taskStartDate.getTime())) {
+      //   throw new Error('Invalid date');
+      // }
     } catch (error) {
       console.error('Error parsing task start date:', error.message);
       return false;
@@ -105,7 +106,7 @@ const AgendaDetails = ({ selectedDate, navigation }) => {
               ItemSeparatorComponent={() => <View style={styles.separator} />}
               onEndReached={loadMoreDates}
               onEndReachedThreshold={0.5}
-              ListFooterComponent={loading && <ActivityIndicator size="large" color="#0000ff" />}
+              ListFooterComponent={loading && <ActivityIndicator size="large" color={config.tokens.colors.primaryDark} />}
             />
           ) : (
             <Text>Loading tasks...</Text>
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: config.tokens.colors.white,
     paddingHorizontal: 11,
     paddingVertical: 5,
     marginVertical: 12,
@@ -152,7 +153,7 @@ const styles = StyleSheet.create({
     paddingTop: 10
   },
   divider: {
-    backgroundColor: '#e6e6e6',
+    backgroundColor: config.tokens.colors.shadowGray,
   },
 });
 

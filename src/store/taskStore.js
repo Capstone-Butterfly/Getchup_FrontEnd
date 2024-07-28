@@ -25,7 +25,7 @@ const useTaskStore = create((set, get) => ({
   }),
   tasksForSelectedDate: (date) => {
     const { tasks } = get();
-    console.log("tasks in store are: ", tasks);
+    //console.log("tasks in store are: ", tasks);
     const formattedDate = DateFormatter(date);
     return tasks.filter((task) => DateFormatter(task.due_date) === formattedDate);
   },

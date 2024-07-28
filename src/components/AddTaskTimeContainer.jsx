@@ -140,12 +140,12 @@ const TimeModelScreen = () => {
       const startTimeMs = selectedTime.getTime();
       const endTimeMs = selectedEndTime.getTime();
       const duration = endTimeMs - startTimeMs;
-      console.log("duration" + duration);
+      //console.log("duration" + duration);
       setUserEstimateDuration(duration);
     }
 
-    console.log("start_time:", start_time);
-    console.log("end_time:", end_time);
+    //console.log("start_time:", start_time);
+    //console.log("end_time:", end_time);
   }, [start_time, end_time, timeLabel]);
 
   return (

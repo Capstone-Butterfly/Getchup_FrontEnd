@@ -13,7 +13,7 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const FocusModeScreen = ({ route, navigation }) => {
     const { task } = route.params;
-    console.log("task is: ", task);
+    //console.log("task is: ", task);
     const totalSteps = task.subtask.length;
     const [currentStep, setCurrentStep] = useState(1);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
@@ -48,7 +48,7 @@ const FocusModeScreen = ({ route, navigation }) => {
         let subscription;
     
         if (isTaskInProgress && isMovementEnabled) {
-            console.log("movement tracking is started");
+            //console.log("movement tracking is started");
             subscription = Accelerometer.addListener(accelerometerData => {
                 const accelerationMagnitude = Math.sqrt(
                     accelerometerData.x * accelerometerData.x +
@@ -94,7 +94,7 @@ const FocusModeScreen = ({ route, navigation }) => {
         const nextStepNumber = currentStep + 1;
         if (nextStepNumber <= totalSteps) {
             setCurrentStep(nextStepNumber);
-            console.log("Playing new track for step: ", nextStepNumber);
+            //console.log("Playing new track for step: ", nextStepNumber);
             musicPlayerRef.current.stopMusic();
             musicPlayerRef.current.playNewTrack();
         } 

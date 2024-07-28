@@ -47,7 +47,7 @@ const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false 
                 t._id === task._id ? { ...t, main_status: "complete" } : t
             );
             setTasks(updatedTasks);
-            console.log("updating task", task._id)
+            //console.log("updating task", task._id)
         } catch (error) {
             console.log("error marking task as done:", error)
         }

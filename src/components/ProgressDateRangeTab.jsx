@@ -16,7 +16,7 @@ const ProgressDateRangeTab = () => {
       activeDateRangeTab: state.activeDateRangeTab,
       setActiveDateRangeTab: state.setActiveDateRangeTab,
     }));
-  console.log("activeDateRangeTab " + activeDateRangeTab);
+  //console.log("activeDateRangeTab " + activeDateRangeTab);
 
   const routes = [
     { key: "Day", title: "Day" },

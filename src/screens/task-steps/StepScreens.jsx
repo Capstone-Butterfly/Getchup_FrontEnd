@@ -52,7 +52,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
         mutationFn: async (task) => await manualCompleteTask(task._id),
         onSuccess: async () => {
             queryClient.invalidateQueries(['tasks']); 
-            console.log("update task: ", task);
+            //console.log("update task: ", task);
             updateDataTask(task); 
             
         },

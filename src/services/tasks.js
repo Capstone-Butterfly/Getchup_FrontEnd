@@ -43,7 +43,7 @@ const getAISubTasks = async (newTitle) => {
 
 const updateTaskStartTime = async (taskId, start_date, mainTaskStartTime, subtaskStartTime, MAIN_STATUS, STATUS, subtaskIndex) => {
   try {
-    console.log("Starting task with task id: ", taskId);
+    //console.log("Starting task with task id: ", taskId);
           const requestBody = {
           start_date: start_date,
           start_time: mainTaskStartTime,
@@ -63,7 +63,7 @@ const updateTaskStartTime = async (taskId, start_date, mainTaskStartTime, subtas
 
 const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_STATUS, STATUS, subtaskIndex, isLastStep) => {
   try {
-    console.log("Ending task with task id: ", taskId);
+    //console.log("Ending task with task id: ", taskId);
       
       const requestBody = {
           subtask: [{
@@ -78,7 +78,7 @@ const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_S
           requestBody.main_status = MAIN_STATUS;
       }
 
-      console.log("request body is: ", requestBody);
+      //console.log("request body is: ", requestBody);
 
       const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
       return data;
@@ -91,7 +91,7 @@ const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_S
 
 const markSubtaskAsComplete = async (taskId, subtaskEndTime, STATUS, subtaskIndex, totalSubtasks) => {
   try {
-    console.log("Completing subtask of task with task id: ", taskId);
+    //console.log("Completing subtask of task with task id: ", taskId);
 
     const isLastStep = subtaskIndex === totalSubtasks - 1;
     const requestBody = {
@@ -103,12 +103,12 @@ const markSubtaskAsComplete = async (taskId, subtaskEndTime, STATUS, subtaskInde
     };
 
     if (isLastStep) {
-      console.log("is last step");
+      //console.log("is last step");
       requestBody.end_time = subtaskEndTime;
       requestBody.main_status = 'complete';
     }
 
-    console.log("request body is: ", requestBody);
+    //console.log("request body is: ", requestBody);
 
     const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
     return data;
@@ -122,7 +122,7 @@ const markSubtaskAsComplete = async (taskId, subtaskEndTime, STATUS, subtaskInde
 
 const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) => {
   try {
-    console.log("Pausing task with task id: ", taskId);
+    //console.log("Pausing task with task id: ", taskId);
     const requestBody = {
       main_status: MAIN_STATUS,
       subtask: [{

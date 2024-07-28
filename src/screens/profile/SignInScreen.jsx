@@ -86,8 +86,8 @@ function SignInScreen() {
                 onChangeText={setPassword}
                 type={showPassword ? "text" : "password"}
               />
-              <InputSlot onPress={handlePasswordVisibility}>
-                <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
+              <InputSlot  pr="$3" onPress={handlePasswordVisibility}>
+                <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color={config.tokens.colors.primary} />
               </InputSlot>
             </Input>
           </VStack>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Button, ButtonText, ImageBackground, SafeAreaView } from '@gluestack-ui/themed';
+import { Button, ButtonText, FlatList, ImageBackground, SafeAreaView } from '@gluestack-ui/themed';
 import TaskDetails from '../../components/TaskDetails';
 import Subtasks from '../../components/Subtasks';
 import { manualCompleteTask, markSubtaskAsComplete } from '../../services/tasks';
@@ -27,14 +27,14 @@ const TaskDetailScreen = ({ route, navigation }) => {
         mutationFn: async (task) => await manualCompleteTask(task._id),
         onSuccess: async () => {
             queryClient.invalidateQueries(['tasks']); 
-            console.log("uodate task: ", task);
+            //console.log("uodate task: ", task);
             updateDataTask(task); 
         },
     });
 
     const handleMarkAsCompleted = async () => {
         try {
-            console.log("calling the mutation now: ");
+            //console.log("calling the mutation now: ");
             await updateTaskStatusMutation.mutateAsync(task);
             const updatedSubtasks = subtaskList.map((subtask) => ({
                 ...subtask,
@@ -60,7 +60,7 @@ const TaskDetailScreen = ({ route, navigation }) => {
                 subtasks: updatedSubtasks
             });
 
-            console.log("Task and subtasks marked as completed");
+            //console.log("Task and subtasks marked as completed");
         } catch (error) {
             console.error("Error marking task and subtasks as completed:", error);
         }
@@ -69,20 +69,40 @@ const TaskDetailScreen = ({ route, navigation }) => {
     return (
         <SafeAreaView style={styles.safeArea}>
             <ImageBackground source={image} resizeMode="cover" style={styles.imageBackground}>
-                <ScrollView>
-                    <View style={styles.container}>
-                        <TaskDetails task={task} />
-                        <Subtasks subtasks={subtaskList} taskId={task._id} />
-                        <Button style={[styles.focusButton, defaultStyles.ButtonDefault]} onPress={() => navigation.navigate('FocusModeScreen', { task })}>
-                            <ButtonText style={[styles.defaultButtonText, defaultStyles.TypographyBodyHeavy]}>Start Focus Mode</ButtonText>
-                        </Button>
-                        <Button style={[styles.completeButton, defaultStyles.buttonVariant3]} onPress={handleMarkAsCompleted}>
-                            <ButtonText style={[styles.buttonText, defaultStyles.TypographyBodyHeavy]}>Mark as Completed</ButtonText>
-                        </Button>
-                    </View>
-                </ScrollView>
+                 <FlatList
+                    data={[]}
+                    ListHeaderComponent={
+                        <View>
+                            <TaskDetails task={task} />
+                            <Subtasks subtasks={subtaskList} taskId={task._id} />
+                            <Button style={[styles.focusButton, defaultStyles.ButtonDefault]} onPress={() => navigation.navigate('FocusModeScreen', { task })}>
+                                <ButtonText style={[styles.defaultButtonText, defaultStyles.TypographyBodyHeavy]}>Start Focus Mode</ButtonText>
+                            </Button>
+                            <Button style={[styles.completeButton, defaultStyles.buttonVariant3]} onPress={handleMarkAsCompleted}>
+                                <ButtonText style={[styles.buttonText, defaultStyles.TypographyBodyHeavy]}>Mark as Completed</ButtonText>
+                            </Button>
+                        </View>
+                    }
+                    contentContainerStyle={styles.container}
+                />
             </ImageBackground>
         </SafeAreaView>
+        // <SafeAreaView style={styles.safeArea}>
+        //     <ImageBackground source={image} resizeMode="cover" style={styles.imageBackground}>
+        //         <ScrollView>
+        //             <View style={styles.container}>
+        //                 <TaskDetails task={task} />
+        //                 <Subtasks subtasks={subtaskList} taskId={task._id} />
+        //                 <Button style={[styles.focusButton, defaultStyles.ButtonDefault]} onPress={() => navigation.navigate('FocusModeScreen', { task })}>
+        //                     <ButtonText style={[styles.defaultButtonText, defaultStyles.TypographyBodyHeavy]}>Start Focus Mode</ButtonText>
+        //                 </Button>
+        //                 <Button style={[styles.completeButton, defaultStyles.buttonVariant3]} onPress={handleMarkAsCompleted}>
+        //                     <ButtonText style={[styles.buttonText, defaultStyles.TypographyBodyHeavy]}>Mark as Completed</ButtonText>
+        //                 </Button>
+        //             </View>
+        //         </ScrollView>
+        //     </ImageBackground>
+        // </SafeAreaView>
     );
 };
 
