@@ -4,6 +4,7 @@ import { VStack, HStack, Icon, Image, Modal, ModalBackdrop, ModalContent, ModalH
 import { EditIcon, CloseIcon } from '@gluestack-ui/themed';
 import { updateUserProfile } from '../../services/profile';
 import profileStore from '../../store/profileStore';
+import useTaskStore from '../../store/taskStore';
 import useCreateTaskStore from '../../store/createTaskStore';
 import useAddTaskDateModelStore from '../../store/addTaskDateModelStore';
 import useProgressDateRangeStore from "../../store/progressDateRangeStore";
@@ -13,6 +14,7 @@ import { config } from '../../styles/themeConfig';
 import { defaultStyles } from './../../styles/styles';
 const image = require('../../../assets/background/background.png');
 import { SafeAreaView } from 'react-native-safe-area-context';
+import dayjs from 'dayjs';
 
 // Get device dimensions
 const { width, height } = Dimensions.get('window');
@@ -27,6 +29,9 @@ function EditProfileScreen({ navigation }) {
   }));
   const { clearProgressDateRangeStore } = useProgressDateRangeStore((state) => ({
     clearProgressDateRangeStore: state.clearProgressDateRangeStore,
+  }));
+  const { setSelectedDate } = useTaskStore((state) => ({
+    setSelectedDate: state.setSelectedDate,
   }));
 
   const [editableField, setEditableField] = useState('');
@@ -109,9 +114,10 @@ function EditProfileScreen({ navigation }) {
       setFirstName("");
       setEmail("");
       setPassword("");
+      setSelectedDate(dayjs().format('YYYY-MM-DD'));
       clearCreateTaskStore();
       clearAddTaskDateModelStore();
-      clearProgressDateRangeStore();
+      clearProgressDateRangeStore(); 
       navigation.navigate('HomeScreen');
     } catch (error) {
       console.error('Error logging out: ', error);

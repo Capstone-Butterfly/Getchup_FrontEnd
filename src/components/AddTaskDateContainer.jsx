@@ -94,8 +94,8 @@ const DateModelScreen = () => {
   }, [dateLabel]);
 
   useEffect(() => {
-    console.log("start_date:", start_date);
-    console.log("end_date:", end_date);
+    //console.log("start_date:", start_date);
+    //console.log("end_date:", end_date);
   }, [start_date, end_date]);
 
   return (

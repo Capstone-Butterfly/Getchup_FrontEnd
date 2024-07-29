@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, Dimensions } from "react-native";
 import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import { getTodayChartDetails } from "../services/progress";
 import { BarChart } from "react-native-gifted-charts";
@@ -12,6 +12,9 @@ import dayjs from "dayjs";
 
 
 const TodayProgressChartDetail = ({ userId }) => {
+  const screenWidth = Dimensions.get('window').width;
+  const chartWidth = screenWidth * 0.515;
+
   const {
     activeDateRangeTab,
     setActiveDateRangeTab,
@@ -62,10 +65,10 @@ const TodayProgressChartDetail = ({ userId }) => {
 
   const transformData = (data) => {
     const timePeriods = [
-      { full: "morning", short: "MORN" },
+      { full: "morning", short: "MOR" },
       { full: "afternoon", short: "AFT" },
       { full: "evening", short: "EVE" },
-      { full: "night", short: "NIGHT" },
+      { full: "night", short: "NIG" },
     ];
     const stackData = timePeriods.map((period) => {
       const completeCount = data.groupedTask[period.full]?.completeCount || 0;
@@ -144,7 +147,7 @@ const TodayProgressChartDetail = ({ userId }) => {
       {renderTitle(data)}
       <Box style={styles.barchartContainer}>
         <BarChart
-          width={250}
+          width={chartWidth}
           noOfSections={5}
           // rotateLabel
           barWidth={15}
@@ -274,7 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     paddingTop: 20,
-    paddingRight: 20,
+    paddingRight: 40,
   },
   updateText: {
     color: config.tokens.colors.neutralDark,

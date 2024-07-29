@@ -9,7 +9,7 @@ export const checkAuthorization = async (navigation) => {
 
 
     const token = await AsyncStorage.getItem('authToken');
-    console.log("Token inside authUtils is", token);
+    //console.log("Token inside authUtils is", token);
 
     if (token) {
       // Token exists, perform validation

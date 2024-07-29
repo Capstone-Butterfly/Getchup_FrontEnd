@@ -108,7 +108,7 @@ function SignUpScreen() {
               <Input textAlign="center" style={styles.inputContainer}>
                 <InputField value={password} onChangeText={handlePasswordChange} type={showPassword ? "text" : "password"} />
                 <InputSlot pr="$3" onPress={handlePasswordState}>
-                  <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
+                  <InputIcon as={showPassword ? EyeIcon : EyeOffIcon} color={config.tokens.colors.primary} />
                 </InputSlot>
               </Input>
             </VStack>
@@ -118,7 +118,7 @@ function SignUpScreen() {
               <Input textAlign="center" style={styles.inputContainer}>
                 <InputField value={confirmPassword} onChangeText={handleConfirmPasswordChange} type={showConfirmPassword ? "text" : "password"} />
                 <InputSlot pr="$3" onPress={handleConfirmPasswordState}>
-                  <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} color="$darkBlue500" />
+                  <InputIcon as={showConfirmPassword ? EyeIcon : EyeOffIcon} color={config.tokens.colors.primary} />
                 </InputSlot>
               </Input>
             </VStack>

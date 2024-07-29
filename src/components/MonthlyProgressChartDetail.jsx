@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, ActivityIndicator } from "react-native";
+import { StyleSheet, ActivityIndicator, Dimensions } from "react-native";
 import { Card, Text, View, VStack, HStack, Box } from "@gluestack-ui/themed";
 import {
   getTodayChartDetails,
@@ -13,6 +13,9 @@ import { defaultStyles } from "../styles/styles";
 import { config } from "../styles/themeConfig";
 
 const MonthlyProgressChartDetail = ({ userId }) => {
+  const screenWidth = Dimensions.get('window').width;
+  const chartWidth = screenWidth * 0.65;
+
   const {
     activeDateRangeTab,
     chartSelectedStartDate,
@@ -174,7 +177,7 @@ const MonthlyProgressChartDetail = ({ userId }) => {
       {renderTitle(todayData)}
       <Box style={styles.barchartContainer}>
         <BarChart
-          width={280}
+          width={chartWidth}
           noOfSections={5}
           barWidth={5}
           barBorderRadius={0}
@@ -261,7 +264,7 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignContent: "center",
-    paddingTop: 5,
+    paddingTop: 10,
     paddingLeft: 10,
   },
   hstack: {
@@ -307,7 +310,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     paddingTop: 20,
-    paddingRight: 20,
+    paddingRight: 40,
   },
   updateText: {
     color: config.tokens.colors.neutralDark,

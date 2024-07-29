@@ -80,7 +80,7 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
 
   const playNextTrack = async () => {
     try {
-      console.log("Playing track:", tracks[currentTrack]); 
+      //console.log("Playing track:", tracks[currentTrack]); 
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: tracks[currentTrack] },
         { shouldPlay: true }

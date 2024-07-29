@@ -57,7 +57,7 @@ const NotificationCard = ({ navigation, notification, userId }) => {
             setNotifications(updatedNotifications);
             const task = await fetchTasksByTaskId(notification.task_id)
             navigation.navigate('TaskDetailScreen', { task })
-            console.log('navigating to task details screen')
+            //console.log('navigating to task details screen')
             closePopover()
         } catch (error) {
             console.log("error handling the click on the notification card:", error)
