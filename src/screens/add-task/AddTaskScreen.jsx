@@ -526,7 +526,7 @@ const AddTaskScreen = ({ navigation }) => {
                     <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareStyle}>
                     <ModalBackdrop />
                     <ModalContent style={styles.modalSubTaskContent}>
-                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Sub-task Title</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Subtask Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseAddSubTaskModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -540,7 +540,7 @@ const AddTaskScreen = ({ navigation }) => {
                     <KeyboardAvoidingView behavior={"padding"} style={styles.keyboardAwareStyle}>
                     <ModalBackdrop/>
                     <ModalContent style={styles.modalSubTaskContent}>
-                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Sub-task Title</Heading>
+                        <Heading textAlign='center' style={[defaultStyles.TypographyH1, styles.textBlack]}>Subtask Title</Heading>
                         <ModalCloseButton style={styles.closeButton} onPress={handleCloseSubTaskModal}>
                             <Icon as={CloseIcon} />
                         </ModalCloseButton>
@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        backgroundColor: config.tokens.colors.background,
+        backgroundColor: config.tokens.colors.neutralLightModal,
         position: 'absolute',
         bottom: 0,
     },
@@ -620,7 +620,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        backgroundColor: config.tokens.colors.background,
+        backgroundColor: config.tokens.colors.neutralLightModal,
         position: 'aboslute',
         bottom: 0,
     },
@@ -640,7 +640,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        backgroundColor: config.tokens.colors.background,
+        backgroundColor: config.tokens.colors.neutralLightModal,
         position: 'aboslute',
         bottom: 0,
     },
@@ -653,7 +653,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        backgroundColor: config.tokens.colors.background,
+        backgroundColor: config.tokens.colors.neutralLightModal,
         position: 'absolute',
         bottom: 0,
     },

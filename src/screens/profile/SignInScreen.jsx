@@ -31,7 +31,7 @@ function SignInScreen() {
         setUserId(data.userId);
 
         const userData = await userDataProfile(data.userId);
-        console.log(userData);
+        //console.log(userData);
         setPhone(userData.profile.phone);
         setNotification(userData.profile.notification);
         setTaskReminder(userData.profile.task_reminder);

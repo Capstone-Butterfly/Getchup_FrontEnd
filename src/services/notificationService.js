@@ -26,7 +26,7 @@ async function scheduleNotification(task) {
 
     const interval = convertToSecondsFromNow(task.start_date, task.start_time)
 
-    console.log('interval:', interval)
+    //console.log('interval:', interval)
     let defaultTrigger = 45 * 60 // 45 minutes
 
     let trigger;
@@ -49,7 +49,7 @@ async function scheduleNotification(task) {
             trigger: { seconds: trigger },
         });
 
-        console.log('Notification scheduled with ID:', identifier);
+        //console.log('Notification scheduled with ID:', identifier);
         return identifier;
     } catch (error) {
         console.error('Error scheduling notification:', error);
@@ -95,7 +95,7 @@ const saveNotification = async (newNotification) => {
 async function getUnreadNotificationsFromTray() { //fetches from the notification tray
     try {
         const notifications = await Notifications.getPresentedNotificationsAsync();
-        console.log('Presented Notifications:', notifications);
+        //console.log('Presented Notifications:', notifications);
         return notifications;
     } catch (error) {
         console.error('Error fetching notifications:', error);
