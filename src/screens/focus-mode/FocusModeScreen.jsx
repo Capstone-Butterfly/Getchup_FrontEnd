@@ -13,13 +13,13 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const FocusModeScreen = ({ route, navigation }) => {
     const { task } = route.params;
-    //console.log("task is: ", task);
+    // console.log("task is: ", task);
     const totalSteps = task.subtask.length;
     const [currentStep, setCurrentStep] = useState(1);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
     const [isAlertShown, setIsAlertShown] = useState(false);
 
-    const { isTaskInProgress, setIsTaskInProgress } = useTaskStore();
+    const { isTaskInProgress, setIsTaskInProgress, movementTracking, setMovementTracking } = useTaskStore();
 
     const musicPlayerRef = useRef(null);
 
@@ -42,6 +42,7 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         setCurrentStep(1);
+        setIsMovementEnabled(task.movement_tracking); 
     }, []);
 
     useEffect(() => {
@@ -111,6 +112,7 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     const toggleMovementSwitch = () => {
         setIsMovementEnabled(previousState => !previousState);
+        setMovementTracking(previousState => !previousState);
     };
 
     return (

@@ -8,6 +8,8 @@ const useTaskStore = create((set, get) => ({
   isTaskCompleted: false,
   isMusicEnabled: false,
   isTaskWorkInProgress: false,
+  movementTracking: false,
+  setMovementTracking: (flag) => set({ movementTracking: flag }),
   setIsMusicEnabled: (isEnabled) => set({ isMusicEnabled: isEnabled }),
   setIsTaskInProgress: (status) => set({ isTaskInProgress: status }),
   setIsTaskCompleted: (status) => set({ isTaskCompleted: status }),
