@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
         borderRadius: 0,
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
-        backgroundColor: config.tokens.colors.background,
+        backgroundColor: config.tokens.colors.neutralLightModal,
         position: 'absolute',
         bottom: 0,
         padding: 20,

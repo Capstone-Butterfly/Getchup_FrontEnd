@@ -17,7 +17,8 @@ export const config = createConfig({
       black: "#222222", // Black
       lightBlack: "#545F71",
       lighterBlack: "#9BA5B7",
-      shadowGray: "#E5E5E5"
+      shadowGray: "#E5E5E5",
+      neutralLightModal: "#E6E6E6"
     },
     spacing: {
       xs: 5,

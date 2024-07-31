@@ -64,7 +64,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
             musicPlayerRef.current.stopMusic(); 
         }
         navigation.navigate('HomeScreen'); 
-        console.log("calling the mutation now: ");
+        //console.log("calling the mutation now: ");
             await updateTaskStatusMutation.mutateAsync(task);}
             catch (error) {
                 console.error("Error marking task and subtasks as completed:", error);
@@ -117,7 +117,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                 await updateTaskStartTime(task._id, start_date, mainTaskStartTime, subtaskStartTime, MAIN_STATUS, STATUS, subtaskIndex);
                 if (task.movement_tracking && taskSubtasks[subtaskIndex].movement) {
                     setIsMovementEnabled(true);
-                    console.log("Movement is enabled for the task");
+                    //console.log("Movement is enabled for the task");
                 }
                 if (isMusicEnabled && musicPlayerRef.current) {
                     await musicPlayerRef.current.playNewTrack();
