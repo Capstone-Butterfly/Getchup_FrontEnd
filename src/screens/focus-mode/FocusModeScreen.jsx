@@ -13,13 +13,13 @@ import { useFocusEffect } from '@react-navigation/native';
 
 const FocusModeScreen = ({ route, navigation }) => {
     const { task } = route.params;
-    //console.log("task is: ", task);
+    // console.log("task is: ", task);
     const totalSteps = task.subtask.length;
     const [currentStep, setCurrentStep] = useState(1);
     const [isMovementEnabled, setIsMovementEnabled] = useState(false);
     const [isAlertShown, setIsAlertShown] = useState(false);
 
-    const { isTaskInProgress, setIsTaskInProgress } = useTaskStore();
+    const { isTaskInProgress, setIsTaskInProgress, movementTracking, setMovementTracking } = useTaskStore();
 
     const musicPlayerRef = useRef(null);
 
@@ -42,6 +42,7 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     useEffect(() => {
         setCurrentStep(1);
+        setIsMovementEnabled(task.movement_tracking); 
     }, []);
 
     useEffect(() => {
@@ -56,7 +57,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                     accelerometerData.z * accelerometerData.z
                 );
     
-                const movementThreshold = 1.5;
+                const movementThreshold = 1.8;
     
                 if (accelerationMagnitude > movementThreshold && !isAlertShown) {
                     setIsAlertShown(true);
@@ -96,7 +97,8 @@ const FocusModeScreen = ({ route, navigation }) => {
             setCurrentStep(nextStepNumber);
             //console.log("Playing new track for step: ", nextStepNumber);
             musicPlayerRef.current.stopMusic();
-            musicPlayerRef.current.playNewTrack();
+            // musicPlayerRef.current.playNewTrack();
+            musicPlayerRef.current.loadNewTrack();
         } 
     };
 
@@ -110,6 +112,7 @@ const FocusModeScreen = ({ route, navigation }) => {
 
     const toggleMovementSwitch = () => {
         setIsMovementEnabled(previousState => !previousState);
+        setMovementTracking(previousState => !previousState);
     };
 
     return (
