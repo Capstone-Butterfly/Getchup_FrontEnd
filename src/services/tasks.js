@@ -1,28 +1,25 @@
-import axios from 'axios';
-import { BASE_URL } from '../config/apiConfig';
-
-const base_url = BASE_URL;
+import axiosInstance from "./axiosInstance";
 
 const fetchTasks = async () => {
-  const { data } = await axios.get( `${base_url}/tasks/`);
+  const { data } = await axiosInstance.get( `/tasks/`);
   return data;
 };
  
 const fetchTasksByTaskId = async (taskId) => {
-    const { data } = await axios.get( `${base_url}/tasks/${taskId}`);
+    const { data } = await axiosInstance.get( `/tasks/${taskId}`);
     return data;
 };
 
 const fetchTasksByUserId = async (userId) => {
     //console.log("fetch data from axios!!!");
-    const { data } = await axios.get( `${base_url}/tasks/user/${userId}`);
+    const { data } = await axiosInstance.get( `/tasks/user/${userId}`);
     return data;
 };
 
 const addTask = async (newTask) => {
   try {
     //console.log("newTask :", newTask);
-    const { data } = await axios.post(`${base_url}/tasks/`, newTask);
+    const { data } = await axiosInstance.post(`/tasks/`, newTask);
     return data;
   } catch (error) {
     console.error("Error adding task:", error);
@@ -32,7 +29,7 @@ const addTask = async (newTask) => {
 
 const getAISubTasks = async (newTitle) => {
   try {
-    const { data } = await axios.post(`${base_url}/tasks/aisubtasks/`, newTitle);
+    const { data } = await axiosInstance.post(`/tasks/aisubtasks/`, newTitle);
     //const data = {subtask: [{"movement": true, "status": "new", "sub_title": "Warm up stretching exercises", "time": "5 minutes"}, {"movement": true, "status": "new", "sub_title": "Jog at a moderate pace", "time": "15 minutes"}, {"movement": true, "status": "new", "sub_title": "Sprint intervals", "time": "5 minutes"}, {"movement": true, "status": "new", "sub_title": "Cool down walking", "time": "5 minutes"}]}
     return data;
   } catch (error) {
@@ -53,7 +50,7 @@ const updateTaskStartTime = async (taskId, start_date, mainTaskStartTime, subtas
               status: STATUS
           }]
       };
-      const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
+      const { data } = await axiosInstance.patch(`/tasks/${taskId}`, requestBody);
       return data;
   } catch (error) {
       console.error("Error updating task start time:", error);
@@ -80,7 +77,7 @@ const updateTaskEndTime = async (taskId, mainTaskEndTime, subtaskEndTime, MAIN_S
 
       //console.log("request body is: ", requestBody);
 
-      const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
+      const { data } = await axiosInstance.patch(`/tasks/${taskId}`, requestBody);
       return data;
   } catch (error) {
       console.error("Error updating task end time:", error);
@@ -110,7 +107,7 @@ const markSubtaskAsComplete = async (taskId, subtaskEndTime, STATUS, subtaskInde
 
     //console.log("request body is: ", requestBody);
 
-    const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
+    const { data } = await axiosInstance.patch(`/tasks/${taskId}`, requestBody);
     return data;
   } catch (error) {
     console.error("Error updating subtask end time:", error);
@@ -131,7 +128,7 @@ const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) 
         pause_time: pause_time,
       }]
     };
-    const { data } = await axios.patch(`${base_url}/tasks/${taskId}`, requestBody);
+    const { data } = await axiosInstance.patch(`/tasks/${taskId}`, requestBody);
     return data;
   } catch (error) {
     console.error("Error pausing task:", error);
@@ -141,7 +138,7 @@ const pauseTask = async (taskId, pause_time, MAIN_STATUS, STATUS, subtaskIndex) 
 
 const manualCompleteTask = async (taskId) => {
   try {
-    const { data } = await axios.patch( `${base_url}/tasks/manualcomplete/${taskId}`);
+    const { data } = await axiosInstance.patch( `/tasks/manualcomplete/${taskId}`);
     return data;
   } catch (error) {
     console.log('error manually completing task:', error)

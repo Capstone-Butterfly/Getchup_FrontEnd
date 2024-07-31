@@ -1,11 +1,8 @@
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import axios from 'axios';
-import { BASE_URL } from '../config/apiConfig';
 import { Platform } from 'react-native';
-
-const base_url = BASE_URL;
+import axiosInstance from './axiosInstance';
 
 Notifications.setNotificationHandler({
     handleNotification: async () => ({
@@ -67,7 +64,7 @@ async function cancelNotification(identifier) {
 
 const fetchNotificationsByUserId = async (userId) => {
     // console.log("fetching notifications...");
-    const { data } = await axios.get(`${base_url}/notifications/user/${userId}`);
+    const { data } = await axiosInstance.get(`/notifications/user/${userId}`);
     // console.log(data)
     return data;
 };
@@ -84,7 +81,7 @@ const getSortedNotificationsByUserId = async (userId) => {
 
 const saveNotification = async (newNotification) => {
     try {
-        const { data } = await axios.post(`${base_url}/notifications/`, newNotification);
+        const { data } = await axiosInstance.post(`/notifications/`, newNotification);
         return data;
     } catch (error) {
         console.error("Error adding notification:", error);
@@ -195,7 +192,7 @@ const formatDateToString = (date) => {
 
 const markNotificationAsRead = async (notificationId) => {
     try {
-        const { data } = await axios.patch( `${base_url}/notifications/${notificationId}`, {read: true});
+        const { data } = await axiosInstance.patch( `/notifications/${notificationId}`, {read: true});
         return data;
     } catch (error) {
         console.log('error marking notification as read', error)
