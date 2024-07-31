@@ -1,13 +1,9 @@
-// src/services/profile.js
-import axios from 'axios';
-import { BASE_URL } from '../config/apiConfig';
 import profileStore from '../store/profileStore';
-
-const base_url = BASE_URL;
+import axiosInstance from './axiosInstance';
 
 const signInProfile = async (email, password) => {
     try {
-        const response = await axios.post(`${base_url}/login`, { email, password });
+        const response = await axiosInstance.post(`/login`, { email, password });
         const { token, userId } = response.data;
         profileStore.setState({ token, userId, is_login: true });
 
@@ -21,7 +17,7 @@ const signInProfile = async (email, password) => {
 const signUpProfile = async (firstName, lastName, email, password, phone) => {
     try {
         phone = " ";
-        const response = await axios.post(`${base_url}/createaccount`, { first_name: firstName, last_name: lastName, email, password, phone });
+        const response = await axiosInstance.post(`/createaccount`, { first_name: firstName, last_name: lastName, email, password, phone });
         return response.data;
     } catch (error) {
         console.error("Error signUp:", error);
@@ -32,7 +28,7 @@ const signUpProfile = async (firstName, lastName, email, password, phone) => {
 const surveyQuestionProfile = async (questions) => {
     try {
         const { token } = profileStore.getState();
-        const response = await axios.post(`${base_url}/surveys/submit`, { questions }, {
+        const response = await axiosInstance.post(`/surveys/submit`, { questions }, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -47,7 +43,7 @@ const surveyQuestionProfile = async (questions) => {
 const userDataProfile = async (userId) => {
     try {
         const { token } = profileStore.getState();
-        const response = await axios.get(`${base_url}/getUserDetails/${userId}`, {
+        const response = await axiosInstance.get(`/getUserDetails/${userId}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -62,7 +58,7 @@ const userDataProfile = async (userId) => {
 const updateUserProfile = async (userId, userInfo) => {
     try {
         const { token } = profileStore.getState();
-        const response = await axios.put(`${base_url}/update/${userId}`, userInfo, {
+        const response = await axiosInstance.put(`/update/${userId}`, userInfo, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${token}`
