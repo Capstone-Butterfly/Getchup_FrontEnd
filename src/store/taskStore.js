@@ -6,8 +6,12 @@ const useTaskStore = create((set, get) => ({
   selectedDate: DateFormatter(new Date()),
   isTaskInProgress: false,
   isTaskCompleted: false,
+  isMusicEnabled: false,
+  isTaskWorkInProgress: false,
+  setIsMusicEnabled: (isEnabled) => set({ isMusicEnabled: isEnabled }),
   setIsTaskInProgress: (status) => set({ isTaskInProgress: status }),
   setIsTaskCompleted: (status) => set({ isTaskCompleted: status }),
+  setIsTaskWorkInProgress: (status) => set({ isTaskWorkInProgress: status }),
   setTasks: (tasks) => set({ tasks }),
   setSelectedDate: (date) => set({ selectedDate: date }),
   addDataTask: (task) => set((state) => {

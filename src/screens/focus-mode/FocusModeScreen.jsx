@@ -56,7 +56,7 @@ const FocusModeScreen = ({ route, navigation }) => {
                     accelerometerData.z * accelerometerData.z
                 );
     
-                const movementThreshold = 1.5;
+                const movementThreshold = 1.8;
     
                 if (accelerationMagnitude > movementThreshold && !isAlertShown) {
                     setIsAlertShown(true);
@@ -96,7 +96,8 @@ const FocusModeScreen = ({ route, navigation }) => {
             setCurrentStep(nextStepNumber);
             //console.log("Playing new track for step: ", nextStepNumber);
             musicPlayerRef.current.stopMusic();
-            musicPlayerRef.current.playNewTrack();
+            // musicPlayerRef.current.playNewTrack();
+            musicPlayerRef.current.loadNewTrack();
         } 
     };
 

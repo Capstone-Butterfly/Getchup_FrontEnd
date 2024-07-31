@@ -20,7 +20,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
     const updateDataTask = useTaskStore(state => state.updateDataTask); 
     const [progressValue, setProgressValue] = useState(0);
 
-    const { isTaskInProgress, setIsTaskInProgress } = useTaskStore();
+    const { isTaskInProgress, setIsTaskInProgress, isMusicEnabled, setIsMusicEnabled, isTaskWorkInProgress, setIsTaskWorkInProgress } = useTaskStore();
 
     useEffect(() => {
         if (isTaskInProgress) {
@@ -106,6 +106,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
             if (!isTaskInProgress) {
                 setIsTaskInProgress(true);
                 setIsTaskStarted(true);
+                setIsTaskWorkInProgress(true);
     
                 const start_date = currentDateTime;
                 const mainTaskStartTime = currentTimestamp;
@@ -118,8 +119,12 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
                     setIsMovementEnabled(true);
                     console.log("Movement is enabled for the task");
                 }
+                if (isMusicEnabled && musicPlayerRef.current) {
+                    await musicPlayerRef.current.playNewTrack();
+                }
             } else {
                 setIsTaskInProgress(false);
+                setIsTaskWorkInProgress(false);
     
                 const mainTaskEndTime = currentTimestamp;
                 const subtaskEndTime = currentTimestamp;
@@ -141,6 +146,7 @@ const StepScreen = ({ route, stepNumber, stepDescription, totalSteps, taskSubtas
     
                 if (stepNumber === totalSteps && isTaskCompleted) {
                     setShowCompletionScreen(true);
+                    setIsMusicEnabled(false)
                 } else {
                     navigateToNextStep();
                 }

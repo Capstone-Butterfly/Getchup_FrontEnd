@@ -2,6 +2,7 @@ import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'rea
 import { View, StyleSheet } from 'react-native';
 import { Audio } from 'expo-av';
 import ToggleSwitch from '../../components/ToggleSwitch';
+import useTaskStore from '../../store/taskStore';
 
 const tracks = [
   'https://butterflycapstonemusic.s3.us-east-2.amazonaws.com/Holizna.mp3',
@@ -13,6 +14,9 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
   const [sound, setSound] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTrack, setCurrentTrack] = useState(Math.floor(Math.random() * tracks.length));
+  const { isTaskWorkInProgress, setIsTaskWorkInProgress, setIsMusicEnabled, isMusicEnabled } = useTaskStore();
+
+
 
   useImperativeHandle(ref, () => ({
     stopMusic: async () => {
@@ -27,6 +31,9 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
         await sound.unloadAsync();
         setSound(null);
       }
+    },
+    loadNewTrack: async () => {
+      await loadTrackWithoutPlaying();
     },
     playNewTrack: async () => {
       await playNextTrack();
@@ -59,7 +66,8 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
         onUnmount && onUnmount();
       }
     };
-  }, [currentTrack]);
+  }, []);
+  
 
   const onPlaybackStatusUpdate = (status) => {
     if (status.didJustFinish && !status.isLooping) {
@@ -71,16 +79,40 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
     if (sound) {
       if (isPlaying) {
         await sound.pauseAsync();
-      } else {
-        await sound.playAsync();
+        setIsPlaying(false);
+      } else  {
+        if (isTaskWorkInProgress)
+          await sound.playAsync();
+        setIsPlaying(true);
       }
-      setIsPlaying(!isPlaying);
+      setIsMusicEnabled(!isMusicEnabled)
+    }
+  };
+
+  const loadTrackWithoutPlaying = async () => {
+    try {
+      if (sound) {
+        await sound.unloadAsync();
+      }
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: tracks[currentTrack] },
+        { shouldPlay: false }
+      );
+      setSound(newSound);
+      console.log("new sound is: ", newSound);
+      newSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
+      setCurrentTrack((prevTrack) => (prevTrack + 1) % tracks.length);
+    } catch (error) {
+      console.error('Error loading track:', error);
     }
   };
 
   const playNextTrack = async () => {
     try {
-      //console.log("Playing track:", tracks[currentTrack]); 
+      if (sound) {
+        await sound.unloadAsync();
+      }
+      
       const { sound: newSound } = await Audio.Sound.createAsync(
         { uri: tracks[currentTrack] },
         { shouldPlay: true }
@@ -89,6 +121,7 @@ const MusicPlayer = forwardRef(({ onUnmount }, ref) => {
       newSound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate);
       setIsPlaying(true);
       setCurrentTrack((prevTrack) => (prevTrack + 1) % tracks.length);
+    
     } catch (error) {
       console.error('Error playing next track:', error);
     }
@@ -113,3 +146,5 @@ const styles = StyleSheet.create({
 });
 
 export default MusicPlayer;
+
+
