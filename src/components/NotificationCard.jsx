@@ -123,6 +123,7 @@ const styles = StyleSheet.create({
     circleRead: {
         marginRight: 8,
         alignSelf: "center",
+        color: "transparent"
     },
     clock: {
         marginRight: 12,
