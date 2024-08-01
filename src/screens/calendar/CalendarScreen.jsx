@@ -32,9 +32,9 @@ const CalendarScreen = ({ navigation }) => {
           </Box>
         </View>
           <Box style={styles.weekLabelsContainer}>
-            {weekLabels.map((label) => {
+            {weekLabels.map((label, index) => {
               return (
-                <Text style={[defaultStyles.TypographyLabelSmall, styles.weekLabels]}>{label}</Text>
+                <Text key={index} style={[defaultStyles.TypographyLabelSmall, styles.weekLabels]}>{label}</Text>
               )
             })}
           </Box>

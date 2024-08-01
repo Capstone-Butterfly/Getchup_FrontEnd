@@ -25,7 +25,7 @@ const TasksCompletedCard = ({ navigation, tasks }) => {
                         <Card style={styles.card}>
                             <HStack>
                                 <Icon as={CheckedIcon} style={styles.icon} />
-                                <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle]}>{item.title}</Text>
+                                <Text style={[defaultStyles.TypographyBodyHeavyStrikethrough, styles.taskTitle, styles.strikethrough]}>{item.title}</Text>
                             </HStack>
                         </Card>
                     </>
@@ -79,8 +79,14 @@ const styles = StyleSheet.create({
     listContent: {
         paddingHorizontal: 20,
     },
+    strikethrough: {
+        textDecorationLine: 'line-through',
+        textDecorationStyle: 'solid',
+        color: config.tokens.colors.neutralDark,
+    },
     taskTitle: {
         color: config.tokens.colors.neutralDark,
+        shadowColor: "transparent"
     },
     text: {
         textAlign: 'center'

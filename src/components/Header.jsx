@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Modal, ModalContent, HStack, Icon, Heading, Pressable, ModalHeader, ModalBody, ModalCloseButton, Text, ModalBackdrop } from "@gluestack-ui/themed";
 import useNotificationStore from '../store/notificationStore';
@@ -75,6 +75,10 @@ const styles = StyleSheet.create({
     brand: {
         flexGrow: 1,
     },
+    closeButton: {
+        position: "absolute",
+        left: 15,
+    },
     container: {
         display: 'flex',
         position: 'absolute',
@@ -105,7 +109,7 @@ const styles = StyleSheet.create({
         height: "100%",
     },
     modalContent: {
-        paddingTop: 50,
+        paddingTop: Platform.OS === "android" ? 20 : 50,
         width: '100%',
         height: '100%',
         margin: 0,
@@ -119,6 +123,7 @@ const styles = StyleSheet.create({
     },
     modalHeader: {
         display: "flex",
+        position: "relative",
     },
     modalBody: {
         flex: 1,
