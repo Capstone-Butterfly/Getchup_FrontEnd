@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     },
     subtask: {
         color: config.tokens.colors.muted,
+        marginTop: 8,
     },
     task: {
         alignItems: 'center',
@@ -136,7 +137,6 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: "center",
-        maxHeight: 73,
         minHeight: 48,
         paddingVertical: 12,
         paddingRight: 10,
@@ -144,11 +144,13 @@ const styles = StyleSheet.create({
     taskInfo: {
         alignItems: 'flex-start',
         flexGrow: 1,
+        flexShrink: 1,
     },
     taskTime: {
         fontSize: 12,
         lineHeight: 14,
         marginBottom: 2,
+        marginLeft: 11,
     },
     endTime: {
         color: config.tokens.colors.neutralDark
@@ -160,7 +162,10 @@ const styles = StyleSheet.create({
     },
     taskTitle: {
         fontSize: 16,
-        lineHeight: 20,
+        lineHeight: 22,
+        flexShrink: 1,
+        flexWrap: "wrap",
+        // maxHeight: 44,
     },
     urgencyBar: {
         borderRadius: 10,
@@ -169,10 +174,8 @@ const styles = StyleSheet.create({
         width: 6,
     },
     view: {
-        height: "100%",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between"
-
     },
 });
