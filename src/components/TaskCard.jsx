@@ -8,17 +8,20 @@ import CheckboxEmptyIcon from '../../assets/icons/checkbox-empty.svg'
 import CheckboxCheckedIcon from '../../assets/icons/checkbox-checked.svg'
 import useTaskStore from '../store/taskStore.js';
 import { manualCompleteTask } from '../services/tasks.js';
-
+import dayjs from 'dayjs';
 
 const TaskCard = ({ task, navigation, showStartTime = true, showEndTime = false }) => {
 
     const { tasks, setTasks } = useTaskStore();
 
-    const formatEstimateTime = (time) => {
-        if (time === 0 || time === null) {
+    const formatEstimateTime = (milliseconds) => {
+        if (milliseconds === 0 || milliseconds === null) {
             return '';
         }
-        return ConvertTimeStamp.convertMillisecondsToTimeString(time);
+        // return ConvertTimeStamp.convertMillisecondsToTimeString(time);
+        const timeString = ConvertTimeStamp.convertMillisecondsToTimeString(milliseconds);
+        const [hours, minutes] = timeString.split(':').map(Number);
+        return dayjs().hour(hours).minute(minutes).format('hh:mm A');
     };
 
     const getCardStyle = (urgency) => {
