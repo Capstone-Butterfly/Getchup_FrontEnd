@@ -44,7 +44,7 @@ const SubTaskScreen = ({index}) => {
         // const updatedSubtask = { ...selectedSubTask, time: "" };
         // updateSubtask(index, updatedSubtask);
         //closeModal();
-        setSelectedMinute(0);
+        setSelectedMinute(1);
     };
 
       const handleSubTitleChange = (newTitle) => {
@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '100%',
-        height: '25%',
+        height: '27%',
         margin: 0,
         padding: 0,
         borderRadius: 0,
