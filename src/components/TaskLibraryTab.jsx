@@ -253,6 +253,7 @@ const styles = StyleSheet.create({
   },
   tabButton: {
     padding: 15,
+    paddingBottom: 8,
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: config.tokens.colors.neutralDark,
@@ -286,7 +287,8 @@ const styles = StyleSheet.create({
     marginLeft: 0,
     marginTop: 5,
     padding: 13,
-
+    flexShrink: 1,
+    flexWrap: "wrap",
     borderRadius: 10,
   },
   detailItem: {
