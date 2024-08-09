@@ -16,8 +16,8 @@ const CalendarStack = () => {
     <CStack.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: 'transparent' },
-        headerTransparent: true,
-        headerTintColor: '#fff',
+        // headerTransparent: true,
+        // headerTintColor: '#fff',
       }}>
       <CStack.Screen name="CalendarScreen" component={CalendarScreen} options={{ headerShown: false }} />
       <CStack.Screen
