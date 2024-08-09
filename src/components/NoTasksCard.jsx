@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Text, Heading, Image, ButtonText, Box } from "@gluestack-ui/themed";
 import { defaultStyles } from '../styles/styles';
@@ -32,7 +32,6 @@ const NoTasksCard = ({navigation}) => {
             >
                 <ButtonText verticalAlign="middle" style={[defaultStyles.TypographyBodyHeavy, styles.buttonText]}>Add New Task</ButtonText>
             </Button>
-
         </SafeAreaView>
     );
 };
@@ -57,6 +56,7 @@ const styles = StyleSheet.create({
         width: 160,
         height: 160,
         marginBottom: 16,
+        marginTop: Platform.OS === "android" ? 0 : -50,
     },
     text: {
         textAlign: 'center'

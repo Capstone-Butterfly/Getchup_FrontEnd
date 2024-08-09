@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Button, Text, Heading, Image, ButtonText, Box, FlatList, Divider, HStack, Icon, Card } from "@gluestack-ui/themed";
 import { defaultStyles } from '../styles/styles';
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
         width: 215,
         height: 150,
         marginBottom: 16,
+        marginTop: Platform.OS === "android" ? 0 : -50,
     },
     list: {
         width: "100%",

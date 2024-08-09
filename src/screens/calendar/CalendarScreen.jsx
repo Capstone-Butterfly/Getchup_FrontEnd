@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
     // marginHorizontal: "auto",
     paddingHorizontal: 30,
     paddingVertical: 10,
-    marginTop: 56,
+    marginTop: 47,
     ...Platform.select({
         android: {
-          marginTop: 10,
+          marginTop: 0,
         }
     })
   },
