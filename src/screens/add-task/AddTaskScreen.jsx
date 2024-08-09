@@ -667,7 +667,9 @@ const styles = StyleSheet.create({
     },
     modalBody: {
         flex: 1,
-        alignItems: 'center',
+        // alignItems: 'center',
+        marginLeft: 25,
+        marginRight: 25,
         paddingTop: 10,
     },
     listContent: {

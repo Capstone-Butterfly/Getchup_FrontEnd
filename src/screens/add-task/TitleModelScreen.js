@@ -22,7 +22,7 @@ const TitleModelScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    margin: 24,
+    // margin: 24,
   },
   flatListContent: {
     flexGrow: 1,
