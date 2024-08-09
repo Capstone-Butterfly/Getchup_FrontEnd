@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import useProgressDateRangeStore from '../store/progressDateRangeStore';
 import { defaultStyles } from '../styles/styles';
 import { config } from '../styles/themeConfig';
-import { ActivityIndicator, StyleSheet } from 'react-native';
+import { ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import Girl from '../../assets/icons/girl.svg'
 
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'space-between',
         paddingBottom: 0,
-        paddingTop: 80,
+        paddingTop: Platform.OS === "android" ? 20 : 67,
     }, 
     headerCard: {
         paddingTop:25,

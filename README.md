@@ -7,8 +7,9 @@ npm install
 
 ## Start the server
 npx expo start
+download Expo Go and scan the QR Code
 
-## Using Expo Go
+## Using Expo Go with tunnel connection
 npx expo start --tunnel
 make sure your mobile device is connected to the same network
 download Expo Go and scan the QR Code
@@ -38,44 +39,18 @@ export default Component
 Getchup_FrontEnd/
 - expo/
 - assets/
+    - background/
     - icons/
-    - images/
-- components/ --> UI components
-- utils/ --> configuration variables to use for API connections
-    - authUtils.js
-- styles/ --> centralize styling of the application and related variables
-- hooks/
-- navigation/
-    - AddTaskTab.jsx
-    - CalendarTab.jsx
-    - HomeTab.jsx
-    - Navigator.jsx
-    - ProfileTab.jsx
-    - ProgressTab.jsx
-- screens/
-    - add-task/
-        - AddTaskScreen.jsx
-    - calendar/
-        - CalendarScreen.jsx
-    - home/
-        - HomeScreen.jsx
-    - profile/
-        - ProfileScreen.jsx
-    - progress/
-        ProgressScreen.jsx
-- services/ --> logic to query APIs for information
-    - notification.js
-    - profile.js
-    - tasks.js
-- state/  --> State management
-    - store_notification.js
-    - store_profile.js
-    - store_tasks.js
-    - types.js
-- .gitignore
-- App.js
-- app.json
-- babel.config.js
-- package-lock.json
-- package.json
-- README.md
+    - illustrations/
+    - logo/
+    - splash-screen/
+- src/
+    - components/ --> UI components
+    - config/ --> base url config
+    - navigation/ --> bottom tabs files
+    - screens/ --> organized majorly according to bottom tabs
+    - services/ --> logic to query APIs for information
+    - stacks/ --> tabs stacks organization
+    - store/  --> state management
+    - styles/ --> centralized styling of the application and related variables
+    - utils/ --> configuration variables to use for API connections
